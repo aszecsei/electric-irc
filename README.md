@@ -31,8 +31,10 @@ To run this project in a development environment, use `yarn start`. This will op
 To package this app,use `yarn dist`. This compiles the application into a native executable, as well as generates an installer for the application.
 
 # Testing
-This app uses [Spectron](https://electronjs.org/spectron) along with [Mocha](https://mochajs.org) and [Chai](http://chaijs.com). I haven't quite figured out the setup for Spectron yet - if you want to test electron integration (as opposed to React components/web logic) this will take some effort.
+This app uses [Spectron](https://electronjs.org/spectron) along with [Mocha](https://mochajs.org), [Chai](http://chaijs.com), and [Sinon](sinonjs.org/) (using [Sinon-Chai](https://github.com/domenic/sinon-chai)). I haven't quite figured out the setup for Spectron yet - if you want to test electron integration (as opposed to React components/web logic) this will take some effort.
 
 All test files should be placed within the `test` folder and have the extension `*.spec.ts` or `*.spec.tsx`.
 
 [Istanbul](https://istanbul.js.org) is used for code coverage. Running `yarn test` will go through all tests and generate a code coverage report. Note that this may include irrelevant JavaScript files - add these folders or files to the `package.json` in the `nyc.exclude` array.
+
+Until we get Spectron figured out, I've removed all of our "main" files from Istanbul's code coverage metrics, as we can't effectively unit-test them.

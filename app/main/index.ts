@@ -1,11 +1,13 @@
 import { app, BrowserWindow } from 'electron'
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
+import installExtension, {
+  REACT_DEVELOPER_TOOLS
+} from 'electron-devtools-installer'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let mainWindow: BrowserWindow | null
 
-function createMainWindow() {
+export function createMainWindow() {
   const window = new BrowserWindow({
     width: 1280,
     height: 720,
@@ -14,7 +16,7 @@ function createMainWindow() {
   const url = isDevelopment
     ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
     : `file://${__dirname}/index.html`
-  
+
   if (isDevelopment) {
     window.webContents.openDevTools()
   }
@@ -32,12 +34,13 @@ function createMainWindow() {
     })
   })
 
-  installExtension(REACT_DEVELOPER_TOOLS).then((name) => {
-    console.log(`Added extension: ${name}`)
-  })
-  .catch((err) => {
-    console.log(`An error occurred: ${err}`)
-  })
+  installExtension(REACT_DEVELOPER_TOOLS)
+    .then(name => {
+      console.log(`Added extension: ${name}`)
+    })
+    .catch(err => {
+      console.log(`An error occurred: ${err}`)
+    })
 
   return window
 }

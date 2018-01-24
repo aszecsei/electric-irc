@@ -11,19 +11,16 @@ import './stylesheets/main.scss'
 
 export class Window extends React.Component {
   handleClose(e: any) {
-    console.log('closing')
     const window = remote.getCurrentWindow()
     window.close()
   }
 
   handleMinimize(e: any) {
-    console.log('minimize')
     const window = remote.getCurrentWindow()
     window.minimize()
   }
 
   handleMaximize(e: any) {
-    console.log('maximize')
     const window = remote.getCurrentWindow()
     if (!window.isMaximized()) {
       window.maximize()
@@ -35,10 +32,12 @@ export class Window extends React.Component {
   render() {
     return (
       <div>
-        <Titlebar draggable={true}
+        <Titlebar
+          draggable={true}
           handleClose={this.handleClose}
           handleMinimize={this.handleMinimize}
-          handleMaximize={this.handleMaximize}>
+          handleMaximize={this.handleMaximize}
+        >
           Electric IRC
         </Titlebar>
         <div id="content">
@@ -49,7 +48,4 @@ export class Window extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Window />,
-  document.getElementById('app')
-)
+ReactDOM.render(<Window />, document.getElementById('app'))
