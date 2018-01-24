@@ -46,9 +46,9 @@ workflows:
   build_and_test:
     jobs:
       - build:
-        filters:
-          branches:
-            only: master
-          tags:
-            only: /.*/ # Force CircleCI to build on tags
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /.*/ # Force CircleCI to build on tags
       - test
