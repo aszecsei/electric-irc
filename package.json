@@ -8,6 +8,7 @@
     "Kyle Anderson <kyle-l-anderson@uiowa.edu>",
     "Vincent Lopez <vincent-lopez@uiowa.edu>"
   ],
+  "repository": "github:aszecsei/electric-irc",
   "description": "A modern, stylish IRC client using Electron and React",
   "scripts": {
     "dev": "electron-webpack dev",
@@ -16,7 +17,7 @@
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "start": "yarn run dev",
     "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha",
-    "release": "build",
+    "release": "yarn compile && electron-builder",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "precommit": "lint-staged"
   },
