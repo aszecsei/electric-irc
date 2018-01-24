@@ -15,7 +15,16 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "start": "yarn run dev",
-    "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha"
+    "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha",
+    "release": "build",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "{app,test}/**/*.ts": [
+      "prettier --write --no-semi --single-quote",
+      "git add"
+    ]
   },
   "nyc": {
     "extension": [
@@ -32,6 +41,11 @@
       "lcov",
       "text"
     ],
+    "lines": 80,
+    "statements": 80,
+    "functions": 80,
+    "branches": 80,
+    "check-coverage": true,
     "all": true
   },
   "license": "MIT",
@@ -50,6 +64,7 @@
     "chai": "^4.1.2",
     "chai-enzyme": "^1.0.0-beta.0",
     "cheerio": "^1.0.0-rc.2",
+    "coveralls": "^3.0.0",
     "cross-env": "^5.1.3",
     "electron": "^1.7.10",
     "electron-builder": "^19.54.0",
@@ -58,8 +73,10 @@
     "electron-webpack-ts": "^1.2.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "husky": "^0.14.3",
     "ignore-styles": "^5.0.1",
     "jsdom": "^11.5.1",
+    "lint-staged": "^6.0.1",
     "mocha": "^5.0.0",
     "node-sass": "^4.7.2",
     "nyc": "^11.4.1",
