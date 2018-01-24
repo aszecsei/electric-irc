@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:8.9.4
     working_directory: ~/repo_build
     steps:
       - checkout
@@ -24,14 +24,14 @@ jobs:
       - run: yarn release
   test:
     docker:
-      -image: circleci/node:7.10
-    working_directory: ~/repo_test
+      - image: circleci/node:8.9.4
+    working_directory: ~/repo_build
     steps:
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies--{{ checksum "yarn.lock" }}
+            - v1-dependencies-{{ checksum "yarn.lock" }}
             - v1-dependencies-
       - run: yarn install
       - save_cache:
