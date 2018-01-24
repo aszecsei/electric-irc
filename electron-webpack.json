@@ -1,0 +1,9 @@
+{
+  "commonSourceDirectory": "app/common",
+  "main": {
+    "sourceDirectory": "app/main"
+  },
+  "renderer": {
+    "sourceDirectory": "app/renderer"
+  }
+}

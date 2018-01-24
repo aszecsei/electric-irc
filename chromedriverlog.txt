@@ -1,0 +1,124 @@
+[0.057][INFO]: COMMAND InitSession {
+   "desiredCapabilities": {
+      "browserName": "electron",
+      "chromeOptions": {
+         "args": [ "spectron-path=C:\\dev\\electric-irc\\node_modules\\.bin\\electron.cmd", "spectron-arg0=C:\\dev\\electric-irc\\dist", "spectron-env-ELECTRON_ENABLE_LOGGING=true", "spectron-env-ELECTRON_ENABLE_STACK_DUMPING=true", "spectron-env-NODE_ENV=development" ],
+         "binary": "C:\\dev\\electric-irc\\node_modules\\spectron\\bin\\launcher.exe"
+      },
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": true,
+      "loggingPrefs": {
+         "browser": "ALL",
+         "driver": "ALL"
+      },
+      "requestOrigins": {
+         "name": "webdriverio",
+         "url": "http://webdriver.io",
+         "version": "4.10.1"
+      },
+      "rotatable": true
+   }
+}
+[0.058][INFO]: Populating Preferences file: {
+   "alternate_error_pages": {
+      "enabled": false
+   },
+   "autofill": {
+      "enabled": false
+   },
+   "browser": {
+      "check_default_browser": false
+   },
+   "distribution": {
+      "import_bookmarks": false,
+      "import_history": false,
+      "import_search_engine": false,
+      "make_chrome_default_for_user": false,
+      "show_welcome_page": false,
+      "skip_first_run_ui": true
+   },
+   "dns_prefetching": {
+      "enabled": false
+   },
+   "profile": {
+      "content_settings": {
+         "pattern_pairs": {
+            "https://*,*": {
+               "media-stream": {
+                  "audio": "Default",
+                  "video": "Default"
+               }
+            }
+         }
+      },
+      "default_content_setting_values": {
+         "geolocation": 1
+      },
+      "default_content_settings": {
+         "geolocation": 1,
+         "mouselock": 1,
+         "notifications": 1,
+         "popups": 1,
+         "ppapi-broker": 1
+      },
+      "password_manager_enabled": false
+   },
+   "safebrowsing": {
+      "enabled": false
+   },
+   "search": {
+      "suggest_enabled": false
+   },
+   "translate": {
+      "enabled": false
+   }
+}
+[0.063][INFO]: Populating Local State file: {
+   "background_mode": {
+      "enabled": false
+   },
+   "ssl": {
+      "rev_checking": {
+         "enabled": false
+      }
+   }
+}
+[0.109][INFO]: Launching chrome: "C:\dev\electric-irc\node_modules\spectron\bin\launcher.exe" --disable-background-networking --disable-client-side-phishing-detection --disable-default-apps --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-web-resources --enable-automation --enable-logging --ignore-certificate-errors --load-component-extension="C:\Users\ALICSZ~1\AppData\Local\Temp\scoped_dir10116_2201\internal" --log-level=0 --metrics-recording-only --no-first-run --password-store=basic --remote-debugging-port=12493 --safebrowsing-disable-auto-update --spectron-arg0="C:\dev\electric-irc\dist" --spectron-env-electron_enable_logging=true --spectron-env-electron_enable_stack_dumping=true --spectron-env-node_env=development --spectron-path="C:\dev\electric-irc\node_modules\.bin\electron.cmd" --test-type=webdriver --use-mock-keychain --user-data-dir="C:\Users\ALICSZ~1\AppData\Local\Temp\scoped_dir10116_7739" data:,
+[0.478][DEBUG]: DevTools request: http://localhost:12493/json/version
+[2.492][DEBUG]: DevTools request failed
+[2.543][DEBUG]: DevTools request: http://localhost:12493/json/version
+[2.735][DEBUG]: DevTools request failed
+[2.786][DEBUG]: DevTools request: http://localhost:12493/json/version
+[4.545][DEBUG]: DevTools request failed
+[4.595][DEBUG]: DevTools request: http://localhost:12493/json/version
+[4.789][DEBUG]: DevTools request failed
+[4.840][DEBUG]: DevTools request: http://localhost:12493/json/version
+[6.598][DEBUG]: DevTools request failed
+[6.648][DEBUG]: DevTools request: http://localhost:12493/json/version
+[6.843][DEBUG]: DevTools request failed
+[6.894][DEBUG]: DevTools request: http://localhost:12493/json/version
+[8.650][DEBUG]: DevTools request failed
+[8.701][DEBUG]: DevTools request: http://localhost:12493/json/version
+[8.896][DEBUG]: DevTools request failed
+[8.946][DEBUG]: DevTools request: http://localhost:12493/json/version
+[10.703][DEBUG]: DevTools request failed
+[10.754][DEBUG]: DevTools request: http://localhost:12493/json/version
+[10.951][DEBUG]: DevTools request failed
+[11.002][DEBUG]: DevTools request: http://localhost:12493/json/version
+[12.757][DEBUG]: DevTools request failed
+[12.808][DEBUG]: DevTools request: http://localhost:12493/json/version
+[13.005][DEBUG]: DevTools request failed
+[13.056][DEBUG]: DevTools request: http://localhost:12493/json/version
+[14.810][DEBUG]: DevTools request failed
+[14.861][DEBUG]: DevTools request: http://localhost:12493/json/version
+[15.059][DEBUG]: DevTools request failed
+[15.110][DEBUG]: DevTools request: http://localhost:12493/json/version
+[16.865][DEBUG]: DevTools request failed
+[16.916][DEBUG]: DevTools request: http://localhost:12493/json/version
+[17.113][DEBUG]: DevTools request failed
+[17.164][DEBUG]: DevTools request: http://localhost:12493/json/version
+[18.919][DEBUG]: DevTools request failed
+[18.969][DEBUG]: DevTools request: http://localhost:12493/json/version
+[19.168][DEBUG]: DevTools request failed
+[19.218][DEBUG]: DevTools request: http://localhost:12493/json/version

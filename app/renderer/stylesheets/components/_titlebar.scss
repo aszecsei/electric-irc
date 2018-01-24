@@ -1,0 +1,90 @@
+.titlebar {
+  padding: 0 3px;
+  background-color: $black;
+  margin: 0;
+  color: $white;
+}
+
+.titlebar.webkit-draggable {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.titlebar-stoplight {
+  float: left;
+}
+
+.titlebar:after,
+.titlebar-stoplight:after {
+  content: ' ';
+  display: table;
+  clear: both;
+}
+
+.titlebar-stoplight:hover, .titlebar-close {
+  background-position: -26px 0;
+}
+
+.titlebar-close,
+.titlebar-minimize,
+.titlebar-maximize {
+	float: left;
+	margin: 6px 4px;
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+}
+
+.titlebar-close {
+  background: red;
+}
+
+.titlebar-minimize {
+  background: yellow;
+}
+
+.titlebar-maximize {
+  background: green;
+}
+
+.titlebar.webkit-draggable .titlebar-close,
+.titlebar.webkit-draggable .titlebar-minimize,
+.titlebar.webkit-draggable .titlebar-maximize {
+	-webkit-app-region: no-drag;
+}
+
+.titlebar-close {
+	position: relative;
+	margin-left: 6px;
+}
+
+.titlebar-maximize {
+	position: relative;
+}
+
+.titlebar-minimize {
+	position: relative;
+}
+
+.titlebar-close:active::after,
+.titlebar-minimize:active::after,
+.titlebar-maximize:active::after {
+	display: block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	content: "";
+	background: rgba(0, 0, 0, .25);
+	border-radius: 100%;
+}
+
+.titlebar-children {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
