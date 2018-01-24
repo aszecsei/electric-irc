@@ -1,4 +1,6 @@
 # Electric IRC
+[![Coverage Status](https://coveralls.io/repos/github/aszecsei/electric-irc/badge.svg?branch=master)](https://coveralls.io/github/aszecsei/electric-irc?branch=master)
+
 **Electric IRC** leverages TypeScript, React, and Electron to create a native IRC client. Below, I'll write a few notes that relate to this project and to its technologies.
 
 ## Yarn
