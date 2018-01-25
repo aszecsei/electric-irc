@@ -8,7 +8,7 @@ export function initializeSpectron() {
   let electronPath = path.join(__dirname, '../node_modules', '.bin', 'electron')
   const appPath = path.join(__dirname, '../dist')
   if (process.platform === 'win32') {
-    electronPath += ".cmd"
+    electronPath += '.cmd'
   }
 
   return new spectron.Application({
@@ -17,7 +17,7 @@ export function initializeSpectron() {
     env: {
       ELECTRON_ENABLE_LOGGING: true,
       ELECTRON_ENABLE_STACK_DUMPING: true,
-      NODE_ENV: "development"
+      NODE_ENV: 'development'
     },
     startTimeout: 20000,
     chromeDriverLogPath: './chromedriverlog.txt'
