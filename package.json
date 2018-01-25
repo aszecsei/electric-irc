@@ -102,7 +102,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "source-map-support": "^0.5.1",
-    "typeface-roboto": "^0.0.50"
+    "typeface-roboto": "^0.0.54"
   },
   "resolutions": {
     "webpack-sources": "1.0.1"
