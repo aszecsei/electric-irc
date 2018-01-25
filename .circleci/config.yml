@@ -13,13 +13,13 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - ${CACHE_VERSION}-dependencies-{{ checksum "yarn.lock" }}
-            - ${CACHE_VERSION}-dependencies-
+            - {{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "yarn.lock" }}
+            - {{ .Environment.CACHE_VERSION }}-dependencies-
       - run: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: ${CACHE_VERSION}-dependencies-{{ checksum "yarn.lock" }}
+          key: {{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "yarn.lock" }}
       # build!
       - run: yarn release
   test:
@@ -32,15 +32,15 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - ${CACHE_VERSION}-dependencies-{{ checksum "yarn.lock" }}
-            - ${CACHE_VERSION}-dependencies-
+            - {{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "yarn.lock" }}
+            - {{ .Environment.CACHE_VERSION }}-dependencies-
       - run: yarn global add greenkeeper-lockfile@1
       - run: yarn install
       - run: ~/.yarn/bin/greenkeeper-lockfile-update
       - save_cache:
           paths:
             - node_modules
-          key: ${CACHE_VERSION}-dependencies-{{ checksum "yarn.lock" }}
+          key: {{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "yarn.lock" }}
       # run tests
       - run: yarn test
       - run: yarn report-coverage
