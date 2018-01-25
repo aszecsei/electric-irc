@@ -23,12 +23,9 @@
     "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\""
   },
   "lint-staged": {
-    "{app,test}/**/*.{ts,tsx}": [
+    "{app,test}/**/*.{ts,tsx,scss}": [
       "prettier --write --no-semi --single-quote",
       "git add"
-    ],
-    "app/**/*.scss": [
-      "prettier --write"
     ]
   },
   "nyc": {
