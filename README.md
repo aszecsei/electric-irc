@@ -1,5 +1,8 @@
 # Electric IRC
-[![Coverage Status](https://coveralls.io/repos/github/aszecsei/electric-irc/badge.svg?branch=master)](https://coveralls.io/github/aszecsei/electric-irc?branch=master)
+[![CircleCI](https://circleci.com/gh/aszecsei/electric-irc.svg?style=svg)](https://circleci.com/gh/aszecsei/electric-irc)
+[![Coverage Status](https://coveralls.io/repos/github/aszecsei/electric-irc/badge.svg?branch=develop)](https://coveralls.io/github/aszecsei/electric-irc?branch=develop)
+[![Greenkeeper badge](https://badges.greenkeeper.io/aszecsei/electric-irc.svg)](https://greenkeeper.io/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **Electric IRC** leverages TypeScript, React, and Electron to create a native IRC client. Below, I'll write a few notes that relate to this project and to its technologies.
 
