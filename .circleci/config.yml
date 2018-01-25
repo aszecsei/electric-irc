@@ -27,6 +27,7 @@ jobs:
       - image: circleci/node:8.9.4
     working_directory: ~/repo_build
     steps:
+      - run: yarn config set prefix ~/.yarn
       - checkout
       # Download and cache dependencies
       - restore_cache:
@@ -35,7 +36,7 @@ jobs:
             - v1-dependencies-
       - run: yarn global add greenkeeper-lockfile@1
       - run: yarn install
-      - run: greenkeeper-lockfile-update
+      - run: ~/.yarn/bin/greenkeeper-lockfile-update
       - save_cache:
           paths:
             - node_modules
@@ -43,7 +44,7 @@ jobs:
       # run tests
       - run: yarn test
       - run: yarn report-coverage
-      - run: greenkeeper-lockfile-upload
+      - run: ~/.yarn/bin/greenkeeper-lockfile-upload
 workflows:
   version: 2
   build_and_test:
