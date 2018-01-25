@@ -17,7 +17,7 @@
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "start": "yarn run dev",
     "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha",
-    "release": "yarn compile && electron-builder",
+    "release": "yarn compile && electron-builder -mwl --ia32 --x64",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "precommit": "lint-staged",
     "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\""
