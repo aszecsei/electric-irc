@@ -7,7 +7,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.4
-    working_directory: ~/repo_build
     steps:
       - checkout
       - run: sudo dpkg --add-architecture i386
@@ -30,7 +29,6 @@ jobs:
   test:
     docker:
       - image: circleci/node:8.9.4
-    working_directory: ~/repo_build
     steps:
       - run: yarn config set prefix ~/.yarn
       - checkout
