@@ -19,12 +19,16 @@
     "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha",
     "release": "yarn compile && electron-builder",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\""
   },
   "lint-staged": {
     "{app,test}/**/*.{ts,tsx}": [
       "prettier --write --no-semi --single-quote",
       "git add"
+    ],
+    "app/**/*.scss": [
+      "prettier --write"
     ]
   },
   "nyc": {
