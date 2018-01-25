@@ -35,11 +35,11 @@ jobs:
             - v1-dependencies-
       - run: yarn global add greenkeeper-lockfile@1
       - run: yarn install
+      - run: greenkeeper-lockfile-update
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
-      - run: greenkeeper-lockfile-update
       # run tests
       - run: yarn test
       - run: yarn report-coverage
