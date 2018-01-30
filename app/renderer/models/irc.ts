@@ -5,6 +5,12 @@ import { IMessage } from 'irc'
 export class Server {
   client: irc.Client
 
+  static default(): Server {
+    let result = new Server('chat.freenode.net', 'ElectricIRC')
+    result.joinChannel('#electric-irc', () => {})
+    return result
+  }
+
   constructor(server: string, nick: string) {
     let opts = getOptions()
     this.client = new irc.Client(server, nick, opts)
