@@ -58,6 +58,12 @@
     "@types/cheerio" "*"
     "@types/react" "*"
 
+"@types/irc@^0.3.32":
+  version "0.3.32"
+  resolved "https://registry.yarnpkg.com/@types/irc/-/irc-0.3.32.tgz#4c7a72633635ebb63717cf915d6816b7d6875702"
+  dependencies:
+    "@types/node" "*"
+
 "@types/mocha@^2.2.46":
   version "2.2.46"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.46.tgz#b04713f7759d1cf752effdaae7b3969e285ebc16"
@@ -3968,6 +3974,12 @@ iconv-lite@0.4.19, iconv-lite@^0.4.17, iconv-lite@^0.4.19, iconv-lite@~0.4.13:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
 
+iconv@~2.2.1:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/iconv/-/iconv-2.2.3.tgz#e084d60eeb7d73da7f0a9c096e4c8abe090bfaed"
+  dependencies:
+    nan "^2.3.5"
+
 icss-replace-symbols@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/icss-replace-symbols/-/icss-replace-symbols-1.1.0.tgz#06ea6f83679a7749e386cfe1fe812ae5db223ded"
@@ -4088,6 +4100,19 @@ ip@^1.1.0, ip@^1.1.5:
 ipaddr.js@1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.5.2.tgz#d4b505bde9946987ccf0fc58d9010ff9607e3fa0"
+
+irc-colors@^1.1.0:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/irc-colors/-/irc-colors-1.4.1.tgz#ac8a3c8970f9be686fc6d678fd392af3d415fec0"
+
+irc@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/irc/-/irc-0.5.2.tgz#3714f4768365a96d0b2f776bc91166beb2464bbc"
+  dependencies:
+    irc-colors "^1.1.0"
+  optionalDependencies:
+    iconv "~2.2.1"
+    node-icu-charset-detector "~0.2.0"
 
 is-absolute-url@^2.0.0:
   version "2.1.0"
@@ -5237,7 +5262,7 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-nan@^2.3.0, nan@^2.3.2:
+nan@^2.3.0, nan@^2.3.2, nan@^2.3.3, nan@^2.3.5:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
 
@@ -5319,6 +5344,12 @@ node-gyp@^3.3.1:
     semver "~5.3.0"
     tar "^2.0.0"
     which "1"
+
+node-icu-charset-detector@~0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/node-icu-charset-detector/-/node-icu-charset-detector-0.2.0.tgz#c2320da374ddcb671fc54cb4a0e041e156ffd639"
+  dependencies:
+    nan "^2.3.3"
 
 node-libs-browser@^2.0.0:
   version "2.1.0"
