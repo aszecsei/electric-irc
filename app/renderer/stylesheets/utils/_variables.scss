@@ -20,4 +20,17 @@ $silver: #ddd;
 $gray: #aaa;
 $black: #111;
 
-// TODO: Add app-specific palette!
+// App-specific palette variables!
+$primary-color: var(--primary);
+$primary-color-light: var(--primary-light);
+$primary-color-dark: var(--primary-dark);
+
+$secondary-color: var(--secondary);
+$secondary-color-light: var(--secondary-light);
+$secondary-color-dark: var(--secondary-dark);
+
+$bg: var(--bg);
+$primary-text: var(--primary-text);
+$secondary-text: var(--secondary-text);
+$disabled-text: var(--disabled-text);
+$dividers: var(--dividers);
