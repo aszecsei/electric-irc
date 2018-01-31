@@ -1,0 +1,32 @@
+$lighten-amount: 10;
+$darken-amount: 10;
+
+:root {
+  --bg: lighten($black, $lighten-amount);
+  --primary-text: $white;
+  --secondary-text: rgba($white, 70);
+  --disabled-text: rgba($white, 50);
+  --dividers: rgba($white, 12);
+
+  --primary: $blue;
+  --primary-light: lighten($blue, $lighten-amount);
+  --primary-dark: darken($blue, $darken-amount);
+
+  --secondary: $yellow;
+  --secondary-light: lighten($yellow, $lighten-amount);
+  --secondary-dark: darken($yellow, $darken-amount);
+}
+
+$primary-color: var(--primary);
+$primary-color-light: var(--primary-light);
+$primary-color-dark: var(--primary-dark);
+
+$secondary-color: var(--secondary);
+$secondary-color-light: var(--secondary-light);
+$secondary-color-dark: var(--secondary-dark);
+
+$bg: var(--bg);
+$primary-text: var(--primary-text);
+$secondary-text: var(--secondary-text);
+$disabled-text: var(--disabled-text);
+$dividers: var(--dividers);
