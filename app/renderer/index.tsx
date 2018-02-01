@@ -21,19 +21,27 @@ export class Window extends React.Component<any, IWindowState> {
 
   constructor(props: any) {
     super(props)
-    this.client = new irc.Client('chat.freenode.com', 'ElectricIRC', {
-      channels: ['#electric-irc']
-    })
     // console.log(this.client)
     this.state = {
       log: []
     }
+  }
+
+  componentDidMount() {
+    this.client = new irc.Client('chat.freenode.com', 'ElectricIRC', {
+      channels: ['#electric-irc']
+    })
     this.client.addListener('raw', (message: irc.IMessage) => {
       this.appendToLog(JSON.stringify(message))
     })
     this.client.addListener('error', (message: IMessage) => {
       this.appendToLog('ERROR: ' + message)
     })
+  }
+
+  disconnect() {
+    this.client.removeAllListeners()
+    this.client.disconnect('Exiting!', () => {})
   }
 
   appendToLog(message: string) {

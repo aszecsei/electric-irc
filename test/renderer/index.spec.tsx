@@ -13,22 +13,36 @@ import * as app from '../../app/renderer/index'
 use(chaiEnzyme())
 use(sinonChai)
 
-describe('main application', () => {
+describe('main application', function() {
   let wrapper: ReactWrapper = null
   let window: app.Window = null
+  let joined = false
 
-  describe('window', () => {
-    before(() => {
+  describe('window', function() {
+    before(function(done) {
+      this.timeout(10000)
       wrapper = mount(<app.Window />)
       window = wrapper.instance() as app.Window
+      window.client.addListener('join', () => {
+        if (!joined) {
+          done()
+          joined = true
+        }
+      })
     })
 
-    it('should have a titlebar', () => {
+    after(function() {
+      window.disconnect()
+      window.client.conn.destroy()
+      joined = false
+    })
+
+    it('should have a titlebar', function() {
       expect(wrapper.find('#titlebar')).to.exist
     })
 
-    describe('handleClose', () => {
-      it('should respond to handleClose', () => {
+    describe('handleClose', function() {
+      it('should respond to handleClose', function() {
         expect(window)
           .to.have.property('handleClose')
           .that.is.a('function')
@@ -36,12 +50,12 @@ describe('main application', () => {
 
       // TODO: Stub out electron's remote process
       /*
-      it('should access the remote electron process', () => {
+      it('should access the remote electron process', function() {
         let mockWindow = {
           close: sinon.spy()
         }
         let mockRemote = {
-          getCurrentWindow: () => mockWindow
+          getCurrentWindow: function() mockWindow
         }
         sinon.stub(electron, 'remote').returns(mockRemote)
 
@@ -51,12 +65,12 @@ describe('main application', () => {
         sinon.restore(electron.remote)
       })
 
-      it('should close the window', () => {
+      it('should close the window', function() {
         let mockWindow = {
           close: sinon.spy()
         }
         let mockRemote = {
-          getCurrentWindow: () => mockWindow
+          getCurrentWindow: function() mockWindow
         }
         sinon.stub(electron, 'remote').returns(mockRemote)
 
@@ -68,24 +82,24 @@ describe('main application', () => {
       */
     })
 
-    describe('handleMinimize', () => {
-      it('should respond to handleMinimize', () => {
+    describe('handleMinimize', function() {
+      it('should respond to handleMinimize', function() {
         expect(window)
           .to.have.property('handleMinimize')
           .that.is.a('function')
       })
     })
 
-    describe('handleMaximize', () => {
-      it('should respond to handleMaximize', () => {
+    describe('handleMaximize', function() {
+      it('should respond to handleMaximize', function() {
         expect(window)
           .to.have.property('handleMaximize')
           .that.is.a('function')
       })
     })
 
-    describe('render', () => {
-      it('should respond to render', () => {
+    describe('render', function() {
+      it('should respond to render', function() {
         expect(window)
           .to.have.property('render')
           .that.is.a('function')
