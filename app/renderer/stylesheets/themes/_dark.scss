@@ -1,0 +1,18 @@
+$lighten-amount: 10;
+$darken-amount: 10;
+
+:root {
+  --bg: lighten($black, $lighten-amount);
+  --primary-text: $white;
+  --secondary-text: rgba($white, 70);
+  --disabled-text: rgba($white, 50);
+  --dividers: rgba($white, 12);
+
+  --primary: $blue;
+  --primary-light: lighten($blue, $lighten-amount);
+  --primary-dark: darken($blue, $darken-amount);
+
+  --secondary: $yellow;
+  --secondary-light: lighten($yellow, $lighten-amount);
+  --secondary-dark: darken($yellow, $darken-amount);
+}
