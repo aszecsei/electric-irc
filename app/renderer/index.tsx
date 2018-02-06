@@ -8,6 +8,7 @@ import { Titlebar } from './components/titlebar'
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
+import 'bootstrap'
 
 export class Window extends React.Component {
   handleClose(e: any) {
