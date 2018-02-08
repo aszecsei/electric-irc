@@ -8,7 +8,7 @@ import { Titlebar } from './components/titlebar'
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
-import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.css'
 
 export class Window extends React.Component {
   handleClose(e: any) {
@@ -32,7 +32,7 @@ export class Window extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <Titlebar
           draggable={true}
           handleClose={this.handleClose}
@@ -41,7 +41,7 @@ export class Window extends React.Component {
         >
           Electric IRC
         </Titlebar>
-        <div id="content">
+        <div id="content" className="container-fluid flex row">
           <div>Hello, world! ❤❤❤</div>
         </div>
       </div>
