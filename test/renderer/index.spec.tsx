@@ -1,3 +1,5 @@
+const globalAny: any = global
+
 import { expect, use } from 'chai'
 import * as chaiEnzyme from 'chai-enzyme'
 import * as sinon from 'sinon'
@@ -7,6 +9,7 @@ import * as React from 'react'
 import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
 import * as electron from 'electron'
+import * as irc from 'irc'
 
 import * as app from '../../app/renderer/index'
 
@@ -14,27 +17,26 @@ use(chaiEnzyme())
 use(sinonChai)
 
 describe('main application', function() {
+  let sandbox: sinon.SinonSandbox
+
   let wrapper: ReactWrapper = null
   let window: app.Window = null
-  let joined = false
 
   describe('window', function() {
-    before(function(done) {
-      this.timeout(10000)
+    before(function() {
+      sandbox = sinon.createSandbox()
+
+      // TODO: Use the sandbox to stub anything out that needs to be stubbed
+
       wrapper = mount(<app.Window />)
       window = wrapper.instance() as app.Window
-      window.client.addListener('join', () => {
-        if (!joined) {
-          done()
-          joined = true
-        }
-      })
     })
 
     after(function() {
-      window.disconnect()
-      window.client.conn.destroy()
-      joined = false
+      wrapper.unmount()
+      sandbox.restore()
+      // TODO: This is useful in case Mocha hangs
+      // globalAny.asyncDump();
     })
 
     it('should have a titlebar', function() {

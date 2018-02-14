@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-import { remote } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 
 import { Titlebar } from './components/titlebar'
 
@@ -11,56 +11,24 @@ import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import { IMessage } from 'irc'
+import { ChatWindow } from './components/ircwindow'
 
-interface IWindowState {
-  log: Array<string>
-}
-
-export class Window extends React.Component<any, IWindowState> {
-  client: irc.Client
-
+export class Window extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
-    // console.log(this.client)
-    this.state = {
-      log: []
-    }
   }
 
-  componentDidMount() {
-    this.client = new irc.Client('chat.freenode.com', 'ElectricIRC', {
-      channels: ['#electric-irc']
-    })
-    this.client.addListener('raw', (message: irc.IMessage) => {
-      this.appendToLog(JSON.stringify(message))
-    })
-    this.client.addListener('error', (message: IMessage) => {
-      this.appendToLog('ERROR: ' + message)
-    })
-  }
-
-  disconnect() {
-    this.client.removeAllListeners()
-    this.client.disconnect('Exiting!', () => {})
-  }
-
-  appendToLog(message: string) {
-    this.setState((prevState: IWindowState) => {
-      return { log: [...prevState.log, message] }
-    })
-  }
-
-  handleClose(e: any) {
+  handleClose = (e: any) => {
     const window = remote.getCurrentWindow()
     window.close()
   }
 
-  handleMinimize(e: any) {
+  handleMinimize = (e: any) => {
     const window = remote.getCurrentWindow()
     window.minimize()
   }
 
-  handleMaximize(e: any) {
+  handleMaximize = (e: any) => {
     const window = remote.getCurrentWindow()
     if (!window.isMaximized()) {
       window.maximize()
@@ -80,9 +48,7 @@ export class Window extends React.Component<any, IWindowState> {
         >
           Electric IRC
         </Titlebar>
-        <div id="content">
-          {this.state.log.map((s, i) => <p key={i}>{s}</p>)}
-        </div>
+        <ChatWindow client={undefined} />
       </div>
     )
   }
