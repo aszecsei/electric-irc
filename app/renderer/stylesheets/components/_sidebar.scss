@@ -5,7 +5,6 @@
 #sidebar {
   min-width: 250px;
   max-width: 250px;
-  min-height: 100vh;
 }
 
 #sidebar.active {
@@ -15,16 +14,6 @@ a[data-toggle='collapse'] {
   position: relative;
 }
 
-a[aria-expanded='false']::before,
-a[aria-expanded='true']::before {
-  content: '\e259';
-  display: block;
-  position: absolute;
-  right: 20px;
-  font-family: 'Glyphicons Halflings';
-  font-size: 0.6em;
-}
-
 a[aria-expanded='true']::before {
   content: '\e260';
 }
@@ -32,7 +21,7 @@ p {
   font-size: 1.1em;
   font-weight: 300;
   line-height: 1.7em;
-  color: #999;
+  color: var(--primary-text);
 }
 
 a,
@@ -45,23 +34,18 @@ a:focus {
 
 #sidebar {
   /* don't forget to add all the previously mentioned styles here too */
-  background: #7386d5;
-  color: #fff;
+  background: var(--primary);
+  color: var(--primary-text);
   transition: all 0.3s;
 }
 
 #sidebar .sidebar-header {
   padding: 20px;
-  background: #6d7fcc;
-}
-
-#sidebar ul.components {
-  padding: 20px 0;
-  border-bottom: 1px solid #47748b;
+  background: var(--primary-dark);
 }
 
 #sidebar ul p {
-  color: #fff;
+  color: var(--primary-text);
   padding: 10px;
 }
 
@@ -71,17 +55,21 @@ a:focus {
   display: block;
 }
 #sidebar ul li a:hover {
-  color: #7386d5;
-  background: #fff;
+  color: var(--primary-dark);
+  background: var(--primary-text);
 }
 
 #sidebar ul li.active > a,
 a[aria-expanded='true'] {
-  color: #fff;
-  background: #6d7fcc;
+  color: var(--primary-text);
+  background: var(--primary-dark);
 }
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
-  background: #6d7fcc;
+  background: var(--primary-dark);
+}
+#sidebar li a {
+  display: flex !important;
+  justify-content: space-between;
 }
