@@ -44,7 +44,7 @@ export class ChatWindow extends React.Component<
 
   render() {
     return (
-      <div id="content">{this.state.log.map((s, i) => <p key={i}>{s}</p>)}</div>
+      <div>{this.state.log.map((s, i) => <p key={i}>{s}</p>)}</div>
     )
   }
 }

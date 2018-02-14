@@ -10,6 +10,7 @@ import * as irc from 'irc'
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
+<<<<<<< HEAD
 import { IMessage } from 'irc'
 import { ChatWindow } from './components/ircwindow'
 
@@ -17,6 +18,9 @@ export class Window extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
   }
+=======
+import 'bootstrap/dist/css/bootstrap.css'
+>>>>>>> bc5f64229a10488a16fb09b8b9433a19be64b79b
 
   handleClose = (e: any) => {
     const window = remote.getCurrentWindow()
@@ -39,7 +43,7 @@ export class Window extends React.Component<any, any> {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <Titlebar
           draggable={true}
           handleClose={this.handleClose}
@@ -48,7 +52,9 @@ export class Window extends React.Component<any, any> {
         >
           Electric IRC
         </Titlebar>
-        <ChatWindow client={undefined} />
+        <div id="content" className="container-fluid flex row">
+          <ChatWindow client={undefined} />
+        </div>
       </div>
     )
   }

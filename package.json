@@ -73,7 +73,7 @@
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.3",
     "electron": "^1.7.10",
-    "electron-builder": "^19.54.0",
+    "electron-builder": "^20.0.4",
     "electron-devtools-installer": "^2.2.3",
     "electron-mocha": "^5.0.0",
     "electron-webpack": "^1.11.0",
@@ -97,12 +97,19 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",
     "electron-store": "^1.3.0",
+<<<<<<< HEAD
     "irc": "^0.5.2",
+=======
+    "jquery": "^3.3.1",
+>>>>>>> bc5f64229a10488a16fb09b8b9433a19be64b79b
     "material-design-icons": "^3.0.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "popper.js": "^1.12.9",
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
+    "reactstrap": "^5.0.0-beta",
     "source-map-support": "^0.5.1",
     "typeface-roboto": "^0.0.54"
   },
