@@ -1,27 +1,35 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-import { remote } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 
 import { Titlebar } from './components/titlebar'
+
+import * as irc from 'irc'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 
-export class Window extends React.Component {
-  handleClose(e: any) {
+import { ChatWindow } from './components/ircwindow'
+
+export class Window extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props)
+  }
+
+  handleClose = (e: any) => {
     const window = remote.getCurrentWindow()
     window.close()
   }
 
-  handleMinimize(e: any) {
+  handleMinimize = (e: any) => {
     const window = remote.getCurrentWindow()
     window.minimize()
   }
 
-  handleMaximize(e: any) {
+  handleMaximize = (e: any) => {
     const window = remote.getCurrentWindow()
     if (!window.isMaximized()) {
       window.maximize()
@@ -42,7 +50,7 @@ export class Window extends React.Component {
           Electric IRC
         </Titlebar>
         <div id="content" className="container-fluid flex row">
-          <div>Hello, world! ❤❤❤</div>
+          <ChatWindow client={undefined} />
         </div>
       </div>
     )
