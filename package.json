@@ -100,11 +100,8 @@
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",
     "electron-store": "^1.3.0",
-<<<<<<< HEAD
     "irc": "^0.5.2",
-=======
     "jquery": "^3.3.1",
->>>>>>> bc5f64229a10488a16fb09b8b9433a19be64b79b
     "material-design-icons": "^3.0.1",
     "popper.js": "^1.12.9",
     "react": "16.0.0",
