@@ -41,7 +41,7 @@ a:focus {
 
 #sidebar .sidebar-header {
   padding: 20px;
-  background: var(--primary-dark);
+  background: var(--primary);
 }
 
 #sidebar ul p {
@@ -62,7 +62,7 @@ a:focus {
 #sidebar ul li.active > a,
 a[aria-expanded='true'] {
   color: var(--primary-text);
-  background: var(--primary-dark);
+  background: var(--primary-light);
 }
 ul ul a {
   font-size: 0.9em !important;
