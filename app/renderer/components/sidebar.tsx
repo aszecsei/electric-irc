@@ -1,6 +1,13 @@
 import * as React from 'react'
+import { Server } from './server'
+
 export class Sidebar extends React.Component<any, any> {
+  constructor(parameters: { props: any }) {
+    let props = parameters.props
+    super(props)
+  }
   public render() {
+    const test = [{ name: 'test', channels: ['test1', 'test2', 'test3'] }]
     return (
       <nav className="flex" id="sidebar">
         <div className="sidebar-header">
@@ -11,80 +18,8 @@ export class Sidebar extends React.Component<any, any> {
           <li className="active">
             <a href="#">Home</a>
           </li>
-          <li>
-            <a
-              href="#IRC1"
-              data-toggle="collapse"
-              aria-expanded="false"
-              role="button"
-              aria-controls="IRC1"
-            >
-              IRC 1
-              <i className="material-icons ml-auto">expand_more</i>
-            </a>
-            <ul className="collapse list-unstyled" id="IRC1">
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="">
-              IRC 2
-              <i className="material-icons ml-auto">expand_more</i>
-            </a>
-            <ul className="collapse list-unstyled" id="homeSubmenu">
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
-              IRC 3
-              <i className="material-icons ml-auto">expand_more</i>
-            </a>
-            <ul className="collapse list-unstyled" id="homeSubmenu">
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
-              IRC 4
-              <i className="material-icons ml-auto">expand_more</i>
-            </a>
-            <ul className="collapse list-unstyled" id="homeSubmenu">
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-              <li>
-                <a href="#">Page</a>
-              </li>
-            </ul>
-          </li>
+          {test.map((server, i) => <Server key={i} server={server} />)}
+
           <li>
             <a href="#">About</a>
           </li>
