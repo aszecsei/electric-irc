@@ -1,10 +1,13 @@
 .titlebar {
-  padding: 0 3px;
-  background-color: $black;
   margin: 0;
   color: $white;
 }
-
+.titlebar,
+.titlebar-maximize,
+.titlebar-minimize,
+.titlebar-close {
+  background-color: $black;
+}
 .titlebar.webkit-draggable {
   -webkit-app-region: drag;
   -webkit-user-select: none;
@@ -12,7 +15,7 @@
 }
 
 .titlebar-stoplight {
-  float: left;
+  float: right;
 }
 
 .titlebar:after,
@@ -27,26 +30,48 @@
   background-position: -26px 0;
 }
 
-.titlebar-close,
+.titlebar-maximize,
 .titlebar-minimize,
-.titlebar-maximize {
+.titlebar-close {
   float: left;
-  margin: 6px 4px;
-  width: 12px;
-  height: 12px;
-  border-radius: 6px;
+  width: 30px;
+  height: 20px;
+}
+.titlebar-maximize:hover,
+.titlebar-close:hover,
+.titlebar-minimize:hover {
+  background-color: $red;
 }
 
-.titlebar-close {
-  background: red;
+.titlebar-close:after {
+  content: '✖';
+  color: white;
+  position: absolute;
+  font-size: 15px;
+  top: -2px;
+  left: 6px;
 }
 
 .titlebar-minimize {
-  background: yellow;
+  border-color: white;
+  padding-bottom: 5px;
+}
+.titlebar-minimize:after {
+  content: '―';
+  color: white;
+  position: absolute;
+  font-size: 15px;
+  top: -2px;
+  left: 7px;
 }
 
-.titlebar-maximize {
-  background: green;
+.titlebar-maximize:after {
+  content: '☐';
+  color: white;
+  position: absolute;
+  font-size: 15px;
+  top: -2px;
+  left: 9px;
 }
 
 .titlebar.webkit-draggable .titlebar-close,
@@ -57,7 +82,6 @@
 
 .titlebar-close {
   position: relative;
-  margin-left: 6px;
 }
 
 .titlebar-maximize {
