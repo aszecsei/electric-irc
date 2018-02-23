@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom'
 import { remote } from 'electron'
 
 import { Titlebar } from './components/titlebar'
+import AddModal from './components/addmodal'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
@@ -41,6 +42,7 @@ export class Window extends React.Component {
         >
           Electric IRC
         </Titlebar>
+        <AddModal />
         <div id="content" className="container-fluid flex row">
           <div>Hello, world! ❤❤❤</div>
         </div>
