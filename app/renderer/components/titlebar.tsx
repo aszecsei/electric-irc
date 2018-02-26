@@ -26,14 +26,8 @@ export class Titlebar extends React.Component<ITitlebarProps, any> {
     })
     return (
       <div className={classes} id="titlebar">
+        <img src="https://cdn2.iconfinder.com/data/icons/freecns-cumulus/32/519878-87_Lightning-32.png" />
         <div className="titlebar-stoplight">
-          <div
-            onDoubleClick={this.handleNop}
-            onClick={this.props.handleClose}
-            className="titlebar-close"
-          >
-            {/* TODO: Fix this styling <i className="material-icons">close</i> */}
-          </div>
           <div
             onDoubleClick={this.handleNop}
             onClick={this.props.handleMinimize}
@@ -43,6 +37,13 @@ export class Titlebar extends React.Component<ITitlebarProps, any> {
             onDoubleClick={this.handleNop}
             onClick={this.props.handleMaximize}
             className="titlebar-maximize"
+          >
+            {/* TODO: Fix this styling <i className="material-icons">close</i> */}
+          </div>
+          <div
+            onDoubleClick={this.handleNop}
+            onClick={this.props.handleClose}
+            className="titlebar-close"
           />
         </div>
         <div className="titlebar-children">{this.props.children}</div>
