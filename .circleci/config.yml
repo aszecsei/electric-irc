@@ -7,9 +7,13 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.4
-    working_directory: ~/repo_build
     steps:
       - checkout
+      - run: sudo dpkg --add-architecture i386
+      - run: sudo add-apt-repository -y ppa:ubuntu-wine/ppa
+      - run: sudo apt-get update
+      - run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+      - run: sudo apt-get install -y wine
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -25,7 +29,6 @@ jobs:
   test:
     docker:
       - image: circleci/node:8.9.4
-    working_directory: ~/repo_build
     steps:
       - run: yarn config set prefix ~/.yarn
       - checkout
