@@ -1,11 +1,42 @@
 import * as React from 'react'
 import { Server } from './server'
+import * as irc from 'irc'
+import { Client } from '../models/client'
 
-export class Sidebar extends React.Component<any, any> {
-  constructor(parameters: { props: any }) {
-    let props = parameters.props
+interface ISidebarProps {
+  onClicked?: (client: irc.Client, channel: string) => void
+}
+
+interface ISidebarState {
+  clientList: Client[]
+}
+
+export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
+  constructor(props: ISidebarProps) {
     super(props)
+    this.state = {
+      clientList: []
+    }
+    this.autoConnect()
   }
+
+  onServerClick = (client: irc.Client, channel: string) => {
+    if (this.props.onClicked) {
+      this.props.onClicked(client, channel)
+    }
+  }
+
+  autoConnect = () => {
+    let c = new Client(
+      'Freenode',
+      new irc.Client('irc.freenode.net', 'eIRCClient', {
+        channels: ['#electric-irc']
+      })
+    )
+
+    this.state.clientList.push(c)
+  }
+
   public render() {
     const test = [{ name: 'test', channels: ['test1', 'test2', 'test3'] }]
     return (
@@ -18,7 +49,9 @@ export class Sidebar extends React.Component<any, any> {
           <li className="active">
             <a href="#">Home</a>
           </li>
-          {test.map((server, i) => <Server key={i} server={server} />)}
+          {this.state.clientList.map((client, i) => (
+            <Server key={i} onClicked={this.onServerClick} server={client} />
+          ))}
 
           <li>
             <a href="#">About</a>

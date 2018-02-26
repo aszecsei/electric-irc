@@ -1,15 +1,32 @@
 import * as React from 'react'
 import { Collapse } from 'reactstrap'
-export class Server extends React.Component<any, any> {
-  constructor(parameters: { props: any }) {
-    let props = parameters.props
+import { Client } from '../models/client'
+import * as irc from 'irc'
+
+interface IServerProps {
+  onClicked: (client: irc.Client, channel: string) => void
+  server: Client
+}
+
+interface IServerState {
+  channelList: string[]
+  collapse: boolean
+  icon: string
+}
+
+export class Server extends React.Component<IServerProps, IServerState> {
+  constructor(props: IServerProps) {
     super(props)
 
     this.toggle = this.toggle.bind(this)
-    this.state = { collapse: false, icon: 'expand_more' }
+    this.state = {
+      collapse: false,
+      icon: 'expand_more',
+      channelList: ['#electric-irc']
+    }
   }
 
-  toggle() {
+  toggle = () => {
     this.setState({ collapse: !this.state.collapse })
     if (this.state.icon === 'expand_more') {
       this.setState({ icon: 'expand_less' })
@@ -17,6 +34,7 @@ export class Server extends React.Component<any, any> {
       this.setState({ icon: 'expand_more' })
     }
   }
+
   render() {
     const server = this.props.server
     return (
@@ -24,15 +42,15 @@ export class Server extends React.Component<any, any> {
         <a
           href="#{server.name}"
           role="button"
-          aria-controls={server.name}
+          aria-controls={this.props.server.name}
           onClick={this.toggle}
         >
-          {server.name}
+          {this.props.server.name}
           <i className="material-icons ml-auto">{this.state.icon}</i>
         </a>
         <Collapse isOpen={this.state.collapse}>
           <ul className="list-unstyled" id={server.name}>
-            {server.channels.map((channel: string, i: number) => (
+            {this.state.channelList.map((channel: string, i: number) => (
               <li key={i}>
                 <a href={i.toString()}>{channel}</a>
               </li>

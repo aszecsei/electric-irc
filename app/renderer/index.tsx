@@ -15,9 +15,15 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 import { ChatWindow } from './components/ircwindow'
 
-export class Window extends React.Component<any, any> {
+interface IWindowState {
+  currentIRCClient?: irc.Client
+  currentIRCChannel?: string
+}
+
+export class Window extends React.Component<any, IWindowState> {
   constructor(props: any) {
     super(props)
+    this.state = {}
   }
 
   handleClose = (e: any) => {
@@ -39,6 +45,13 @@ export class Window extends React.Component<any, any> {
     }
   }
 
+  setChatWindow = (client: irc.Client, channel: string) => {
+    this.setState({
+      currentIRCClient: client,
+      currentIRCChannel: channel
+    })
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -52,8 +65,8 @@ export class Window extends React.Component<any, any> {
         </Titlebar>
 
         <div id="content" className="flex container-fluid">
-          <Sidebar />
-          <ChatWindow client={undefined} />
+          <Sidebar onClicked={this.setChatWindow} />
+          <ChatWindow client={this.state.currentIRCClient} />
         </div>
       </div>
     )
