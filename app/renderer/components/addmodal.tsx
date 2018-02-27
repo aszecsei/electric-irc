@@ -16,22 +16,41 @@ export class AddModal extends React.Component<any, any> {
     super(props)
     this.state = {
       modal: true,
-      irc: 'test'
+      irc: 'chat.freenode.net',
+      name: 'Guest'
     }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.toggle = this.toggle.bind(this)
   }
-  toggle() {
+  toggle = () => {
     this.setState({
       modal: !this.state.modal
     })
   }
-  handleChange(event: any) {
-    this.setState({ irc: event.target.irc })
+  handleChangeName = (event: any) => {
+    if (
+      event.target.value.match(
+        '[a-z_\\-\\[\\]\\\\^{}|`][a-z0-9_\\-\\[\\]\\\\^{}|`]{2,15}'
+      )
+    ) {
+      this.setState({
+        name: event.target.value
+      })
+      event.target.classList.add('is-valid')
+      event.target.classList.remove('is-invalid')
+    } else {
+      this.setState({
+        name: event.target.value
+      })
+      event.target.classList.add('is-invalid')
+      event.target.classList.remove('is-valid')
+    }
+  }
+  handleChangeIRC = (event: any) => {
+    this.setState({
+      irc: event.target.value
+    })
   }
 
-  handleSubmit(event: any) {
+  handleSubmit = (event: any) => {
     alert('A name was submitted: ' + this.state.irc)
     event.preventDefault()
   }
@@ -47,16 +66,23 @@ export class AddModal extends React.Component<any, any> {
             <ModalHeader toggle={this.toggle}>Add new server</ModalHeader>
             <ModalBody>
               <FormGroup>
-                <Label for="IRC" hidden>
-                  chat.freenode.net
-                </Label>
+                <Label for="IRC">IRC name:</Label>
                 <Input
                   type="text"
                   value={this.state.irc}
-                  onChange={this.handleChange}
+                  onChange={this.handleChangeIRC}
                   name="IRC"
                   id="IRC"
                   placeholder="IRC"
+                />
+                <Label for="Nickname">Nickname:</Label>
+                <Input
+                  type="text"
+                  value={this.state.name}
+                  onChange={this.handleChangeName}
+                  name="Nickname"
+                  id="Nickname"
+                  placeholder="Nickname"
                 />
               </FormGroup>
             </ModalBody>
