@@ -4,6 +4,13 @@
   display: flex;
   flex-direction: column;
 }
+#content {
+  margin: 0px;
+}
 .flex {
   flex: 1;
+}
+.row {
+  padding-left: 0px;
+  padding-right: 0px;
 }
