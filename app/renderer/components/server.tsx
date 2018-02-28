@@ -35,6 +35,12 @@ export class Server extends React.Component<IServerProps, IServerState> {
     }
   }
 
+  onClickGenerator = (client: irc.Client, channel: string) => {
+    return (event: any) => {
+      this.props.onClicked(client, channel)
+    }
+  }
+
   render() {
     const server = this.props.server
     return (
@@ -52,7 +58,15 @@ export class Server extends React.Component<IServerProps, IServerState> {
           <ul className="list-unstyled" id={server.name}>
             {this.state.channelList.map((channel: string, i: number) => (
               <li key={i}>
-                <a href={i.toString()}>{channel}</a>
+                <a
+                  href="#"
+                  onClick={this.onClickGenerator(
+                    this.props.server.client,
+                    channel
+                  )}
+                >
+                  {channel}
+                </a>
               </li>
             ))}
           </ul>

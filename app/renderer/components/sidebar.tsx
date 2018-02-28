@@ -17,6 +17,8 @@ export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
     this.state = {
       clientList: []
     }
+    // TODO: Uncommenting this works for manual testing, but makes Mocha hang
+    // Hopefully we can remove it once adding a server works
     // this.autoConnect()
   }
 
