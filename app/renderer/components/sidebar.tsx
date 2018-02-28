@@ -17,7 +17,7 @@ export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
     this.state = {
       clientList: []
     }
-    this.autoConnect()
+    // this.autoConnect()
   }
 
   onServerClick = (client: irc.Client, channel: string) => {
