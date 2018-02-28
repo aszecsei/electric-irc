@@ -75,7 +75,7 @@
     "electron": "^1.7.10",
     "electron-builder": "^20.0.4",
     "electron-devtools-installer": "^2.2.3",
-    "electron-mocha": "^5.0.0",
+    "electron-mocha": "^6.0.0",
     "electron-webpack": "^1.11.0",
     "electron-webpack-ts": "^1.2.0",
     "enzyme": "^3.3.0",
