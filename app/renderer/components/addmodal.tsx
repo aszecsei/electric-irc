@@ -61,6 +61,7 @@ export class AddModal extends React.Component<any, any> {
           isOpen={this.state.modal}
           toggle={this.toggle}
           className={this.props.className}
+          id="addmodal"
         >
           <Form onSubmit={this.handleSubmit}>
             <ModalHeader toggle={this.toggle}>Add new server</ModalHeader>

@@ -6,8 +6,6 @@ import { ipcRenderer, remote } from 'electron'
 import { Titlebar } from './components/titlebar'
 import AddModal from './components/addmodal'
 
-import * as irc from 'irc'
-
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
