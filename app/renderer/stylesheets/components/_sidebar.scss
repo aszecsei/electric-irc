@@ -1,0 +1,75 @@
+.wrapper {
+  display: flex;
+  align-items: stretch;
+}
+#sidebar {
+  min-width: 250px;
+  max-width: 250px;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+a[data-toggle='collapse'] {
+  position: relative;
+}
+
+a[aria-expanded='true']::before {
+  content: '\e260';
+}
+p {
+  font-size: 1.1em;
+  font-weight: 300;
+  line-height: 1.7em;
+  color: var(--primary-text);
+}
+
+a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+#sidebar {
+  /* don't forget to add all the previously mentioned styles here too */
+  background: var(--primary);
+  color: var(--primary-text);
+  transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: var(--primary);
+}
+
+#sidebar ul p {
+  color: var(--primary-text);
+  padding: 10px;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+}
+#sidebar ul li a:hover {
+  color: var(--primary-dark);
+  background: var(--primary-text);
+}
+
+#sidebar ul li.active > a,
+a[aria-expanded='true'] {
+  color: var(--primary-text);
+  background: var(--primary-light);
+}
+ul ul a {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: var(--primary-dark);
+}
+#sidebar li a {
+  display: flex !important;
+  justify-content: space-between;
+}

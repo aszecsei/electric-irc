@@ -4,7 +4,12 @@ import * as ReactDOM from 'react-dom'
 import { ipcRenderer, remote } from 'electron'
 
 import { Titlebar } from './components/titlebar'
+
 import AddModal from './components/addmodal'
+import { Sidebar } from './components/sidebar'
+
+import * as irc from 'irc'
+
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
@@ -13,9 +18,15 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 import { ChatWindow } from './components/ircwindow'
 
-export class Window extends React.Component<any, any> {
+interface IWindowState {
+  currentIRCClient?: irc.Client
+  currentIRCChannel?: string
+}
+
+export class Window extends React.Component<any, IWindowState> {
   constructor(props: any) {
     super(props)
+    this.state = {}
   }
 
   handleClose = (e: any) => {
@@ -37,6 +48,13 @@ export class Window extends React.Component<any, any> {
     }
   }
 
+  setChatWindow = (client: irc.Client, channel: string) => {
+    this.setState({
+      currentIRCClient: client,
+      currentIRCChannel: channel
+    })
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -49,8 +67,11 @@ export class Window extends React.Component<any, any> {
           Electric IRC
         </Titlebar>
         <AddModal />
-        <div id="content" className="container-fluid flex row">
-          <ChatWindow client={undefined} />
+
+
+        <div id="content" className="flex container-fluid">
+          <Sidebar onClicked={this.setChatWindow} />
+          <ChatWindow client={this.state.currentIRCClient} />
         </div>
       </div>
     )
