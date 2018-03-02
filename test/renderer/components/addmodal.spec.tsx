@@ -20,7 +20,6 @@ describe('addmodal', function() {
     onClick = sinon.spy()
     wrapper = mount(<AddModal.AddModal />)
     instance = wrapper.instance() as AddModal.AddModal
-    inputName = wrapper.find('#Nickname')
   })
   it('should exist', function() {
     expect(AddModal.AddModal).to.exist
@@ -36,11 +35,13 @@ describe('addmodal', function() {
   })
   describe('handlename', function() {
     it('should change state of name if valid', function() {
-      inputName.simulate('change', { target: { value: 'test' } })
+      inputName = wrapper.children().debug()
+      console.log(inputName)
+      instance.handleChangeName({ target: <input value="test" />.get })
       expect(instance.state.name).to.be.equal('test')
     })
     it('should not change state if not valid', function() {
-      inputName.simulate('change', { target: { value: 'st' } })
+      instance.handleChangeName({ target: { value: 'test.net' } })
       expect(instance.state.name).to.be.equal('st')
     })
   })

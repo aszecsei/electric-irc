@@ -57,48 +57,48 @@ export class AddModal extends React.Component<any, any> {
   }
   public render() {
     return (
-      <div>
-        <Modal
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-          className={this.props.className}
-          id="addmodal"
-        >
-          <Form onSubmit={this.handleSubmit}>
-            <ModalHeader toggle={this.toggle}>Add new server</ModalHeader>
-            <ModalBody>
-              <FormGroup>
-                <Label for="IRC">IRC name:</Label>
-                <Input
-                  type="text"
-                  value={this.state.irc}
-                  onChange={this.handleChangeIRC}
-                  name="IRC"
-                  id="IRC"
-                  placeholder="IRC"
-                />
-                <Label for="Nickname">Nickname:</Label>
-                <Input
-                  type="text"
-                  value={this.state.name}
-                  onChange={this.handleChangeName}
-                  name="Nickname"
-                  id="Nickname"
-                  placeholder="Nickname"
-                />
-              </FormGroup>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" type="submit">
-                Add
-              </Button>{' '}
-              <Button color="secondary" type="button" onClick={this.toggle}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
-      </div>
+      <Modal
+        isOpen={this.state.modal}
+        toggle={this.toggle}
+        className={this.props.className}
+        id="addmodal"
+      >
+        <Form onSubmit={this.handleSubmit}>
+          <ModalHeader toggle={this.toggle}>Add new server</ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Label for="IRC">IRC name:</Label>
+              <Input
+                className={'IRC'}
+                type="text"
+                value={this.state.irc}
+                onChange={this.handleChangeIRC}
+                name="IRC"
+                id="IRC"
+                placeholder="IRC"
+              />
+              <Label for="Nickname">Nickname:</Label>
+              <Input
+                className={'Nickname'}
+                type="text"
+                value={this.state.name}
+                onChange={this.handleChangeName}
+                name="Nickname"
+                id="Nickname"
+                placeholder="Nickname"
+              />
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" type="submit">
+              Add
+            </Button>{' '}
+            <Button color="secondary" type="button" onClick={this.toggle}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     )
   }
 }
