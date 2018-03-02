@@ -92,7 +92,7 @@
     "sinon": "^4.2.1",
     "sinon-chai": "^2.14.0",
     "spectron": "^3.7.2",
-    "ts-node": "^4.1.0",
+    "ts-node": "^5.0.1",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },
