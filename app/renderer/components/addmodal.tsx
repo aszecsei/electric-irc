@@ -26,6 +26,7 @@ export class AddModal extends React.Component<any, any> {
     })
   }
   handleChangeName = (event: any) => {
+    console.log(event.target)
     if (
       event.target.value.match(
         '[a-z_\\-\\[\\]\\\\^{}|`][a-z0-9_\\-\\[\\]\\\\^{}|`]{2,15}'
