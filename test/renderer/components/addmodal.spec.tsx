@@ -15,6 +15,7 @@ describe('addmodal', function() {
   let instance: AddModal.AddModal = null
   let onClick: sinon.SinonSpy = null
   let inputName: any = null
+  let value: string
 
   before(function() {
     onClick = sinon.spy()
@@ -35,13 +36,21 @@ describe('addmodal', function() {
   })
   describe('handlename', function() {
     it('should change state of name if valid', function() {
-      inputName = wrapper.children().debug()
-      console.log(inputName)
-      instance.handleChangeName({ target: <input value="test" />.get })
+      value = 'test'
+      inputName = mount(
+        <Input value={value} onChange={instance.handleChangeName} />
+      )
+      inputName.instance().value = 'test'
+      inputName.simulate('change')
       expect(instance.state.name).to.be.equal('test')
     })
     it('should not change state if not valid', function() {
-      instance.handleChangeName({ target: { value: 'test.net' } })
+      value = 'st'
+      inputName = mount(
+        <Input value={value} onChange={instance.handleChangeName} />
+      )
+      inputName.instance().value = 'st'
+      inputName.simulate('change')
       expect(instance.state.name).to.be.equal('st')
     })
   })
@@ -50,5 +59,11 @@ describe('addmodal', function() {
       instance.handleChangeIRC({ target: { value: 'test.net' } })
       expect(instance.state.irc).to.be.equal('test.net')
     })
+  })
+  it('should handle submitting', function() {
+    instance.handleSubmit({
+      preventDefault: () => {}
+    })
+    expect(instance.state.submitted).to.be.true
   })
 })

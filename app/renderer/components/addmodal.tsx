@@ -17,7 +17,8 @@ export class AddModal extends React.Component<any, any> {
     this.state = {
       modal: true,
       irc: 'chat.freenode.net',
-      name: 'Guest'
+      name: 'Guest',
+      submitted: false
     }
   }
   toggle = () => {
@@ -52,6 +53,9 @@ export class AddModal extends React.Component<any, any> {
   }
 
   handleSubmit = (event: any) => {
+    this.setState({
+      submitted: true
+    })
     alert('A name was submitted: ' + this.state.irc)
     event.preventDefault()
   }
