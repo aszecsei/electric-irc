@@ -4,9 +4,12 @@ import * as ReactDOM from 'react-dom'
 import { ipcRenderer, remote } from 'electron'
 
 import { Titlebar } from './components/titlebar'
+
+import AddModal from './components/addmodal'
 import { Sidebar } from './components/sidebar'
 
 import * as irc from 'irc'
+
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
@@ -63,6 +66,8 @@ export class Window extends React.Component<any, IWindowState> {
         >
           Electric IRC
         </Titlebar>
+        <AddModal />
+
 
         <div id="content" className="flex container-fluid">
           <Sidebar onClicked={this.setChatWindow} />

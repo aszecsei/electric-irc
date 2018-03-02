@@ -83,6 +83,9 @@ describe('main application', function() {
       })
       */
     })
+    it('should have a add modal', function() {
+      expect(wrapper.find('#addmodal')).to.exist
+    })
 
     describe('handleMinimize', function() {
       it('should respond to handleMinimize', function() {
