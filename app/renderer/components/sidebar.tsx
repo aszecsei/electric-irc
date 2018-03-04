@@ -5,6 +5,7 @@ import { Client } from '../models/client'
 
 interface ISidebarProps {
   onClicked?: (client: irc.Client, channel: string) => void
+  clickAdd: () => void
 }
 
 interface ISidebarState {
@@ -40,7 +41,6 @@ export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
   }
 
   public render() {
-    const test = [{ name: 'test', channels: ['test1', 'test2', 'test3'] }]
     return (
       <nav className="flex" id="sidebar">
         <div className="sidebar-header">
@@ -49,12 +49,13 @@ export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
 
         <ul className="list-unstyled components">
           <li className="active">
-            <a href="#">Home</a>
+            <a href="#" onClick={this.props.clickAdd}>
+              Add new server
+            </a>
           </li>
           {this.state.clientList.map((client, i) => (
             <Server key={i} onClicked={this.onServerClick} server={client} />
           ))}
-
           <li>
             <a href="#">About</a>
           </li>
