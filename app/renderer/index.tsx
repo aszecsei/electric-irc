@@ -15,12 +15,12 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 import { ChatWindow } from './components/ircwindow'
 
-interface IWindowState {
+interface IAppState {
   currentIRCClient?: irc.Client
   currentIRCChannel?: string
 }
 
-export class Window extends React.Component<any, IWindowState> {
+export class App extends React.Component<any, IAppState> {
   constructor(props: any) {
     super(props)
     this.state = {}
@@ -76,4 +76,4 @@ export class Window extends React.Component<any, IWindowState> {
   }
 }
 
-ReactDOM.render(<Window />, document.getElementById('app'))
+ReactDOM.render(<App />, document.getElementById('app'))
