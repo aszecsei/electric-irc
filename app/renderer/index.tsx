@@ -10,8 +10,8 @@ import { Sidebar } from './components/sidebar'
 
 import * as irc from 'irc'
 
-
 import 'material-design-icons/iconfont/material-icons.css'
+
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -24,9 +24,13 @@ interface IWindowState {
 }
 
 export class Window extends React.Component<any, IWindowState> {
+  ref: any
   constructor(props: any) {
     super(props)
     this.state = {}
+  }
+  modalToggle = () => {
+    this.ref.toggle()
   }
 
   handleClose = (e: any) => {
@@ -66,11 +70,14 @@ export class Window extends React.Component<any, IWindowState> {
         >
           Electric IRC
         </Titlebar>
-        <AddModal />
-
+        <AddModal
+          ref={instance => {
+            this.ref = instance
+          }}
+        />
 
         <div id="content" className="flex container-fluid">
-          <Sidebar onClicked={this.setChatWindow} />
+          <Sidebar clickAdd={this.modalToggle} onClicked={this.setChatWindow} />
           <ChatWindow client={this.state.currentIRCClient} />
         </div>
       </div>

@@ -27,11 +27,11 @@ describe('addmodal', function() {
   })
   describe('toggle', function() {
     it('should initialize to be closed', function() {
-      expect(instance.state.modal).to.be.true
+      expect(instance.state.modal).to.be.false
     })
     it('should be expanded', function() {
       instance.toggle()
-      expect(instance.state.modal).to.be.false
+      expect(instance.state.modal).to.be.true
     })
   })
   describe('handlename', function() {
