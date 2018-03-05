@@ -53,6 +53,6 @@ export class ConnectionHandler {
 }
 
 // TODO: Remove this so we can add servers manually
-ConnectionHandler.addServer('Freenode', 'irc.freenode.net', 'eIRCClient', [
-  '#electric-irc'
-])
+// ConnectionHandler.addServer('Freenode', 'irc.freenode.net', 'eIRCClient', [
+//   '#electric-irc'
+// ])
