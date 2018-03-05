@@ -66,7 +66,10 @@ export class Window extends React.Component<any, IWindowState> {
 
         <div id="content" className="flex container-fluid">
           <Sidebar onClicked={this.setChatWindow} />
-          <ChatWindow client={this.state.currentIRCClient} />
+          <ChatWindow
+            client={this.state.currentIRCClient}
+            channel={this.state.currentIRCChannel}
+          />
         </div>
       </div>
     )

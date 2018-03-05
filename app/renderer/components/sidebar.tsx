@@ -1,25 +1,15 @@
 import * as React from 'react'
 import { Server } from './server'
 import * as irc from 'irc'
-import { Client } from '../models/client'
+import { ConnectionHandler } from '../models/connections'
 
 interface ISidebarProps {
   onClicked?: (client: irc.Client, channel: string) => void
 }
 
-interface ISidebarState {
-  clientList: Client[]
-}
-
-export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
+export class Sidebar extends React.Component<ISidebarProps, any> {
   constructor(props: ISidebarProps) {
     super(props)
-    this.state = {
-      clientList: []
-    }
-    // TODO: Uncommenting this works for manual testing, but makes Mocha hang
-    // Hopefully we can remove it once adding a server works
-    // this.autoConnect()
   }
 
   onServerClick = (client: irc.Client, channel: string) => {
@@ -28,19 +18,7 @@ export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
     }
   }
 
-  autoConnect = () => {
-    let c = new Client(
-      'Freenode',
-      new irc.Client('irc.freenode.net', 'eIRCClient', {
-        channels: ['#electric-irc']
-      })
-    )
-
-    this.state.clientList.push(c)
-  }
-
   public render() {
-    const test = [{ name: 'test', channels: ['test1', 'test2', 'test3'] }]
     return (
       <nav className="flex" id="sidebar">
         <div className="sidebar-header">
@@ -51,10 +29,18 @@ export class Sidebar extends React.Component<ISidebarProps, ISidebarState> {
           <li className="active">
             <a href="#">Home</a>
           </li>
-          {this.state.clientList.map((client, i) => (
-            <Server key={i} onClicked={this.onServerClick} server={client} />
-          ))}
-
+          {ConnectionHandler.connections.map(
+            (connection, i) =>
+              connection.client ? (
+                <Server
+                  key={i}
+                  onClicked={this.onServerClick}
+                  server={connection.client}
+                />
+              ) : (
+                <div />
+              )
+          )}
           <li>
             <a href="#">About</a>
           </li>

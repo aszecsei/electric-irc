@@ -3,25 +3,35 @@ import * as irc from 'irc'
 
 interface IChatBoxProps {
   client?: irc.Client
+  channel?: string
 }
-type valueState = { value: string }
-export default class MessageEntry extends React.Component<
+interface IMessageEntryState {
+  value: string
+}
+export class MessageEntry extends React.Component<
   IChatBoxProps,
-  valueState
+  IMessageEntryState
 > {
   constructor(props: IChatBoxProps) {
     super(props)
     this.state = { value: '' }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange(event: any) {
-    this.setState({ value: event.target.text })
+  handleChange = (event: any) => {
+    this.setState({ value: event.target.value })
   }
-  handleSubmit(event: any) {
-    //   this.props.client.say(irc.Client.channel,this.state.value);
+
+  handleSubmit = (event: any) => {
+    if (this.props.client && this.props.channel) {
+      this.props.client.say(this.props.channel, this.state.value)
+    } else {
+      console.error(
+        'Tried to connect to chat, but client or channel did not exist.'
+      )
+    }
+    event.preventDefault()
   }
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
