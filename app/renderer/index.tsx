@@ -1,7 +1,11 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
-import { ipcRenderer, remote } from 'electron'
+import { remote } from 'electron'
+
+import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
 import { Sidebar } from './components/sidebar'
@@ -76,4 +80,11 @@ export class App extends React.Component<any, IAppState> {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'))
+const store = createStore(defaultReducer, defaultStore)
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
