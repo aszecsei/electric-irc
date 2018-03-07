@@ -27,7 +27,6 @@ export class AddModal extends React.Component<any, any> {
     })
   }
   handleChangeName = (event: any) => {
-    console.log(event.target)
     if (
       event.target.value.match(
         '[a-z_\\-\\[\\]\\\\^{}|`][a-z0-9_\\-\\[\\]\\\\^{}|`]{2,15}'
@@ -56,7 +55,6 @@ export class AddModal extends React.Component<any, any> {
     this.setState({
       submitted: true
     })
-    alert('A name was submitted: ' + this.state.irc)
     event.preventDefault()
   }
   public render() {
