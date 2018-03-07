@@ -38,11 +38,15 @@ export interface IJoinChannelAction {
 
 export interface IAppendLogAction {
   readonly type: ActionTypeKeys.APPEND_LOG
+  readonly serverId: number
+  readonly channelId: number
   readonly message: Message
 }
 
 export interface ISendMessageAction {
   readonly type: ActionTypeKeys.SEND_MESSAGE
+  readonly serverId: number
+  readonly channelId: number
   readonly message: Message
 }
 
@@ -107,16 +111,28 @@ export function joinChannel(
   }
 }
 
-export function appendLog(message: Message): IAppendLogAction {
+export function appendLog(
+  serverId: number,
+  channelId: number,
+  message: Message
+): IAppendLogAction {
   return {
     type: ActionTypeKeys.APPEND_LOG,
+    serverId,
+    channelId,
     message
   }
 }
 
-export function sendMessage(message: Message): ISendMessageAction {
+export function sendMessage(
+  serverId: number,
+  channelId: number,
+  message: Message
+): ISendMessageAction {
   return {
     type: ActionTypeKeys.SEND_MESSAGE,
+    serverId,
+    channelId,
     message
   }
 }
