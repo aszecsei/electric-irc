@@ -12,19 +12,21 @@ import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
 import * as IRC from 'irc'
 
+use(sinonChai)
+
 describe('add-server reducer', function() {
   let sandbox: sinon.SinonSandbox
 
-  const prevState = defaultStore
+  const prevState = { ...defaultStore }
   let nextState: ElectricState = undefined
 
   before(function() {
     sandbox = sinon.createSandbox()
     sandbox.stub(IRC, 'Client').returns('Client')
     prevState.connections = List([
-      new Connection('Connection 1', [
-        new Channel('#channel1'),
-        new Channel('#channel2')
+      new Connection(0, 'Connection 1', [
+        new Channel(1, '#channel1'),
+        new Channel(2, '#channel2')
       ])
     ])
   })
@@ -40,7 +42,7 @@ describe('add-server reducer', function() {
       )
     })
 
-    it('has two connections', function() {
+    it('has one more connection', function() {
       expect(nextState.connections.count()).to.eq(2)
     })
 
