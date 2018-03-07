@@ -1,7 +1,8 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import createSagaMiddleware from 'redux-saga'
 
 import { remote } from 'electron'
 
@@ -80,7 +81,13 @@ export class App extends React.Component<any, IAppState> {
   }
 }
 
-const store = createStore(defaultReducer, defaultStore)
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(
+  defaultReducer,
+  defaultStore,
+  applyMiddleware(sagaMiddleware)
+)
+// TODO: Start the message listening saga
 
 ReactDOM.render(
   <Provider store={store}>
