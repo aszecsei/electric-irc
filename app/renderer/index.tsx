@@ -9,7 +9,7 @@ import { remote } from 'electron'
 import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
-import { Sidebar } from './components/sidebar'
+import SidebarContainer from './containers/sidebar-container'
 
 import * as irc from 'irc'
 
@@ -70,11 +70,8 @@ export class App extends React.Component<any, IAppState> {
         </Titlebar>
 
         <div id="content" className="flex container-fluid">
-          <Sidebar onClicked={this.setChatWindow} />
-          <ChatWindow
-            client={this.state.currentIRCClient}
-            channel={this.state.currentIRCChannel}
-          />
+          <SidebarContainer />
+          <ChatWindow />
         </div>
       </div>
     )

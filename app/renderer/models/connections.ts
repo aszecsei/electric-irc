@@ -1,16 +1,22 @@
+import { List } from 'immutable'
 import { Channel } from './channel'
 
 import * as IRC from 'irc'
 
 export const Clients = new Map<string, IRC.Client>()
 
+let lastId = 0
+
 export class Connection {
-  name: string
-  channels: Channel[]
+  readonly id: number
+  readonly name: string
+  readonly channels: List<Channel>
 
   constructor(name: string, channels: Channel[] = []) {
     this.name = name
-    this.channels = channels
+    this.channels = List(channels)
+    this.id = lastId
+    lastId++
   }
 
   getClient() {

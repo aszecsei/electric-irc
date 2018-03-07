@@ -6,7 +6,6 @@ export default function appendLog(
   action: IAppendLogAction
 ): ElectricState {
   let newState = { ...state }
-  newState.connections = [...newState.connections]
 
   // TODO: Implement this
 

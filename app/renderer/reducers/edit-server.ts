@@ -6,7 +6,6 @@ export default function editServer(
   action: IEditServerAction
 ): ElectricState {
   let newState = { ...state }
-  newState.connections = [...newState.connections]
 
   // TODO: Implement this
 

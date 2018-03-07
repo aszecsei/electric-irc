@@ -10,7 +10,6 @@ export default function addServer(
   action: IAddServerAction
 ): ElectricState {
   let newState = { ...state }
-  newState.connections = [...newState.connections]
 
   let conn = new Connection(
     action.name,
@@ -24,6 +23,6 @@ export default function addServer(
     })
   )
 
-  newState.connections.push(conn)
+  newState.connections = newState.connections.push(conn)
   return newState
 }

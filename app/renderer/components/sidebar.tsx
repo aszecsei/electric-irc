@@ -1,51 +1,36 @@
+import { List } from 'immutable'
 import * as React from 'react'
 import { Server } from './server'
-import * as irc from 'irc'
-import { ConnectionHandler } from '../models/connections'
+import { Connection } from '../models/connections'
+import { Channel } from '../models/channel'
 
 interface ISidebarProps {
-  onClicked?: (client: irc.Client, channel: string) => void
+  connections: List<Connection>
+  onChannelClick: (conn: Connection, channel: Channel) => void
 }
 
-export class Sidebar extends React.Component<ISidebarProps, any> {
-  constructor(props: ISidebarProps) {
-    super(props)
-  }
+export const Sidebar: React.SFC<ISidebarProps> = props => {
+  return (
+    <nav className="flex" id="sidebar">
+      <div className="sidebar-header">
+        <h3>Electric IRC: Welcome Home</h3>
+      </div>
 
-  onServerClick = (client: irc.Client, channel: string) => {
-    if (this.props.onClicked) {
-      this.props.onClicked(client, channel)
-    }
-  }
-
-  public render() {
-    return (
-      <nav className="flex" id="sidebar">
-        <div className="sidebar-header">
-          <h3>Electric IRC: Welcome Home</h3>
-        </div>
-
-        <ul className="list-unstyled components">
-          <li className="active">
-            <a href="#">Home</a>
-          </li>
-          {ConnectionHandler.connections.map(
-            (connection, i) =>
-              connection.client ? (
-                <Server
-                  key={i}
-                  onClicked={this.onServerClick}
-                  server={connection.client}
-                />
-              ) : (
-                <div />
-              )
-          )}
-          <li>
-            <a href="#">About</a>
-          </li>
-        </ul>
-      </nav>
-    )
-  }
+      <ul className="list-unstyled components">
+        <li className="active">
+          <a href="#">Home</a>
+        </li>
+        {props.connections.map((connection, i) => (
+          <Server
+            key={i}
+            connection={connection}
+            onChannelClick={props.onChannelClick}
+          />
+        ))}
+        <li>
+          <a href="#">About</a>
+        </li>
+      </ul>
+    </nav>
+  )
 }

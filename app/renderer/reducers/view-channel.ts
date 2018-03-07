@@ -1,9 +1,9 @@
 import { ElectricState } from '../store'
-import { ISendMessageAction } from '../actions'
+import { IViewChannelAction } from '../actions'
 
 export default function sendMessage(
   state: ElectricState,
-  action: ISendMessageAction
+  action: IViewChannelAction
 ): ElectricState {
   let newState = { ...state }
 

@@ -6,7 +6,6 @@ export default function joinChannel(
   action: IJoinChannelAction
 ): ElectricState {
   let newState = { ...state }
-  newState.connections = [...newState.connections]
 
   // TODO: Implement this
 

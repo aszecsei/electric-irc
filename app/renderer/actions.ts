@@ -6,7 +6,8 @@ export enum ActionTypeKeys {
   EDIT_SERVER = 'EDIT_SERVER',
   JOIN_CHANNEL = 'JOIN_CHANNEL',
   APPEND_LOG = 'APPEND_LOG',
-  SEND_MESSAGE = 'SEND_MESSAGE'
+  SEND_MESSAGE = 'SEND_MESSAGE',
+  VIEW_CHANNEL = 'VIEW_CHANNEL'
 }
 
 export interface IAddServerAction {
@@ -45,6 +46,12 @@ export interface ISendMessageAction {
   readonly message: Message
 }
 
+export interface IViewChannelAction {
+  readonly type: ActionTypeKeys.VIEW_CHANNEL
+  readonly serverId: number
+  readonly channelId: number
+}
+
 export type ActionTypes =
   | IAddServerAction
   | IRemoveServerAction
@@ -52,6 +59,7 @@ export type ActionTypes =
   | IJoinChannelAction
   | IAppendLogAction
   | ISendMessageAction
+  | IViewChannelAction
 
 export function addServer(
   name: string,
@@ -110,5 +118,13 @@ export function sendMessage(message: Message): ISendMessageAction {
   return {
     type: ActionTypeKeys.SEND_MESSAGE,
     message
+  }
+}
+
+export function viewChannel(serverId: number, channelId: number) {
+  return {
+    type: ActionTypeKeys.VIEW_CHANNEL,
+    serverId,
+    channelId
   }
 }
