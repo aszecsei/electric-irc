@@ -8,26 +8,25 @@ import { Connection } from '../../../app/renderer/models/connections'
 import { Channel } from '../../../app/renderer/models/channel'
 import { addServer } from '../../../app/renderer/actions'
 import { ElectricState } from '../../../app/renderer/store'
+import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
 import * as IRC from 'irc'
 
 describe('add-server reducer', function() {
   let sandbox: sinon.SinonSandbox
-  let createIRCClientStub: sinon.SinonStubStatic
 
-  const prevState = {
-    connections: List([
-      new Connection('Connection 1', [
-        new Channel('#channel1'),
-        new Channel('#channel2')
-      ])
-    ])
-  }
+  const prevState = defaultStore
   let nextState: ElectricState = undefined
 
   before(function() {
     sandbox = sinon.createSandbox()
     sandbox.stub(IRC, 'Client').returns('Client')
+    prevState.connections = List([
+      new Connection('Connection 1', [
+        new Channel('#channel1'),
+        new Channel('#channel2')
+      ])
+    ])
   })
 
   describe('adding a server', function() {

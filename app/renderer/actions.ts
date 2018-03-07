@@ -121,7 +121,10 @@ export function sendMessage(message: Message): ISendMessageAction {
   }
 }
 
-export function viewChannel(serverId: number, channelId: number) {
+export function viewChannel(
+  serverId: number,
+  channelId: number
+): IViewChannelAction {
   return {
     type: ActionTypeKeys.VIEW_CHANNEL,
     serverId,
