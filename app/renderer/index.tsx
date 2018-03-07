@@ -17,6 +17,7 @@ import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 
 import { ChatWindow } from './components/ircwindow'
+import SettingsModal from './components/settingsmodal'
 
 interface IWindowState {
   currentIRCClient?: irc.Client
@@ -62,6 +63,7 @@ export class Window extends React.Component<any, IWindowState> {
   render() {
     return (
       <div className="container-fluid">
+        <SettingsModal />
         <Titlebar
           draggable={true}
           handleClose={this.handleClose}

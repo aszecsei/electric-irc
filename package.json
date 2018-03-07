@@ -97,6 +97,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "@types/react-color": "^2.13.4",
     "@types/reactstrap": "^5.0.17",
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",
@@ -106,6 +107,7 @@
     "material-design-icons": "^3.0.1",
     "popper.js": "^1.12.9",
     "react": "16.0.0",
+    "react-color": "^2.14.0",
     "react-dom": "16.0.0",
     "reactstrap": "^5.0.0-beta",
     "source-map-support": "^0.5.1",
