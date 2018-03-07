@@ -21,10 +21,13 @@ export default function addServer(
 ): ElectricState {
   let newState = { ...state }
 
+  newState.lastUsedConnectionId += 1
   let conn = new Connection(
+    newState.lastUsedConnectionId,
     action.name,
     action.channels.map(chanName => {
-      return new Channel(chanName)
+      newState.lastUsedChannelId += 1
+      return new Channel(newState.lastUsedChannelId, chanName)
     })
   )
   conn.setClient(createIRCClient(action.url, action.nickname, action.channels))

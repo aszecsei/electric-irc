@@ -5,18 +5,15 @@ import * as IRC from 'irc'
 
 export const Clients = new Map<string, IRC.Client>()
 
-let lastId = 0
-
 export class Connection {
   readonly id: number
   readonly name: string
   readonly channels: List<Channel>
 
-  constructor(name: string, channels: Channel[] = []) {
+  constructor(id: number, name: string, channels: Channel[] = []) {
     this.name = name
     this.channels = List(channels)
-    this.id = lastId
-    lastId++
+    this.id = id
   }
 
   getClient() {

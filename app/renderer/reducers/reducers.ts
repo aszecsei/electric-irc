@@ -23,7 +23,9 @@ import viewChannel from './view-channel'
 export const defaultStore: ElectricState = {
   connections: List([]),
   currentChannel: undefined,
-  currentConnection: undefined
+  currentConnection: undefined,
+  lastUsedChannelId: 0,
+  lastUsedConnectionId: 0
 }
 
 export function defaultReducer(

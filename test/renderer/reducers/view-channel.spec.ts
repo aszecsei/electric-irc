@@ -11,19 +11,18 @@ import { defaultStore } from '../../../app/renderer/reducers/reducers'
 import * as IRC from 'irc'
 
 describe('view-channel reducer', function() {
-  const prevState = defaultStore
+  const prevState = { ...defaultStore }
   let nextState: ElectricState = undefined
 
-  const chan1 = new Channel('#channel1')
-  const chan2 = new Channel('#channel2')
-  const chan3 = new Channel('#channel3')
+  const chan1 = new Channel(1, '#channel1')
+  const chan2 = new Channel(2, '#channel2')
+  const chan3 = new Channel(3, '#channel3')
 
-  const conn1 = new Connection('Connection 1', [chan1, chan2])
-  const conn2 = new Connection('Connection 2', [chan3])
-  const conn3 = new Connection('Connection 3')
+  const conn1 = new Connection(1, 'Connection 1', [chan1, chan2])
+  const conn2 = new Connection(2, 'Connection 2', [chan3])
 
   before(function() {
-    prevState.connections = List([conn1, conn2, conn3])
+    prevState.connections = List([conn1, conn2])
   })
 
   describe('getting conn1 chan1', function() {
