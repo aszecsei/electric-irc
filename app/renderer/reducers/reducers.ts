@@ -21,7 +21,9 @@ import sendMessage from './send-message'
 import viewChannel from './view-channel'
 
 export const defaultStore: ElectricState = {
-  connections: List([])
+  connections: List([]),
+  currentChannel: undefined,
+  currentConnection: undefined
 }
 
 export function defaultReducer(

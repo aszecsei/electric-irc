@@ -7,7 +7,17 @@ export default function sendMessage(
 ): ElectricState {
   let newState = { ...state }
 
-  // TODO: Implement this
+  const conn = state.connections.find(connection => {
+    return connection.id == action.serverId
+  })
+  newState.currentConnection = conn
+
+  if (conn) {
+    const chan = conn.channels.find(channel => {
+      return channel.id == action.channelId
+    })
+    newState.currentChannel = chan
+  }
 
   return newState
 }
