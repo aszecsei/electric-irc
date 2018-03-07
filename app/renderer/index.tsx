@@ -1,12 +1,16 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { createStore, applyMiddleware, compose } from 'redux'
+import { Provider } from 'react-redux'
+import createSagaMiddleware from 'redux-saga'
 
-import { ipcRenderer, remote } from 'electron'
+import { remote } from 'electron'
+
+import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
-
+import SidebarContainer from './containers/sidebar-container'
 import AddModal from './components/addmodal'
-import { Sidebar } from './components/sidebar'
 
 import * as irc from 'irc'
 
@@ -18,12 +22,12 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 import { ChatWindow } from './components/ircwindow'
 
-interface IWindowState {
+interface IAppState {
   currentIRCClient?: irc.Client
   currentIRCChannel?: string
 }
 
-export class Window extends React.Component<any, IWindowState> {
+export class App extends React.Component<any, IAppState> {
   ref: any
   constructor(props: any) {
     super(props)
@@ -70,6 +74,7 @@ export class Window extends React.Component<any, IWindowState> {
         >
           Electric IRC
         </Titlebar>
+
         <AddModal
           ref={instance => {
             this.ref = instance
@@ -77,12 +82,27 @@ export class Window extends React.Component<any, IWindowState> {
         />
 
         <div id="content" className="flex container-fluid">
-          <Sidebar clickAdd={this.modalToggle} onClicked={this.setChatWindow} />
-          <ChatWindow client={this.state.currentIRCClient} />
+          <SidebarContainer />
+          <ChatWindow />
         </div>
       </div>
     )
   }
 }
 
-ReactDOM.render(<Window />, document.getElementById('app'))
+const sagaMiddleware = createSagaMiddleware()
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+  defaultReducer,
+  defaultStore,
+  composeEnhancers(applyMiddleware(sagaMiddleware))
+)
+// TODO: Start the message listening saga
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)

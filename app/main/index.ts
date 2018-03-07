@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import installExtension, {
-  REACT_DEVELOPER_TOOLS
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS
 } from 'electron-devtools-installer'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -35,6 +36,14 @@ export function createMainWindow() {
   })
 
   installExtension(REACT_DEVELOPER_TOOLS)
+    .then(name => {
+      console.log(`Added extension: ${name}`)
+    })
+    .catch(err => {
+      console.log(`An error occurred: ${err}`)
+    })
+
+  installExtension(REDUX_DEVTOOLS)
     .then(name => {
       console.log(`Added extension: ${name}`)
     })

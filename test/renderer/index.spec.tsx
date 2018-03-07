@@ -6,12 +6,13 @@ import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 
 import * as React from 'react'
-import { mount, render, shallow, ReactWrapper } from 'enzyme'
+import { mount, render, shallow, ShallowWrapper } from 'enzyme'
 
 import * as electron from 'electron'
 import * as irc from 'irc'
 
 import * as app from '../../app/renderer/index'
+import { Titlebar } from '../../app/renderer/components/titlebar'
 
 use(chaiEnzyme())
 use(sinonChai)
@@ -19,8 +20,8 @@ use(sinonChai)
 describe('main application', function() {
   let sandbox: sinon.SinonSandbox
 
-  let wrapper: ReactWrapper = null
-  let window: app.Window = null
+  let wrapper: ShallowWrapper = null
+  let window: app.App = null
 
   describe('window', function() {
     before(function() {
@@ -28,8 +29,8 @@ describe('main application', function() {
 
       // TODO: Use the sandbox to stub anything out that needs to be stubbed
 
-      wrapper = mount(<app.Window />)
-      window = wrapper.instance() as app.Window
+      wrapper = shallow(<app.App />)
+      window = wrapper.instance() as app.App
     })
 
     after(function() {
@@ -40,7 +41,7 @@ describe('main application', function() {
     })
 
     it('should have a titlebar', function() {
-      expect(wrapper.find('#titlebar')).to.exist
+      expect(wrapper.find(Titlebar)).to.exist
     })
 
     describe('handleClose', function() {
@@ -82,9 +83,6 @@ describe('main application', function() {
         sinon.restore(electron.remote)
       })
       */
-    })
-    it('should have a add modal', function() {
-      expect(wrapper.find('#addmodal')).to.exist
     })
 
     describe('handleMinimize', function() {
