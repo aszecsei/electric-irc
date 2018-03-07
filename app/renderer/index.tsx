@@ -15,6 +15,7 @@ import AddModal from './components/addmodal'
 import * as irc from 'irc'
 
 import 'material-design-icons/iconfont/material-icons.css'
+
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -27,9 +28,13 @@ interface IAppState {
 }
 
 export class App extends React.Component<any, IAppState> {
+  ref: any
   constructor(props: any) {
     super(props)
     this.state = {}
+  }
+  modalToggle = () => {
+    this.ref.toggle()
   }
 
   handleClose = (e: any) => {
@@ -69,7 +74,12 @@ export class App extends React.Component<any, IAppState> {
         >
           Electric IRC
         </Titlebar>
-        <AddModal />
+
+        <AddModal
+          ref={instance => {
+            this.ref = instance
+          }}
+        />
 
         <div id="content" className="flex container-fluid">
           <SidebarContainer />

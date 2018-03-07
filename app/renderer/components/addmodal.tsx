@@ -15,7 +15,7 @@ export class AddModal extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
-      modal: true,
+      modal: false,
       irc: 'chat.freenode.net',
       name: 'Guest',
       submitted: false
