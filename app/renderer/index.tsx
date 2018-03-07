@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 
@@ -91,10 +91,12 @@ export class App extends React.Component<any, IAppState> {
 }
 
 const sagaMiddleware = createSagaMiddleware()
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   defaultReducer,
   defaultStore,
-  applyMiddleware(sagaMiddleware)
+  composeEnhancers(applyMiddleware(sagaMiddleware))
 )
 // TODO: Start the message listening saga
 
