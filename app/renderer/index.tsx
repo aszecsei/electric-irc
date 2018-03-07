@@ -10,6 +10,7 @@ import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
 import SidebarContainer from './containers/sidebar-container'
+import AddModal from './components/addmodal'
 
 import * as irc from 'irc'
 
@@ -68,6 +69,7 @@ export class App extends React.Component<any, IAppState> {
         >
           Electric IRC
         </Titlebar>
+        <AddModal />
 
         <div id="content" className="flex container-fluid">
           <SidebarContainer />
