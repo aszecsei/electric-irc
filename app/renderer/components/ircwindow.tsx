@@ -1,12 +1,15 @@
 import * as React from 'react'
 import * as irc from 'irc'
 
+import { MessageEntry } from './messageentry'
+
 interface IChatWindowState {
   log: Array<string>
 }
 
 interface IChatWindowProps {
   client?: irc.Client
+  channel?: string
 }
 
 export class ChatWindow extends React.Component<
@@ -19,9 +22,6 @@ export class ChatWindow extends React.Component<
     this.state = {
       log: []
     }
-  }
-
-  componentDidMount() {
     this.bindClient()
   }
 
@@ -43,6 +43,11 @@ export class ChatWindow extends React.Component<
   }
 
   render() {
-    return <div>{this.state.log.map((s, i) => <p key={i}>{s}</p>)}</div>
+    return (
+      <div>
+        {this.state.log.map((s, i) => <p key={i}>{s}</p>)}
+        <MessageEntry client={this.props.client} channel={this.props.channel} />
+      </div>
+    )
   }
 }
