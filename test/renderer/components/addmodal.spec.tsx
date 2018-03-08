@@ -14,13 +14,19 @@ describe('addmodal', function() {
   let wrapper: ReactWrapper = null
   let instance: AddModal.AddModal = null
   let onClick: sinon.SinonSpy = null
+  let onSubmit: sinon.SinonSpy = null
   let inputName: any = null
   let value: string
 
   before(function() {
     onClick = sinon.spy()
+    onSubmit = sinon.spy()
     wrapper = mount(
-      <AddModal.AddModal visible={false} onAddServerToggle={onClick} />
+      <AddModal.AddModal
+        visible={false}
+        onAddServerToggle={onClick}
+        onAddServerSubmit={onSubmit}
+      />
     )
     instance = wrapper.instance() as AddModal.AddModal
   })
@@ -63,6 +69,6 @@ describe('addmodal', function() {
     instance.handleSubmit({
       preventDefault: () => {}
     })
-    expect(instance.state.submitted).to.be.true
+    expect(onSubmit).to.have.been.calledOnce
   })
 })
