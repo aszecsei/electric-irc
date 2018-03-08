@@ -8,30 +8,41 @@ import {
   Form,
   FormGroup,
   Label,
-  Input
+  Input,
+  InputGroup,
+  InputGroupAddon
 } from 'reactstrap'
+import { List } from 'immutable'
 
 interface IAddModalProps {
   visible: boolean
   onAddServerToggle: () => void
+  onAddServerSubmit: (
+    serverName: string,
+    serverURL: string,
+    nickname: string,
+    channels: string[]
+  ) => void
 }
 
 interface IAddModalState {
   name: string
   url: string
   nickname: string
-  submitted: boolean
+  channels: List<string>
+}
+
+const defaultState = {
+  name: 'Freenode',
+  url: 'chat.freenode.net',
+  nickname: 'Guest',
+  channels: List([])
 }
 
 export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
   constructor(props: IAddModalProps) {
     super(props)
-    this.state = {
-      name: 'Freenode',
-      url: 'chat.freenode.net',
-      nickname: 'Guest',
-      submitted: false
-    }
+    this.state = { ...defaultState }
   }
   handleChangeName = (event: any) => {
     if (
@@ -62,12 +73,37 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
       name: event.target.value
     })
   }
+  handleAddChannel = (event: any) => {
+    this.setState({
+      channels: this.state.channels.push('')
+    })
+  }
+
+  generateHandleChangeChannel = (index: number) => {
+    return (event: any) => {
+      this.setState({
+        channels: this.state.channels.set(index, event.target.value)
+      })
+    }
+  }
+  generateHandleDeleteChannel = (index: number) => {
+    return (event: any) => {
+      this.setState({
+        channels: this.state.channels.remove(index)
+      })
+    }
+  }
 
   handleSubmit = (event: any) => {
-    this.setState({
-      submitted: true
-    })
+    this.props.onAddServerSubmit(
+      this.state.name,
+      this.state.url,
+      this.state.nickname,
+      this.state.channels.toArray()
+    )
+    this.setState({ ...defaultState })
     event.preventDefault()
+    this.props.onAddServerToggle()
   }
   public render() {
     return (
@@ -92,6 +128,8 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
                 id="Name"
                 placeholder="Server Name"
               />
+            </FormGroup>
+            <FormGroup>
               <Label for="IRC">IRC name:</Label>
               <Input
                 className={'IRC'}
@@ -102,6 +140,8 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
                 id="IRC"
                 placeholder="IRC"
               />
+            </FormGroup>
+            <FormGroup>
               <Label for="Nickname">Nickname:</Label>
               <Input
                 className={'Nickname'}
@@ -113,6 +153,36 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
                 placeholder="Nickname"
               />
             </FormGroup>
+            {this.state.channels
+              .map((channel, index) => {
+                return (
+                  <FormGroup key={index}>
+                    <InputGroup>
+                      <Input
+                        className={'Channel'}
+                        type="text"
+                        value={this.state.channels.get(index)}
+                        onChange={this.generateHandleChangeChannel(index)}
+                        name={`channel${index}`}
+                        id={`channel${index}`}
+                        placeholder={'#'}
+                      />
+                      <InputGroupAddon addonType="append">
+                        <Button
+                          color="danger"
+                          onClick={this.generateHandleDeleteChannel(index)}
+                        >
+                          Delete
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </FormGroup>
+                )
+              })
+              .toArray()}
+            <Button color="secondary" onClick={this.handleAddChannel}>
+              Add Channel
+            </Button>
           </ModalBody>
           <ModalFooter>
             <Button color="primary" type="submit">
