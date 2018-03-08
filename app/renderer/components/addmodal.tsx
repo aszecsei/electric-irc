@@ -11,20 +11,27 @@ import {
   Input
 } from 'reactstrap'
 
-export class AddModal extends React.Component<any, any> {
-  constructor(props: any) {
+interface IAddModalProps {
+  visible: boolean
+  onAddServerToggle: () => void
+}
+
+interface IAddModalState {
+  name: string
+  url: string
+  nickname: string
+  submitted: boolean
+}
+
+export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
+  constructor(props: IAddModalProps) {
     super(props)
     this.state = {
-      modal: false,
-      irc: 'chat.freenode.net',
-      name: 'Guest',
+      name: 'Freenode',
+      url: 'chat.freenode.net',
+      nickname: 'Guest',
       submitted: false
     }
-  }
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal
-    })
   }
   handleChangeName = (event: any) => {
     if (
@@ -33,13 +40,13 @@ export class AddModal extends React.Component<any, any> {
       )
     ) {
       this.setState({
-        name: event.target.value
+        nickname: event.target.value
       })
       event.target.classList.add('is-valid')
       event.target.classList.remove('is-invalid')
     } else {
       this.setState({
-        name: event.target.value
+        nickname: event.target.value
       })
       event.target.classList.add('is-invalid')
       event.target.classList.remove('is-valid')
@@ -47,7 +54,12 @@ export class AddModal extends React.Component<any, any> {
   }
   handleChangeIRC = (event: any) => {
     this.setState({
-      irc: event.target.value
+      url: event.target.value
+    })
+  }
+  handleChangeIRCName = (event: any) => {
+    this.setState({
+      name: event.target.value
     })
   }
 
@@ -60,20 +72,31 @@ export class AddModal extends React.Component<any, any> {
   public render() {
     return (
       <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
-        className={this.props.className}
+        isOpen={this.props.visible}
+        toggle={this.props.onAddServerToggle}
         id="addmodal"
       >
         <Form onSubmit={this.handleSubmit}>
-          <ModalHeader toggle={this.toggle}>Add new server</ModalHeader>
+          <ModalHeader toggle={this.props.onAddServerToggle}>
+            Add new server
+          </ModalHeader>
           <ModalBody>
             <FormGroup>
+              <Label for="Name">Server Name:</Label>
+              <Input
+                className={'IRCName'}
+                type="text"
+                value={this.state.name}
+                onChange={this.handleChangeIRCName}
+                name="Name"
+                id="Name"
+                placeholder="Server Name"
+              />
               <Label for="IRC">IRC name:</Label>
               <Input
                 className={'IRC'}
                 type="text"
-                value={this.state.irc}
+                value={this.state.url}
                 onChange={this.handleChangeIRC}
                 name="IRC"
                 id="IRC"
@@ -83,7 +106,7 @@ export class AddModal extends React.Component<any, any> {
               <Input
                 className={'Nickname'}
                 type="text"
-                value={this.state.name}
+                value={this.state.nickname}
                 onChange={this.handleChangeName}
                 name="Nickname"
                 id="Nickname"
@@ -95,7 +118,11 @@ export class AddModal extends React.Component<any, any> {
             <Button color="primary" type="submit">
               Add
             </Button>{' '}
-            <Button color="secondary" type="button" onClick={this.toggle}>
+            <Button
+              color="secondary"
+              type="button"
+              onClick={this.props.onAddServerToggle}
+            >
               Cancel
             </Button>
           </ModalFooter>

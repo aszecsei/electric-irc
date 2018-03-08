@@ -10,7 +10,7 @@ import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
 import SidebarContainer from './containers/sidebar-container'
-import AddModal from './components/addmodal'
+import AddModalContainer from './containers/add-modal-container'
 
 import * as irc from 'irc'
 
@@ -28,13 +28,9 @@ interface IAppState {
 }
 
 export class App extends React.Component<any, IAppState> {
-  ref: any
   constructor(props: any) {
     super(props)
     this.state = {}
-  }
-  modalToggle = () => {
-    this.ref.toggle()
   }
 
   handleClose = (e: any) => {
@@ -75,11 +71,7 @@ export class App extends React.Component<any, IAppState> {
           Electric IRC
         </Titlebar>
 
-        <AddModal
-          ref={instance => {
-            this.ref = instance
-          }}
-        />
+        <AddModalContainer />
 
         <div id="content" className="flex container-fluid">
           <SidebarContainer />
