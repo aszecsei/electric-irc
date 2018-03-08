@@ -8,4 +8,6 @@ export type ElectricState = {
   currentChannel?: Channel
   lastUsedConnectionId: number // Used for adding new connections
   lastUsedChannelId: number // Used for joining new channels
+
+  addServerModalActive: boolean
 }

@@ -9,7 +9,8 @@ import {
   IJoinChannelAction,
   IRemoveServerAction,
   ISendMessageAction,
-  IViewChannelAction
+  IViewChannelAction,
+  IToggleAddServerModalAction
 } from '../actions'
 
 import addServer from './add-server'
@@ -19,13 +20,15 @@ import joinChannel from './join-channel'
 import removeServer from './remove-server'
 import sendMessage from './send-message'
 import viewChannel from './view-channel'
+import toggleAddServerModal from './toggle-add-server-modal'
 
 export const defaultStore: ElectricState = {
   connections: List([]),
   currentChannel: undefined,
   currentConnection: undefined,
   lastUsedChannelId: 0,
-  lastUsedConnectionId: 0
+  lastUsedConnectionId: 0,
+  addServerModalActive: false
 }
 
 export function defaultReducer(
@@ -48,6 +51,8 @@ export function defaultReducer(
       return sendMessage(state, action as ISendMessageAction)
     case ActionTypeKeys.VIEW_CHANNEL:
       return viewChannel(state, action as IViewChannelAction)
+    case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
+      return toggleAddServerModal(state, action as IToggleAddServerModalAction)
     default:
       return state
   }
