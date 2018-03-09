@@ -7,7 +7,7 @@ import { ElectricState } from '../../../app/renderer/store'
 import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
 describe('toggle add server modal reducer', function() {
-  const prevState = { ...defaultStore }
+  const prevState = defaultStore
   let nextState: ElectricState = undefined
   let nextNextState: ElectricState = undefined
 

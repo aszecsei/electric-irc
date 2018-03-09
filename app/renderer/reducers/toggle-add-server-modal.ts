@@ -5,12 +5,15 @@ export default function toggleAddServerModal(
   state: ElectricState,
   action: IToggleAddServerModalAction
 ): ElectricState {
-  let newState = { ...state }
+  let newState = state
 
   if (action.visible === undefined) {
-    newState.addServerModalActive = !newState.addServerModalActive
+    newState = newState.set(
+      'addServerModalActive',
+      !newState.addServerModalActive
+    )
   } else {
-    newState.addServerModalActive = action.visible
+    newState = newState.set('addServerModalActive', action.visible)
   }
 
   return newState

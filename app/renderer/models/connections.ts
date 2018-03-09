@@ -26,7 +26,7 @@ export const ConnectionFactory = Record<IConnection>({
 export type Connection = Record<IConnection> & Readonly<IConnection>
 
 export function getClient(connection: Connection) {
-  return Clients.get(connection.name)
+  return Clients.get(connection.url)
 }
 
 export function setClient(connection: Connection, client?: IRC.Client) {

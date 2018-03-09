@@ -1,9 +1,13 @@
 import * as React from 'react'
-import * as irc from 'irc'
+
+import { Connection } from '../models/connections'
+import { Channel } from '../models/channel'
+import { Message, MessageFactory } from '../models/message'
 
 interface IChatBoxProps {
-  client?: irc.Client
-  channel?: string
+  connection?: Connection
+  channel?: Channel
+  onSendMessage: (message: Message, conn: Connection, channel: Channel) => void
 }
 interface IMessageEntryState {
   value: string
@@ -22,12 +26,14 @@ export class MessageEntry extends React.Component<
   }
 
   handleSubmit = (event: any) => {
-    if (this.props.client && this.props.channel) {
-      this.props.client.say(this.props.channel, this.state.value)
-    } else {
-      console.error(
-        'Tried to connect to chat, but client or channel did not exist.'
+    if (this.props.connection && this.props.channel) {
+      this.props.onSendMessage(
+        new MessageFactory({ text: this.state.value }),
+        this.props.connection,
+        this.props.channel
       )
+    } else {
+      console.error('Tried to send message without connection or channel')
     }
     event.preventDefault()
   }

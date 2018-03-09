@@ -2,12 +2,16 @@ import { expect, use } from 'chai'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { List } from 'immutable'
+import * as IRC from 'irc'
 
 import sendMessageReducer, {
   _replace
 } from '../../../app/renderer/reducers/send-message'
 import { defaultStore } from '../../../app/renderer/reducers/reducers'
-import { ConnectionFactory } from '../../../app/renderer/models/connections'
+import {
+  ConnectionFactory,
+  Clients
+} from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
 import { ElectricState } from '../../../app/renderer/store'
 import { MessageFactory } from '../../../app/renderer/models/message'
@@ -97,7 +101,10 @@ describe('send message reducer', function() {
   let result: ElectricState
 
   describe('with valid connection and channel', function() {
+    let ircClientMock
     before(function() {
+      ircClientMock = sinon.createStubInstance(IRC.Client)
+      Clients.set(originalState.connections.get(0).url, ircClientMock)
       result = sendMessageReducer(originalState, sendMessage(1, 2, message))
     })
 
@@ -114,6 +121,10 @@ describe('send message reducer', function() {
       expect(result.connections.get(0).channels.get(0).log).to.deep.eq(
         originalState.connections.get(0).channels.get(0).log
       )
+    })
+
+    it('should send the message to the IRC Client', function() {
+      expect(ircClientMock.say).to.have.been.calledOnce
     })
   })
 
