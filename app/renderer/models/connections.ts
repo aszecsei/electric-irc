@@ -5,34 +5,43 @@ import * as IRC from 'irc'
 
 export const Clients = new Map<string, IRC.Client>()
 
-export class Connection {
-  readonly id: number
-  readonly name: string
-  readonly channels: List<Channel>
+import { Record } from 'immutable'
 
-  constructor(id: number, name: string, channels: Channel[] = []) {
-    this.name = name
-    this.channels = List(channels)
-    this.id = id
-  }
+interface IConnection {
+  id: number
+  name: string
+  url: string
+  nickname: string
+  channels: List<Channel>
+}
 
-  getClient() {
-    return Clients.get(this.name)
-  }
+export const ConnectionFactory = Record<IConnection>({
+  id: -1,
+  name: '',
+  url: '',
+  nickname: '',
+  channels: List<Channel>([])
+})
 
-  setClient(client?: IRC.Client) {
-    if (client) {
-      if (!Clients.get(this.name)) {
-        Clients.set(this.name, client)
-        // TODO: Dispatch an action for these callbacks
+export type Connection = Record<IConnection> & Readonly<IConnection>
 
-        // conn.client.client.addListener('raw', (msg: irc.IMessage) => {
-        //   Message.Log.push(new Message(JSON.stringify(msg)))
-        // })
-        // conn.client.client.addListener('error', (msg: irc.IMessage) => {
-        //   Message.Log.push(new Message(JSON.stringify(msg)))
-        // })
-      }
+export function getClient(connection: Connection) {
+  return Clients.get(connection.name)
+}
+
+export function setClient(connection: Connection, client?: IRC.Client) {
+  if (client) {
+    if (!Clients.get(connection.url)) {
+      Clients.set(connection.url, client)
+
+      // TODO: Dispatch an action for these callbacks
+
+      // conn.client.client.addListener('raw', (msg: irc.IMessage) => {
+      //   Message.Log.push(new Message(JSON.stringify(msg)))
+      // })
+      // conn.client.client.addListener('error', (msg: irc.IMessage) => {
+      //   Message.Log.push(new Message(JSON.stringify(msg)))
+      // })
     }
   }
 }

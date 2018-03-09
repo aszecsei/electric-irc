@@ -1,6 +1,5 @@
-import { List } from 'immutable'
 import { AnyAction } from 'redux'
-import { ElectricState } from '../store'
+import { ElectricState, ElectricStateFactory } from '../store'
 import {
   ActionTypeKeys,
   IAddServerAction,
@@ -22,14 +21,7 @@ import sendMessage from './send-message'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
 
-export const defaultStore: ElectricState = {
-  connections: List([]),
-  currentChannel: undefined,
-  currentConnection: undefined,
-  lastUsedChannelId: 0,
-  lastUsedConnectionId: 0,
-  addServerModalActive: false
-}
+export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
   state: ElectricState,

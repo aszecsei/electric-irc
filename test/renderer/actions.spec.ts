@@ -2,7 +2,7 @@ import { expect, use } from 'chai'
 import { List } from 'immutable'
 
 import * as Actions from '../../app/renderer/actions'
-import { Message } from '../../app/renderer/models/message'
+import { MessageFactory } from '../../app/renderer/models/message'
 
 describe('actions', function() {
   describe('removeServer', function() {
@@ -67,7 +67,7 @@ describe('actions', function() {
     let result: Actions.IAppendLogAction
     const serverId = 122
     const channelId = 12
-    const msg = new Message('Hello, world!')
+    const msg = new MessageFactory({ text: 'Hello, world!' })
 
     before(function() {
       result = Actions.appendLog(serverId, channelId, msg)
@@ -90,7 +90,7 @@ describe('actions', function() {
     let result: Actions.ISendMessageAction
     const serverId = 122
     const channelId = 12
-    const msg = new Message('Hello, world!')
+    const msg = new MessageFactory({ text: 'Hello, world!' })
 
     before(function() {
       result = Actions.sendMessage(serverId, channelId, msg)
