@@ -5,7 +5,7 @@ export default function removeServer(
   state: ElectricState,
   action: IRemoveServerAction
 ): ElectricState {
-  let newState = { ...state }
+  let newState = state
 
   // TODO: Implement this
 

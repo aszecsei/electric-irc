@@ -4,8 +4,8 @@ import * as sinonChai from 'sinon-chai'
 import { List } from 'immutable'
 
 import * as mAddServer from '../../../app/renderer/reducers/add-server'
-import { Connection } from '../../../app/renderer/models/connections'
-import { Channel } from '../../../app/renderer/models/channel'
+import { ConnectionFactory } from '../../../app/renderer/models/connections'
+import { ChannelFactory } from '../../../app/renderer/models/channel'
 import { addServer } from '../../../app/renderer/actions'
 import { ElectricState } from '../../../app/renderer/store'
 import { defaultStore } from '../../../app/renderer/reducers/reducers'
@@ -17,18 +17,25 @@ use(sinonChai)
 describe('add-server reducer', function() {
   let sandbox: sinon.SinonSandbox
 
-  const prevState = { ...defaultStore }
+  let prevState = defaultStore
   let nextState: ElectricState = undefined
 
   before(function() {
     sandbox = sinon.createSandbox()
     sandbox.stub(IRC, 'Client').returns('Client')
-    prevState.connections = List([
-      new Connection(0, 'Connection 1', [
-        new Channel(1, '#channel1'),
-        new Channel(2, '#channel2')
+    prevState = prevState.set(
+      'connections',
+      List([
+        new ConnectionFactory({
+          id: 0,
+          name: 'Connection 1',
+          channels: List([
+            new ChannelFactory({ id: 1, name: '#channel1' }),
+            new ChannelFactory({ id: 2, name: '#channel2' })
+          ])
+        })
       ])
-    ])
+    )
   })
 
   describe('adding a server', function() {
