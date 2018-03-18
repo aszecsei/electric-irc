@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai'
 import * as React from 'react'
 import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
-import * as server from '../../../app/renderer/components/server'
+import * as server from '../../../renderer/components/server'
 
 use(chaiEnzyme())
 use(sinonChai)

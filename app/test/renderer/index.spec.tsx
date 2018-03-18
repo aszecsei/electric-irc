@@ -11,7 +11,7 @@ import { mount, render, shallow, ReactWrapper } from 'enzyme'
 import * as electron from 'electron'
 import * as irc from 'irc'
 
-import * as app from '../../app/renderer/index'
+import * as app from '../../renderer/index'
 
 use(chaiEnzyme())
 use(sinonChai)
