@@ -81,7 +81,7 @@
     "electron-devtools-installer": "^2.2.3",
     "electron-mocha": "^6.0.0",
     "electron-webpack": "^1.11.0",
-    "electron-webpack-ts": "^1.2.0",
+    "electron-webpack-ts": "^2.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "husky": "^0.14.3",
