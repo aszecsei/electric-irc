@@ -1,6 +1,6 @@
 import { expect, use } from 'chai'
 
-import * as client from '../../../renderer/models/client'
+import * as client from '../../../app/renderer/models/client'
 
 describe('client', function() {
   let instance: client.Client

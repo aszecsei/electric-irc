@@ -4,8 +4,12 @@ import * as chaiEnzyme from 'chai-enzyme'
 import * as React from 'react'
 import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
-import * as titlebar from '../../../renderer/components/titlebar'
+import { ChatWindow } from '../../../app/renderer/components/ircwindow'
 
 use(chaiEnzyme())
 
-describe('titlebar', () => {})
+describe('irc window', function() {
+  it('should exist', function() {
+    expect(ChatWindow).to.exist
+  })
+})
