@@ -1,48 +1,32 @@
 import * as React from 'react'
 import * as irc from 'irc'
 
-interface IChatWindowState {
-  log: Array<string>
-}
+import { List } from 'immutable'
+
+import { MessageEntry } from './messageentry'
+
+import { Connection } from '../models/connections'
+import { Channel } from '../models/channel'
+import { Message } from '../models/message'
 
 interface IChatWindowProps {
-  client?: irc.Client
+  connection: Connection | undefined
+  channel: Channel | undefined
+  messages: List<Message> | undefined
+  onSendMessage: (message: Message, conn: Connection, channel: Channel) => void
 }
 
-export class ChatWindow extends React.Component<
-  IChatWindowProps,
-  IChatWindowState
-> {
-  constructor(props: IChatWindowProps) {
-    super(props)
-    // console.log(this.client)
-    this.state = {
-      log: []
-    }
-  }
-
-  componentDidMount() {
-    this.bindClient()
-  }
-
-  bindClient = () => {
-    if (this.props.client) {
-      this.props.client.addListener('raw', (message: irc.IMessage) => {
-        this.appendToLog(JSON.stringify(message))
-      })
-      this.props.client.addListener('error', (message: irc.IMessage) => {
-        this.appendToLog('ERROR: ' + message)
-      })
-    }
-  }
-
-  appendToLog = (message: string) => {
-    this.setState((prevState: IChatWindowState) => {
-      return { log: [...prevState.log, message] }
-    })
-  }
-
-  render() {
-    return <div>{this.state.log.map((s, i) => <p key={i}>{s}</p>)}</div>
-  }
+export const ChatWindow: React.SFC<IChatWindowProps> = props => {
+  return (
+    <div>
+      {props.messages
+        ? props.messages.map((message, i) => <p key={i}>{message.text}</p>)
+        : []}
+      <MessageEntry
+        connection={props.connection}
+        channel={props.channel}
+        onSendMessage={props.onSendMessage}
+      />
+    </div>
+  )
 }

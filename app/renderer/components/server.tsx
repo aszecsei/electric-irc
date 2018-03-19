@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { Collapse } from 'reactstrap'
-import { Client } from '../models/client'
+import { Connection } from '../models/connections'
+import { Channel } from '../models/channel'
 import * as irc from 'irc'
 
 interface IServerProps {
-  onClicked: (client: irc.Client, channel: string) => void
-  server: Client
+  onChannelClick: (conn: Connection, channel: Channel) => void
+  connection: Connection
 }
 
 interface IServerState {
-  channelList: string[]
   collapse: boolean
   icon: string
 }
@@ -21,8 +21,7 @@ export class Server extends React.Component<IServerProps, IServerState> {
     this.toggle = this.toggle.bind(this)
     this.state = {
       collapse: false,
-      icon: 'expand_more',
-      channelList: ['#electric-irc']
+      icon: 'expand_more'
     }
   }
 
@@ -35,37 +34,37 @@ export class Server extends React.Component<IServerProps, IServerState> {
     }
   }
 
-  onClickGenerator = (client: irc.Client, channel: string) => {
+  onClickGenerator = (client: Connection, channel: Channel) => {
     return (event: any) => {
-      this.props.onClicked(client, channel)
+      this.props.onChannelClick(client, channel)
     }
   }
 
   render() {
-    const server = this.props.server
+    const server = this.props.connection
     return (
       <li>
         <a
-          href="#{server.name}"
+          href={`#${server.name}`}
           role="button"
-          aria-controls={this.props.server.name}
+          aria-controls={this.props.connection.name}
           onClick={this.toggle}
         >
-          {this.props.server.name}
+          {this.props.connection.name}
           <i className="material-icons ml-auto">{this.state.icon}</i>
         </a>
         <Collapse isOpen={this.state.collapse}>
           <ul className="list-unstyled" id={server.name}>
-            {this.state.channelList.map((channel: string, i: number) => (
+            {this.props.connection.channels.map((channel, i) => (
               <li key={i}>
                 <a
                   href="#"
                   onClick={this.onClickGenerator(
-                    this.props.server.client,
+                    this.props.connection,
                     channel
                   )}
                 >
-                  {channel}
+                  {channel.name}
                 </a>
               </li>
             ))}

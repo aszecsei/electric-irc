@@ -1,14 +1,21 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { createStore, applyMiddleware, compose } from 'redux'
+import { Provider } from 'react-redux'
+import createSagaMiddleware from 'redux-saga'
 
-import { ipcRenderer, remote } from 'electron'
+import { remote } from 'electron'
+
+import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
-
-import AddModal from './components/addmodal'
-import { Sidebar } from './components/sidebar'
+import SidebarContainer from './containers/sidebar-container'
+import AddModalContainer from './containers/add-modal-container'
+import ChatWindowContainer from './containers/irc-window-container'
 
 import * as irc from 'irc'
+import { ChatWindow } from './components/ircwindow'
+import SettingsModalContainer from './containers/settings-modal-container'
 
 import 'material-design-icons/iconfont/material-icons.css'
 
@@ -16,22 +23,15 @@ import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import { ChatWindow } from './components/ircwindow'
-import SettingsModal from './components/settingsmodal'
-
-interface IWindowState {
+interface IAppState {
   currentIRCClient?: irc.Client
   currentIRCChannel?: string
 }
 
-export class Window extends React.Component<any, IWindowState> {
-  ref: any
+export class App extends React.Component<any, IAppState> {
   constructor(props: any) {
     super(props)
     this.state = {}
-  }
-  modalToggle = () => {
-    this.ref.toggle()
   }
 
   handleClose = (e: any) => {
@@ -63,7 +63,7 @@ export class Window extends React.Component<any, IWindowState> {
   render() {
     return (
       <div className="container-fluid">
-        <SettingsModal />
+        <SettingsModalContainer />
         <Titlebar
           draggable={true}
           handleClose={this.handleClose}
@@ -72,19 +72,31 @@ export class Window extends React.Component<any, IWindowState> {
         >
           Electric IRC
         </Titlebar>
-        <AddModal
-          ref={instance => {
-            this.ref = instance
-          }}
-        />
+
+        <AddModalContainer />
 
         <div id="content" className="flex container-fluid">
-          <Sidebar clickAdd={this.modalToggle} onClicked={this.setChatWindow} />
-          <ChatWindow client={this.state.currentIRCClient} />
+          <SidebarContainer />
+          <ChatWindowContainer />
         </div>
       </div>
     )
   }
 }
 
-ReactDOM.render(<Window />, document.getElementById('app'))
+const sagaMiddleware = createSagaMiddleware()
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+  defaultReducer,
+  defaultStore,
+  composeEnhancers(applyMiddleware(sagaMiddleware))
+)
+// TODO: Start the message listening saga
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
