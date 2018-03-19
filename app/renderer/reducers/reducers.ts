@@ -9,7 +9,8 @@ import {
   IRemoveServerAction,
   ISendMessageAction,
   IViewChannelAction,
-  IToggleAddServerModalAction
+  IToggleAddServerModalAction,
+  IToggleSettingsModalAction
 } from '../actions'
 
 import addServer from './add-server'
@@ -20,6 +21,7 @@ import removeServer from './remove-server'
 import sendMessage from './send-message'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
+import toggleSettingsModal from './toggle-settings-modal'
 
 export const defaultStore = new ElectricStateFactory({})
 
@@ -45,6 +47,8 @@ export function defaultReducer(
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
+    case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
+      return toggleSettingsModal(state, action as IToggleSettingsModalAction)
     default:
       return state
   }
