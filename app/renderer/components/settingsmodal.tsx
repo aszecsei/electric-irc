@@ -10,19 +10,21 @@ import {
   Col
 } from 'reactstrap'
 import classnames from 'classnames'
-import Swatches from 'react-color'
-import SketchPicker from 'react-color/lib/components/sketch/Sketch'
 import SwatchesPicker from 'react-color/lib/components/swatches/Swatches'
+
+const defaultState = {
+  activeTab: '1'
+}
+interface ISettingsProps {
+  visible: boolean
+  onSettingsToggle: () => void
+}
 
 export class SettingsModal extends React.Component<any, any> {
   ref: any
-  constructor(props: any) {
+  constructor(props: ISettingsProps) {
     super(props)
-    this.state = {
-      modal: true,
-      submitted: false,
-      activeTab: '1'
-    }
+    this.state = { ...defaultState }
   }
   toggle = () => {
     this.setState({
@@ -42,8 +44,8 @@ export class SettingsModal extends React.Component<any, any> {
   public render() {
     return (
       <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
+        isOpen={this.props.visible}
+        toggle={this.props.onSettingsToggle}
         className={this.props.className}
         id="addmodal"
       >
