@@ -7,7 +7,9 @@ export enum ActionTypeKeys {
   JOIN_CHANNEL = 'JOIN_CHANNEL',
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
-  VIEW_CHANNEL = 'VIEW_CHANNEL'
+  VIEW_CHANNEL = 'VIEW_CHANNEL',
+  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
+  UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL'
 }
 
 export interface IAddServerAction {
@@ -56,6 +58,15 @@ export interface IViewChannelAction {
   readonly channelId: number
 }
 
+export interface IToggleAddServerModalAction {
+  readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
+  readonly visible?: boolean
+}
+export interface IToggleSettingsModalAction {
+  readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
+  readonly visible?: boolean
+}
+
 export type ActionTypes =
   | IAddServerAction
   | IRemoveServerAction
@@ -64,6 +75,8 @@ export type ActionTypes =
   | IAppendLogAction
   | ISendMessageAction
   | IViewChannelAction
+  | IToggleAddServerModalAction
+  | IToggleSettingsModalAction
 
 export function addServer(
   name: string,
@@ -145,5 +158,22 @@ export function viewChannel(
     type: ActionTypeKeys.VIEW_CHANNEL,
     serverId,
     channelId
+  }
+}
+
+export function toggleAddServerModal(
+  visible?: boolean
+): IToggleAddServerModalAction {
+  return {
+    type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL,
+    visible
+  }
+}
+export function toggleSettingsModal(
+  visible?: boolean
+): IToggleSettingsModalAction {
+  return {
+    type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL,
+    visible
   }
 }

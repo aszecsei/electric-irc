@@ -1,11 +1,13 @@
-export class Message {
-  // TODO: Move this so it's per-server and per-channel
-  static Log: Message[] = []
+import { Record } from 'immutable'
 
-  // TODO: Flesh this out
-  msgText: string
-
-  constructor(msgText: string) {
-    this.msgText = msgText
-  }
+interface IMessage {
+  text: string
+  sender?: string
 }
+
+export const MessageFactory = Record<IMessage>({
+  text: '',
+  sender: undefined
+})
+
+export type Message = Record<IMessage> & Readonly<IMessage>

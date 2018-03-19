@@ -16,7 +16,7 @@ import * as joinChannelReducer from '../../../app/renderer/reducers/join-channel
 import * as removeServerReducer from '../../../app/renderer/reducers/remove-server'
 import * as sendMessageReducer from '../../../app/renderer/reducers/send-message'
 import * as viewChannelReducer from '../../../app/renderer/reducers/view-channel'
-import { Message } from '../../../app/renderer/models/message'
+import { MessageFactory } from '../../../app/renderer/models/message'
 
 use(sinonChai)
 
@@ -26,11 +26,11 @@ describe('default store', function() {
   })
 
   it('should have no current channel', function() {
-    expect(defaultStore.currentChannel).to.be.undefined
+    expect(defaultStore.currentChannelId).to.be.undefined
   })
 
   it('should have no current connection', function() {
-    expect(defaultStore.currentConnection).to.be.undefined
+    expect(defaultStore.currentConnectionId).to.be.undefined
   })
 
   it('should have no last used channel ID', function() {
@@ -92,7 +92,7 @@ describe('default reducer', function() {
       result = undefined
       result = defaultReducer(
         initialState,
-        Actions.appendLog(1, 2, new Message('Text'))
+        Actions.appendLog(1, 2, new MessageFactory({ text: 'Text' }))
       )
     })
 
@@ -158,7 +158,7 @@ describe('default reducer', function() {
       result = undefined
       result = defaultReducer(
         initialState,
-        Actions.sendMessage(2, 5, new Message('Hello, world!'))
+        Actions.sendMessage(2, 5, new MessageFactory({ text: 'Hello, world!' }))
       )
     })
 

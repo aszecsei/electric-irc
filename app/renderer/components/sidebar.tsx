@@ -7,6 +7,7 @@ import { Channel } from '../models/channel'
 interface ISidebarProps {
   connections: List<Connection>
   onChannelClick: (conn: Connection, channel: Channel) => void
+  onAddServerClick: () => void
 }
 
 export const Sidebar: React.SFC<ISidebarProps> = props => {
@@ -19,6 +20,11 @@ export const Sidebar: React.SFC<ISidebarProps> = props => {
       <ul className="list-unstyled components">
         <li className="active">
           <a href="#">Home</a>
+        </li>
+        <li>
+          <a href="#" onClick={props.onAddServerClick}>
+            Add Server
+          </a>
         </li>
         {props.connections.map((connection, i) => (
           <Server

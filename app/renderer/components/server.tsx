@@ -45,7 +45,7 @@ export class Server extends React.Component<IServerProps, IServerState> {
     return (
       <li>
         <a
-          href="#{server.name}"
+          href={`#${server.name}`}
           role="button"
           aria-controls={this.props.connection.name}
           onClick={this.toggle}
@@ -64,7 +64,7 @@ export class Server extends React.Component<IServerProps, IServerState> {
                     channel
                   )}
                 >
-                  {channel}
+                  {channel.name}
                 </a>
               </li>
             ))}

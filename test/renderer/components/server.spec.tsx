@@ -6,8 +6,10 @@ import * as sinonChai from 'sinon-chai'
 import * as React from 'react'
 import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
+import { List } from 'immutable'
+
 import * as server from '../../../app/renderer/components/server'
-import { Connection } from '../../../app/renderer/models/connections'
+import { ConnectionFactory } from '../../../app/renderer/models/connections'
 
 use(chaiEnzyme())
 use(sinonChai)
@@ -22,7 +24,9 @@ describe('server panel', function() {
     wrapper = mount(
       <server.Server
         onChannelClick={onClick}
-        connection={new Connection('Connection', [])}
+        connection={
+          new ConnectionFactory({ name: 'Connection', channels: List([]) })
+        }
       />
     )
     instance = wrapper.instance() as server.Server

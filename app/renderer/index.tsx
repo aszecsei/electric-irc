@@ -10,9 +10,12 @@ import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
 import SidebarContainer from './containers/sidebar-container'
-import AddModal from './components/addmodal'
+import AddModalContainer from './containers/add-modal-container'
+import ChatWindowContainer from './containers/irc-window-container'
 
 import * as irc from 'irc'
+import { ChatWindow } from './components/ircwindow'
+import SettingsModalContainer from './containers/settings-modal-container'
 
 import 'material-design-icons/iconfont/material-icons.css'
 
@@ -20,22 +23,15 @@ import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import { ChatWindow } from './components/ircwindow'
-import SettingsModal from './components/settingsmodal'
-
 interface IAppState {
   currentIRCClient?: irc.Client
   currentIRCChannel?: string
 }
 
 export class App extends React.Component<any, IAppState> {
-  ref: any
   constructor(props: any) {
     super(props)
     this.state = {}
-  }
-  modalToggle = () => {
-    this.ref.toggle()
   }
 
   handleClose = (e: any) => {
@@ -67,7 +63,7 @@ export class App extends React.Component<any, IAppState> {
   render() {
     return (
       <div className="container-fluid">
-        <SettingsModal />
+        <SettingsModalContainer />
         <Titlebar
           draggable={true}
           handleClose={this.handleClose}
@@ -77,15 +73,11 @@ export class App extends React.Component<any, IAppState> {
           Electric IRC
         </Titlebar>
 
-        <AddModal
-          ref={instance => {
-            this.ref = instance
-          }}
-        />
+        <AddModalContainer />
 
         <div id="content" className="flex container-fluid">
           <SidebarContainer />
-          <ChatWindow />
+          <ChatWindowContainer />
         </div>
       </div>
     )
