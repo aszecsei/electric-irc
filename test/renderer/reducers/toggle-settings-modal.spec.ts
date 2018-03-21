@@ -1,8 +1,8 @@
 import { expect, use } from 'chai'
 import { List } from 'immutable'
 
-import toggleAddServerModalReducer from '../../../app/renderer/reducers/toggle-add-server-modal'
-import { toggleAddServerModal } from '../../../app/renderer/actions'
+import toggleSettingsModalReducer from '../../../app/renderer/reducers/toggle-settings-modal'
+import { toggleSettingsModal } from '../../../app/renderer/actions'
 import { ElectricState } from '../../../app/renderer/store'
 import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
@@ -13,58 +13,58 @@ describe('toggle add server modal reducer', function() {
 
   describe('setting modal to invisible', function() {
     before(function() {
-      nextState = toggleAddServerModalReducer(
+      nextState = toggleSettingsModalReducer(
         prevState,
-        toggleAddServerModal(false)
+        toggleSettingsModal(false)
       )
-      nextNextState = toggleAddServerModalReducer(
+      nextNextState = toggleSettingsModalReducer(
         nextState,
-        toggleAddServerModal(false)
+        toggleSettingsModal(false)
       )
     })
 
     it('should set the modal to invisible', function() {
-      expect(nextState.addServerModalActive).to.be.false
+      expect(nextState.settingsModalActive).to.be.false
     })
 
     it('should continue setting the modal to invisible', function() {
-      expect(nextNextState.addServerModalActive).to.be.false
+      expect(nextNextState.settingsModalActive).to.be.false
     })
   })
 
   describe('setting modal to visible', function() {
     before(function() {
-      nextState = toggleAddServerModalReducer(
+      nextState = toggleSettingsModalReducer(
         prevState,
-        toggleAddServerModal(true)
+        toggleSettingsModal(true)
       )
-      nextNextState = toggleAddServerModalReducer(
+      nextNextState = toggleSettingsModalReducer(
         nextState,
-        toggleAddServerModal(true)
+        toggleSettingsModal(true)
       )
     })
 
     it('should set the modal to visible', function() {
-      expect(nextState.addServerModalActive).to.be.true
+      expect(nextState.settingsModalActive).to.be.true
     })
 
     it('should continue setting the modal to visible', function() {
-      expect(nextNextState.addServerModalActive).to.be.true
+      expect(nextNextState.settingsModalActive).to.be.true
     })
   })
 
   describe('toggling a modal back and forth', function() {
     before(function() {
-      nextState = toggleAddServerModalReducer(prevState, toggleAddServerModal())
-      nextNextState = toggleAddServerModalReducer(
+      nextState = toggleSettingsModalReducer(prevState, toggleSettingsModal())
+      nextNextState = toggleSettingsModalReducer(
         nextState,
-        toggleAddServerModal()
+        toggleSettingsModal()
       )
     })
 
     it('should toggle the modal visibility', function() {
-      expect(nextState.addServerModalActive).to.not.eq(
-        nextNextState.addServerModalActive
+      expect(nextState.settingsModalActive).to.not.eq(
+        nextNextState.settingsModalActive
       )
     })
   })

@@ -9,8 +9,8 @@ import {
   Row,
   Col
 } from 'reactstrap'
-import classnames from 'classnames'
-import SwatchesPicker from 'react-color/lib/components/swatches/Swatches'
+import * as classnames from 'classnames'
+import SwatchesPicker from 'react-color'
 
 const defaultState = {
   activeTab: '1'
