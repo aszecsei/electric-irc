@@ -9,7 +9,8 @@ export enum ActionTypeKeys {
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
-  UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL'
+  UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
+  EDIT_SETTINGS = 'EDIT_SETTINGS'
 }
 
 export interface IAddServerAction {
@@ -36,6 +37,25 @@ export interface IJoinChannelAction {
   readonly type: ActionTypeKeys.JOIN_CHANNEL
   readonly serverId: number
   readonly channel: string
+}
+export interface IEditSettingsAction {
+  readonly type: ActionTypeKeys.EDIT_SETTINGS
+  readonly scrollback: boolean
+  readonly scrollbackLines?: number
+  readonly timestamps: boolean
+  readonly timeformat?: string
+  readonly urlgrabber: boolean
+  readonly maxurl: number
+  readonly autoaway: boolean
+  readonly defquit: string
+  readonly defleave: string
+  readonly defaway: string
+  readonly showawayonce: boolean
+  readonly hidejoin: boolean
+  readonly hidenicknamechange: boolean
+  readonly downloadfolder: string
+  readonly soundChannel: boolean
+  readonly soundPrivate: boolean
 }
 
 export interface IAppendLogAction {
@@ -175,5 +195,43 @@ export function toggleSettingsModal(
   return {
     type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL,
     visible
+  }
+}
+export function editSettings(
+  scrollback: boolean,
+  scrollbackLines: number,
+  timestamps: boolean,
+  timeformat: string,
+  urlgrabber: boolean,
+  maxurl: number,
+  autoaway: boolean,
+  defquit: string,
+  defleave: string,
+  defaway: string,
+  showawayonce: boolean,
+  hidejoin: boolean,
+  hidenicknamechange: boolean,
+  downloadfolder: string,
+  soundChannel: boolean,
+  soundPrivate: boolean
+): IEditSettingsAction {
+  return {
+    type: ActionTypeKeys.EDIT_SETTINGS,
+    scrollback,
+    scrollbackLines,
+    timestamps,
+    timeformat,
+    urlgrabber,
+    maxurl,
+    autoaway,
+    defquit,
+    defleave,
+    defaway,
+    showawayonce,
+    hidejoin,
+    hidenicknamechange,
+    downloadfolder,
+    soundChannel,
+    soundPrivate
   }
 }

@@ -21,15 +21,9 @@ interface ISettingsProps {
 }
 
 export class SettingsModal extends React.Component<any, any> {
-  ref: any
   constructor(props: ISettingsProps) {
     super(props)
     this.state = { ...defaultState }
-  }
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal
-    })
   }
   toggletab = (tab: string) => {
     if (this.state.activeTab !== tab) {
@@ -38,9 +32,13 @@ export class SettingsModal extends React.Component<any, any> {
       })
     }
   }
-  toggletheme = () => {
-    this.ref.toggle()
+
+  handlechange = (e: any) => {
+    let change: any = {}
+    change[e.target.name] = e.target.value
+    this.setState(change)
   }
+
   public render() {
     return (
       <Modal
