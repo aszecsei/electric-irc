@@ -48,7 +48,7 @@ function subscribe(client: irc.Client, connection: Connection) {
             connection.id,
             channel.id,
             new MessageFactory({
-              text: message.rawCommand
+              text: JSON.stringify(message)
             })
           )
         )

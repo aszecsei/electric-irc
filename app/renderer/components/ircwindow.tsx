@@ -18,15 +18,19 @@ interface IChatWindowProps {
 
 export const ChatWindow: React.SFC<IChatWindowProps> = props => {
   return (
-    <div>
-      {props.messages
-        ? props.messages.map((message, i) => <p key={i}>{message.text}</p>)
-        : []}
-      <MessageEntry
-        connection={props.connection}
-        channel={props.channel}
-        onSendMessage={props.onSendMessage}
-      />
+    <div className="chatwindow">
+      <div className="logWindow">
+        {props.messages
+          ? props.messages.map((message, i) => <p key={i}>{message.text}</p>)
+          : []}
+      </div>
+      <div className="sendMessage flex">
+        <MessageEntry
+          connection={props.connection}
+          channel={props.channel}
+          onSendMessage={props.onSendMessage}
+        />
+      </div>
     </div>
   )
 }
