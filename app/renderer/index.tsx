@@ -11,6 +11,7 @@ import { defaultReducer, defaultStore } from './reducers/reducers'
 import { Titlebar } from './components/titlebar'
 import SidebarContainer from './containers/sidebar-container'
 import AddModalContainer from './containers/add-modal-container'
+import ChatWindowContainer from './containers/irc-window-container'
 
 import * as irc from 'irc'
 
@@ -19,8 +20,6 @@ import 'material-design-icons/iconfont/material-icons.css'
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
 import 'bootstrap/dist/css/bootstrap.css'
-
-import { ChatWindow } from './components/ircwindow'
 
 interface IAppState {
   currentIRCClient?: irc.Client
@@ -75,7 +74,7 @@ export class App extends React.Component<any, IAppState> {
 
         <div id="content" className="flex container-fluid">
           <SidebarContainer />
-          <ChatWindow />
+          <ChatWindowContainer />
         </div>
       </div>
     )

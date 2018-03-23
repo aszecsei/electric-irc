@@ -5,7 +5,7 @@ export default function appendLog(
   state: ElectricState,
   action: IAppendLogAction
 ): ElectricState {
-  let newState = { ...state }
+  let newState = state
 
   // TODO: Implement this
 

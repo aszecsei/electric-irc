@@ -2,11 +2,46 @@ import { eventChannel } from 'redux-saga'
 import { fork, take, call, put, cancel } from 'redux-saga/effects'
 import * as irc from 'irc'
 import * as actions from '../actions'
-import { Connection } from '../models/connections'
+import { Connection, ConnectionFactory } from '../models/connections'
 import { Message } from '../models/message'
 
+function createIRCClient(url: string, nickname: string, channels: string[]) {
+  return new irc.Client(url, nickname, {
+    channels: channels
+  })
+}
+
+// export default function addServer(
+//   state: ElectricState,
+//   action: IAddServerAction
+// ): ElectricState {
+//   let newState = state.set(
+//   'lastUsedConnectionId',
+//   state.lastUsedConnectionId + 1
+// )
+// let conn = new ConnectionFactory({
+//   id: newState.lastUsedConnectionId,
+//   name: action.name,
+//   channels: List<Channel>(
+//     action.channels.map(chanName => {
+//       newState = newState.set(
+//         'lastUsedChannelId',
+//         newState.lastUsedChannelId + 1
+//       )
+//       return new ChannelFactory({
+//         id: newState.lastUsedChannelId,
+//         name: chanName
+//       })
+//     })
+//   )
+// })
+// setClient(conn, createIRCClient(action.url, action.nickname, action.channels))
+// }
+
 function connect(payload: actions.IAddServerAction) {
-  // TODO: Connect to a server; do what's in add-server.ts
+  const conn = new ConnectionFactory({
+    id: 1
+  })
 }
 
 function subscribe(client: irc.Client, connection: Connection) {

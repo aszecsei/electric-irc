@@ -1,15 +1,16 @@
-import { List } from 'immutable'
+import { List, Record } from 'immutable'
 import { Message } from './message'
 
-export class Channel {
-  readonly id: number
-  readonly name: string
-  readonly log: List<Message>
-
-  constructor(id: number, name: string) {
-    this.name = name
-    // TODO: Read from file
-    this.log = List([])
-    this.id = id
-  }
+interface IChannel {
+  id: number
+  name: string
+  log: List<Message>
 }
+
+export const ChannelFactory = Record<IChannel>({
+  id: -1,
+  name: '',
+  log: List<Message>([])
+})
+
+export type Channel = Record<IChannel> & Readonly<IChannel>

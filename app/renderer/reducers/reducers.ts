@@ -1,6 +1,5 @@
-import { List } from 'immutable'
 import { AnyAction } from 'redux'
-import { ElectricState } from '../store'
+import { ElectricState, ElectricStateFactory } from '../store'
 import {
   ActionTypeKeys,
   IAddServerAction,
@@ -14,7 +13,7 @@ import {
   IAddConnectionAction
 } from '../actions'
 
-import addServer from './add-server'
+import addConnection from './add-connection'
 import appendLog from './append-log'
 import editServer from './edit-server'
 import joinChannel from './join-channel'
@@ -23,14 +22,7 @@ import sendMessage from './send-message'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
 
-export const defaultStore: ElectricState = {
-  connections: List([]),
-  currentChannel: undefined,
-  currentConnection: undefined,
-  lastUsedChannelId: 0,
-  lastUsedConnectionId: 0,
-  addServerModalActive: false
-}
+export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
   state: ElectricState,
@@ -39,7 +31,7 @@ export function defaultReducer(
   // Note: We don't need break statements since we're returning values
   switch (action.type) {
     case ActionTypeKeys.ADD_CONNECTION:
-      return addServer(state, action as IAddConnectionAction)
+      return addConnection(state, action as IAddConnectionAction)
     case ActionTypeKeys.APPEND_LOG:
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:
