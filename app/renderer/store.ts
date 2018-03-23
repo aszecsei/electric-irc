@@ -1,7 +1,6 @@
 import { List, Record } from 'immutable'
 import { Connection } from './models/connections'
 import { Channel } from './models/channel'
-import { SettingFactory, Settings } from './models/settings'
 
 interface IElectricState {
   connections: List<Connection>
@@ -9,10 +8,8 @@ interface IElectricState {
   currentChannelId?: number
   lastUsedConnectionId: number
   lastUsedChannelId: number
-  settingsModalActive: boolean
+
   addServerModalActive: boolean
-  settings: Settings
-  toggleTab: string
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
@@ -21,10 +18,8 @@ export const ElectricStateFactory = Record<IElectricState>({
   currentChannelId: undefined,
   lastUsedConnectionId: 0,
   lastUsedChannelId: 0,
-  settingsModalActive: true,
-  addServerModalActive: false,
-  settings: SettingFactory(),
-  toggleTab: '1'
+
+  addServerModalActive: false
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>
