@@ -9,16 +9,17 @@ import {
 } from 'redux-saga/effects'
 import * as irc from 'irc'
 import * as actions from '../actions'
-import { ElectricState, EState } from '../store'
-
+import * as selectors from '../selectors'
 function* watchGetMessage() {
+  const connections: any = yield select(selectors.connections)
   while (true) {
-    let EState = yield select(EState)
-    yield takeEvery('APPEND_LOG', appendLog)
+    connections.on('raw', function(message: string) {
+      appendLog(message)
+    })
   }
 }
-function* appendLog() {
-  yield put({ type: 'APPEND_LOG' })
+function* appendLog(message: string) {
+  yield put({ type: 'APPEND_LOG', message })
 }
 export default function* messageSaga() {
   yield all([watchGetMessage])
