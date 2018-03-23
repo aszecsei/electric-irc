@@ -10,7 +10,8 @@ import {
   IRemoveServerAction,
   ISendMessageAction,
   IViewChannelAction,
-  IToggleAddServerModalAction
+  IToggleAddServerModalAction,
+  IAddConnectionAction
 } from '../actions'
 
 import addServer from './add-server'
@@ -37,8 +38,8 @@ export function defaultReducer(
 ): ElectricState {
   // Note: We don't need break statements since we're returning values
   switch (action.type) {
-    case ActionTypeKeys.ADD_SERVER:
-      return addServer(state, action as IAddServerAction)
+    case ActionTypeKeys.ADD_CONNECTION:
+      return addServer(state, action as IAddConnectionAction)
     case ActionTypeKeys.APPEND_LOG:
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:

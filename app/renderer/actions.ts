@@ -1,7 +1,9 @@
 import { Message } from './models/message'
+import { Connection } from './models/connections'
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
+  ADD_CONNECTION = 'ADD_CONNECTION',
   REMOVE_SERVER = 'REMOVE_SERVER',
   EDIT_SERVER = 'EDIT_SERVER',
   JOIN_CHANNEL = 'JOIN_CHANNEL',
@@ -17,6 +19,11 @@ export interface IAddServerAction {
   readonly url: string
   readonly nickname: string
   readonly channels: string[]
+}
+
+export interface IAddConnectionAction {
+  readonly type: ActionTypeKeys.ADD_CONNECTION
+  readonly connection: Connection
 }
 
 export interface IRemoveServerAction {
@@ -64,6 +71,7 @@ export interface IToggleAddServerModalAction {
 
 export type ActionTypes =
   | IAddServerAction
+  | IAddConnectionAction
   | IRemoveServerAction
   | IEditServerAction
   | IJoinChannelAction
@@ -84,6 +92,13 @@ export function addServer(
     url,
     nickname,
     channels
+  }
+}
+
+export function addConnection(connection: Connection): IAddConnectionAction {
+  return {
+    type: ActionTypeKeys.ADD_CONNECTION,
+    connection
   }
 }
 
