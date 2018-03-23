@@ -1,10 +1,5 @@
-import { List } from 'immutable'
 import { ElectricState } from '../store'
-import { IAddServerAction, IAddConnectionAction } from '../actions'
-
-import { ConnectionFactory, setClient } from '../models/connections'
-import { Channel, ChannelFactory } from '../models/channel'
-import * as IRC from 'irc'
+import { IAddConnectionAction } from '../actions'
 
 export default function addConnection(
   state: ElectricState,

@@ -3,7 +3,10 @@ import { fork, take, call, put, cancel } from 'redux-saga/effects'
 import * as irc from 'irc'
 import * as actions from '../actions'
 import { Connection, ConnectionFactory } from '../models/connections'
-import { Message } from '../models/message'
+import { MessageFactory } from '../models/message'
+import { ChannelFactory, Channel } from '../models/channel'
+
+import { List } from 'immutable'
 
 function createIRCClient(url: string, nickname: string, channels: string[]) {
   return new irc.Client(url, nickname, {
@@ -11,37 +14,27 @@ function createIRCClient(url: string, nickname: string, channels: string[]) {
   })
 }
 
-// export default function addServer(
-//   state: ElectricState,
-//   action: IAddServerAction
-// ): ElectricState {
-//   let newState = state.set(
-//   'lastUsedConnectionId',
-//   state.lastUsedConnectionId + 1
-// )
-// let conn = new ConnectionFactory({
-//   id: newState.lastUsedConnectionId,
-//   name: action.name,
-//   channels: List<Channel>(
-//     action.channels.map(chanName => {
-//       newState = newState.set(
-//         'lastUsedChannelId',
-//         newState.lastUsedChannelId + 1
-//       )
-//       return new ChannelFactory({
-//         id: newState.lastUsedChannelId,
-//         name: chanName
-//       })
-//     })
-//   )
-// })
-// setClient(conn, createIRCClient(action.url, action.nickname, action.channels))
-// }
-
-function connect(payload: actions.IAddServerAction) {
-  const conn = new ConnectionFactory({
-    id: 1
+function connect(action: actions.IAddServerAction, id: number) {
+  let chanId = 0
+  const connection = new ConnectionFactory({
+    id: id,
+    name: action.name,
+    channels: List<Channel>(
+      action.channels.map(chanName => {
+        chanId += 1
+        return new ChannelFactory({
+          id: chanId,
+          name: chanName
+        })
+      })
+    )
   })
+  const client = createIRCClient(action.url, action.nickname, action.channels)
+  return {
+    client,
+    connection,
+    chanId
+  }
 }
 
 function subscribe(client: irc.Client, connection: Connection) {
@@ -54,7 +47,9 @@ function subscribe(client: irc.Client, connection: Connection) {
           actions.appendLog(
             connection.id,
             channel.id,
-            new Message(message.rawCommand)
+            new MessageFactory({
+              text: message.rawCommand
+            })
           )
         )
       }
@@ -73,9 +68,20 @@ function* read(client: irc.Client, connection: Connection) {
 
 function* write(client: irc.Client, connection: Connection) {
   while (true) {
-    const payload = yield take(actions.ActionTypeKeys.SEND_MESSAGE)
-    // TODO: Handle sending the message
-    // TODO: Append message to log
+    const payload: actions.ISendMessageAction = yield take(
+      actions.ActionTypeKeys.SEND_MESSAGE
+    )
+    const channel = connection.channels.find(value => {
+      return value.id === payload.channelId
+    })
+
+    if (channel) {
+      // Send the message
+      client.say(channel.name, payload.message.text)
+
+      // Append message to log
+      yield put(actions.appendLog(connection.id, channel.id, payload.message))
+    }
   }
 }
 
@@ -85,11 +91,15 @@ function* handleIO(client: irc.Client, connection: Connection) {
 }
 
 function* flow() {
+  let currId = 0
   while (true) {
     // TODO: Investigate adding multiple servers
     let payload = yield take(actions.ActionTypeKeys.ADD_SERVER)
-    const { client, connection } = yield call(connect, payload)
+    const { client, connection } = yield call(connect, payload, currId)
+    yield put(actions.addConnection(connection))
+    currId += 1
 
+    console.log('Hello?')
     const task = yield fork(handleIO, client, connection)
 
     let action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
