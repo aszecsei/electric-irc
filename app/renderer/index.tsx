@@ -14,6 +14,8 @@ import AddModalContainer from './containers/add-modal-container'
 import ChatWindowContainer from './containers/irc-window-container'
 
 import * as irc from 'irc'
+import { ChatWindow } from './components/ircwindow'
+import SettingsModalContainer from './containers/settings-modal-container'
 
 import 'material-design-icons/iconfont/material-icons.css'
 
@@ -61,6 +63,7 @@ export class App extends React.Component<any, IAppState> {
   render() {
     return (
       <div className="container-fluid">
+        <SettingsModalContainer />
         <Titlebar
           draggable={true}
           handleClose={this.handleClose}

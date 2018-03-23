@@ -8,7 +8,10 @@ export enum ActionTypeKeys {
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
-  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL'
+  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
+  UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
+  EDIT_SETTINGS = 'EDIT_SETTINGS',
+  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS'
 }
 
 export interface IAddServerAction {
@@ -36,6 +39,25 @@ export interface IJoinChannelAction {
   readonly serverId: number
   readonly channel: string
 }
+export interface IEditSettingsAction {
+  readonly type: ActionTypeKeys.EDIT_SETTINGS
+  readonly scrollback: boolean
+  readonly scrollbackLines?: number
+  readonly timestamps: boolean
+  readonly timeformat?: string
+  readonly urlgrabber: boolean
+  readonly maxurl: number
+  readonly autoaway: boolean
+  readonly defquit: string
+  readonly defleave: string
+  readonly defaway: string
+  readonly showawayonce: boolean
+  readonly hidejoin: boolean
+  readonly hidenicknamechange: boolean
+  readonly downloadfolder: string
+  readonly soundChannel: boolean
+  readonly soundPrivate: boolean
+}
 
 export interface IAppendLogAction {
   readonly type: ActionTypeKeys.APPEND_LOG
@@ -61,6 +83,14 @@ export interface IToggleAddServerModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
   readonly visible?: boolean
 }
+export interface IToggleSettingsModalAction {
+  readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
+  readonly visible?: boolean
+}
+export interface IToggleTabAction {
+  readonly type: ActionTypeKeys.TOGGLE_TAB_SETTINGS
+  readonly tab: string
+}
 
 export type ActionTypes =
   | IAddServerAction
@@ -71,6 +101,9 @@ export type ActionTypes =
   | ISendMessageAction
   | IViewChannelAction
   | IToggleAddServerModalAction
+  | IToggleSettingsModalAction
+  | IEditSettingsAction
+  | IToggleTabAction
 
 export function addServer(
   name: string,
@@ -161,5 +194,57 @@ export function toggleAddServerModal(
   return {
     type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL,
     visible
+  }
+}
+export function toggleSettingsModal(
+  visible?: boolean
+): IToggleSettingsModalAction {
+  return {
+    type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL,
+    visible
+  }
+}
+export function toggleSettingsTab(tab: string): IToggleTabAction {
+  return {
+    type: ActionTypeKeys.TOGGLE_TAB_SETTINGS,
+    tab
+  }
+}
+export function editSettings(
+  scrollback: boolean,
+  scrollbackLines: number,
+  timestamps: boolean,
+  timeformat: string,
+  urlgrabber: boolean,
+  maxurl: number,
+  autoaway: boolean,
+  defquit: string,
+  defleave: string,
+  defaway: string,
+  showawayonce: boolean,
+  hidejoin: boolean,
+  hidenicknamechange: boolean,
+  downloadfolder: string,
+  soundChannel: boolean,
+  soundPrivate: boolean
+): IEditSettingsAction {
+  return {
+    type: ActionTypeKeys.EDIT_SETTINGS,
+    scrollback,
+    scrollbackLines,
+    timestamps,
+    timeformat,
+    urlgrabber,
+    maxurl,
+    autoaway,
+    defquit,
+    defleave,
+    defaway,
+    showawayonce,
+    hidejoin,
+    hidenicknamechange,
+    downloadfolder,
+    soundChannel,
+    soundPrivate
   }
 }
