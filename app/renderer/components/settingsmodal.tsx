@@ -10,33 +10,23 @@ import {
   Col
 } from 'reactstrap'
 import * as classnames from 'classnames'
-import SwatchesPicker from 'react-color'
-
 const defaultState = {
   activeTab: '1'
 }
 interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
+  onTabToggle: (arg: number) => void
 }
 
 export class SettingsModal extends React.Component<any, any> {
   constructor(props: ISettingsProps) {
     super(props)
     this.state = { ...defaultState }
+    console.log
   }
   toggletab = (tab: string) => {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      })
-    }
-  }
-
-  handlechange = (e: any) => {
-    let change: any = {}
-    change[e.target.name] = e.target.value
-    this.setState(change)
+    this.props.onTabToggle(tab)
   }
 
   public render() {
@@ -50,7 +40,7 @@ export class SettingsModal extends React.Component<any, any> {
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '1' })}
+              className={classnames({ active: this.props.toggleTab == '1' })}
               onClick={() => {
                 this.toggletab('1')
               }}
@@ -60,7 +50,7 @@ export class SettingsModal extends React.Component<any, any> {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '2' })}
+              className={classnames({ active: this.props.toggleTab === '2' })}
               onClick={() => {
                 this.toggletab('2')
               }}
@@ -70,7 +60,7 @@ export class SettingsModal extends React.Component<any, any> {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '3' })}
+              className={classnames({ active: this.props.toggleTab === '3' })}
               onClick={() => {
                 this.toggletab('3')
               }}
@@ -79,7 +69,7 @@ export class SettingsModal extends React.Component<any, any> {
             </NavLink>
           </NavItem>
         </Nav>
-        <TabContent activeTab={this.state.activeTab}>
+        <TabContent activeTab={this.props.toggleTab}>
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
@@ -90,9 +80,7 @@ export class SettingsModal extends React.Component<any, any> {
           <TabPane tabId="2">
             <h4>Networking</h4>
           </TabPane>
-          <TabPane tabId="3">
-            <SwatchesPicker />
-          </TabPane>
+          <TabPane tabId="3" />
         </TabContent>
       </Modal>
     )

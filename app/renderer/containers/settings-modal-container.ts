@@ -1,11 +1,12 @@
 import { connect, Dispatch } from 'react-redux'
 import { ElectricState } from '../store'
-import { toggleSettingsModal, addServer } from '../actions'
+import { toggleSettingsModal, toggleSettingsTab } from '../actions'
 import SettingsModal from '../components/settingsmodal'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
-    visible: state.settingsModalActive
+    visible: state.settingsModalActive,
+    toggleTab: state.toggleTab
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
@@ -13,19 +14,14 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     onSettingsToggle: () => {
       dispatch(toggleSettingsModal())
     },
-    onAddServerSubmit: (
-      serverName: string,
-      serverURL: string,
-      nickname: string,
-      channels: string[]
-    ) => {
-      dispatch(addServer(serverName, serverURL, nickname, channels))
+    onTabToggle: (arg: string) => {
+      dispatch(toggleSettingsTab(arg))
     }
   }
 }
 
-const AddModalContainer = connect(mapStateToProps, mapDispatchToProps)(
+const SettingsModalContainer = connect(mapStateToProps, mapDispatchToProps)(
   SettingsModal
 )
 
-export default AddModalContainer
+export default SettingsModalContainer

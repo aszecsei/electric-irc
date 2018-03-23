@@ -12,6 +12,7 @@ interface IElectricState {
   settingsModalActive: boolean
   addServerModalActive: boolean
   settings: Settings
+  toggleTab: string
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
@@ -22,7 +23,8 @@ export const ElectricStateFactory = Record<IElectricState>({
   lastUsedChannelId: 0,
   settingsModalActive: true,
   addServerModalActive: false,
-  settings: SettingFactory()
+  settings: SettingFactory(),
+  toggleTab: '1'
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>

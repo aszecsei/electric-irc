@@ -10,7 +10,8 @@ export enum ActionTypeKeys {
   VIEW_CHANNEL = 'VIEW_CHANNEL',
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
   UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
-  EDIT_SETTINGS = 'EDIT_SETTINGS'
+  EDIT_SETTINGS = 'EDIT_SETTINGS',
+  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS'
 }
 
 export interface IAddServerAction {
@@ -86,6 +87,10 @@ export interface IToggleSettingsModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
   readonly visible?: boolean
 }
+export interface IToggleTabAction {
+  readonly type: ActionTypeKeys.TOGGLE_TAB_SETTINGS
+  readonly tab: string
+}
 
 export type ActionTypes =
   | IAddServerAction
@@ -97,6 +102,8 @@ export type ActionTypes =
   | IViewChannelAction
   | IToggleAddServerModalAction
   | IToggleSettingsModalAction
+  | IEditSettingsAction
+  | IToggleTabAction
 
 export function addServer(
   name: string,
@@ -195,6 +202,12 @@ export function toggleSettingsModal(
   return {
     type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL,
     visible
+  }
+}
+export function toggleSettingsTab(tab: string): IToggleTabAction {
+  return {
+    type: ActionTypeKeys.TOGGLE_TAB_SETTINGS,
+    tab
   }
 }
 export function editSettings(

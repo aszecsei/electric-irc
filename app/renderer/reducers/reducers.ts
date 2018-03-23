@@ -11,7 +11,7 @@ import {
   IViewChannelAction,
   IToggleAddServerModalAction,
   IToggleSettingsModalAction,
-  IEditSettings
+  IEditSettingsAction
 } from '../actions'
 
 import addServer from './add-server'
@@ -52,7 +52,9 @@ export function defaultReducer(
     case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
       return toggleSettingsModal(state, action as IToggleSettingsModalAction)
     case ActionTypeKeys.EDIT_SETTINGS:
-      return editSettings(state, action as IEditSettings)
+      return editSettings(state, action as IEditSettingsAction)
+    case ActionTypeKeys.TOGGLE_TAB_SETTINGS:
+      return editSettings(state, action as IToggleSettingsModalAction)
     default:
       return state
   }
