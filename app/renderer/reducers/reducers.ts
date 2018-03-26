@@ -18,7 +18,6 @@ import appendLog from './append-log'
 import editServer from './edit-server'
 import joinChannel from './join-channel'
 import removeServer from './remove-server'
-import sendMessage from './send-message'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
 
@@ -40,8 +39,6 @@ export function defaultReducer(
       return joinChannel(state, action as IJoinChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
-    case ActionTypeKeys.SEND_MESSAGE:
-      return sendMessage(state, action as ISendMessageAction)
     case ActionTypeKeys.VIEW_CHANNEL:
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:

@@ -90,22 +90,25 @@ function* handleIO(client: irc.Client, connection: Connection) {
   yield fork(write, client, connection)
 }
 
+function* handleServer(payload: actions.IAddServerAction, id: number) {
+  const { client, connection } = yield call(connect, payload, id)
+  yield put(actions.addConnection(connection))
+
+  console.log('Hello?')
+  const task = yield fork(handleIO, client, connection)
+
+  let action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
+  yield cancel(task)
+  const ircClient = client as irc.Client
+  ircClient.disconnect('Bye!!!', () => {})
+}
+
 function* flow() {
   let currId = 0
   while (true) {
-    // TODO: Investigate adding multiple servers
     let payload = yield take(actions.ActionTypeKeys.ADD_SERVER)
-    const { client, connection } = yield call(connect, payload, currId)
-    yield put(actions.addConnection(connection))
+    yield fork(handleServer, payload, currId)
     currId += 1
-
-    console.log('Hello?')
-    const task = yield fork(handleIO, client, connection)
-
-    let action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
-    yield cancel(task)
-    const ircClient = client as irc.Client
-    ircClient.disconnect('Bye!!!', () => {})
   }
 }
 
