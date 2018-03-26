@@ -58,7 +58,7 @@ function subscribe(client: irc.Client, connection: Connection) {
   })
 }
 
-function* read(client: irc.Client, connection: Connection) {
+export function* read(client: irc.Client, connection: Connection) {
   const channel = yield call(subscribe, client, connection)
   while (true) {
     let action = yield take(channel)
@@ -66,7 +66,7 @@ function* read(client: irc.Client, connection: Connection) {
   }
 }
 
-function* write(client: irc.Client, connection: Connection) {
+export function* write(client: irc.Client, connection: Connection) {
   while (true) {
     const payload: actions.ISendMessageAction = yield take(
       actions.ActionTypeKeys.SEND_MESSAGE
@@ -85,12 +85,12 @@ function* write(client: irc.Client, connection: Connection) {
   }
 }
 
-function* handleIO(client: irc.Client, connection: Connection) {
+export function* handleIO(client: irc.Client, connection: Connection) {
   yield fork(read, client, connection)
   yield fork(write, client, connection)
 }
 
-function* flow() {
+export function* flow() {
   let currId = 0
   while (true) {
     // TODO: Investigate adding multiple servers
