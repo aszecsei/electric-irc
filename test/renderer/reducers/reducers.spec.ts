@@ -9,7 +9,7 @@ import { ElectricState } from '../../../app/renderer/store'
 
 import * as Actions from '../../../app/renderer/actions'
 
-import * as addServerReducer from '../../../app/renderer/reducers/add-server'
+import * as addServerReducer from '../../../app/renderer/reducers/add-connection'
 import * as appendLogReducer from '../../../app/renderer/reducers/append-log'
 import * as editServerReducer from '../../../app/renderer/reducers/edit-server'
 import * as joinChannelReducer from '../../../app/renderer/reducers/join-channel'
