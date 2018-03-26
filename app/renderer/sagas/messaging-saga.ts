@@ -14,7 +14,7 @@ function createIRCClient(url: string, nickname: string, channels: string[]) {
   })
 }
 
-function connect(action: actions.IAddServerAction, id: number) {
+export function connect(action: actions.IAddServerAction, id: number) {
   let chanId = 0
   const connection = new ConnectionFactory({
     id: id,
