@@ -9,14 +9,15 @@ import { ElectricState } from '../../../app/renderer/store'
 
 import * as Actions from '../../../app/renderer/actions'
 
-import * as addServerReducer from '../../../app/renderer/reducers/add-connection'
+import * as addConnectionReducer from '../../../app/renderer/reducers/add-connection'
 import * as appendLogReducer from '../../../app/renderer/reducers/append-log'
 import * as editServerReducer from '../../../app/renderer/reducers/edit-server'
 import * as joinChannelReducer from '../../../app/renderer/reducers/join-channel'
 import * as removeServerReducer from '../../../app/renderer/reducers/remove-server'
-import * as sendMessageReducer from '../../../app/renderer/reducers/send-message'
 import * as viewChannelReducer from '../../../app/renderer/reducers/view-channel'
 import { MessageFactory } from '../../../app/renderer/models/message'
+import { ConnectionFactory } from '../../../app/renderer/models/connections'
+import { ChannelFactory } from '../../../app/renderer/models/channel'
 
 use(sinonChai)
 
@@ -54,12 +55,11 @@ describe('default reducer', function() {
     alteredState.lastUsedConnectionId = 2
 
     sandbox = sinon.createSandbox()
-    sandbox.stub(addServerReducer, 'default').returns(alteredState)
+    sandbox.stub(addConnectionReducer, 'default').returns(alteredState)
     sandbox.stub(appendLogReducer, 'default').returns(alteredState)
     sandbox.stub(editServerReducer, 'default').returns(alteredState)
     sandbox.stub(joinChannelReducer, 'default').returns(alteredState)
     sandbox.stub(removeServerReducer, 'default').returns(alteredState)
-    sandbox.stub(sendMessageReducer, 'default').returns(alteredState)
     sandbox.stub(viewChannelReducer, 'default').returns(alteredState)
   })
 
@@ -67,19 +67,31 @@ describe('default reducer', function() {
     sandbox.restore()
   })
 
-  describe('add server', function() {
+  describe('add connection', function() {
     before(function() {
       result = undefined
       result = defaultReducer(
         initialState,
-        Actions.addServer('Server Name', 'Server URL', 'Nickname', [
-          '#channel1'
-        ])
+        Actions.addConnection(
+          new ConnectionFactory({
+            name: 'Server Name',
+            url: 'Server URL',
+            nickname: 'Nickname',
+            channels: List([
+              new ChannelFactory({
+                name: '#channel1'
+              }),
+              new ChannelFactory({
+                name: '#channel2'
+              })
+            ])
+          })
+        )
       )
     })
 
-    it('should call the addServer reducer', function() {
-      expect(addServerReducer.default).to.be.calledOnce
+    it('should call the addConnection reducer', function() {
+      expect(addConnectionReducer.default).to.be.calledOnce
     })
 
     it('should alter the state', function() {
@@ -146,24 +158,6 @@ describe('default reducer', function() {
 
     it('should call the remove server reducer', function() {
       expect(removeServerReducer.default).to.be.calledOnce
-    })
-
-    it('should alter the state', function() {
-      expect(result).to.eq(alteredState)
-    })
-  })
-
-  describe('send message', function() {
-    before(function() {
-      result = undefined
-      result = defaultReducer(
-        initialState,
-        Actions.sendMessage(2, 5, new MessageFactory({ text: 'Hello, world!' }))
-      )
-    })
-
-    it('should call the send message reducer', function() {
-      expect(sendMessageReducer.default).to.be.calledOnce
     })
 
     it('should alter the state', function() {
