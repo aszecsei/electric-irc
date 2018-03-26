@@ -16,10 +16,12 @@ const defaultState = {
 interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
-  onTabToggle: (arg: number) => void
+  onTabToggle: (arg: string) => void
+  toggleTab: string
+  className: string
 }
 
-export class SettingsModal extends React.Component<any, any> {
+export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
     this.state = { ...defaultState }

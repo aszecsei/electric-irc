@@ -16,6 +16,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     onTabToggle: (arg: string) => {
       dispatch(toggleSettingsTab(arg))
+      console.log(arg)
     }
   }
 }

@@ -7,7 +7,7 @@ export default function toggleTab(
 ): ElectricState {
   let newState = state
 
-  if (action.tab != '1' && action.tab != '2' && action.tab != '3') {
+  if (action.tab === '1' || action.tab === '2' || action.tab === '3') {
     newState = newState.set('toggleTab', action.tab)
   }
   return newState
