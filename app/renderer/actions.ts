@@ -39,9 +39,9 @@ export interface IJoinChannelAction {
   readonly serverId: number
   readonly channel: string
 }
-export interface IEditSettingsAction<T extends keyof ISettings> {
+export interface IEditSettingsAction {
   readonly type: ActionTypeKeys.EDIT_SETTINGS
-  readonly prop: T
+  readonly prop: string
   readonly value: string
 }
 
@@ -78,7 +78,7 @@ export interface IToggleTabAction {
   readonly tab: string
 }
 
-export type ActionTypes<K extends keyof ISettings> =
+export type ActionTypes =
   | IAddServerAction
   | IRemoveServerAction
   | IEditServerAction
@@ -88,7 +88,7 @@ export type ActionTypes<K extends keyof ISettings> =
   | IViewChannelAction
   | IToggleAddServerModalAction
   | IToggleSettingsModalAction
-  | IEditSettingsAction<K>
+  | IEditSettingsAction
   | IToggleTabAction
 
 export function addServer(
@@ -199,7 +199,7 @@ export function toggleSettingsTab(tab: string): IToggleTabAction {
 export function editSettings<K extends keyof ISettings>(
   prop: K,
   value: string
-): IEditSettingsAction<K> {
+): IEditSettingsAction {
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,
     prop,
