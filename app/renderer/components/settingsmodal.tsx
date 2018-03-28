@@ -10,6 +10,7 @@ import {
   Col
 } from 'reactstrap'
 import * as classnames from 'classnames'
+import { Settings } from '../models/settings'
 const defaultState = {
   activeTab: '1'
 }
@@ -19,13 +20,13 @@ interface ISettingsProps {
   onTabToggle: (arg: string) => void
   toggleTab: string
   className: string
+  settings: Settings
 }
 
 export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
     this.state = { ...defaultState }
-    console.log
   }
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)

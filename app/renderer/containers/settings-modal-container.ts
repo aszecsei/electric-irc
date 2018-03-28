@@ -6,7 +6,8 @@ import SettingsModal from '../components/settingsmodal'
 const mapStateToProps = (state: ElectricState) => {
   return {
     visible: state.settingsModalActive,
-    toggleTab: state.toggleTab
+    toggleTab: state.toggleTab,
+    settings: state.settings
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {

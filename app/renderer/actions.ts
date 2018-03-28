@@ -1,5 +1,5 @@
 import { Message } from './models/message'
-
+import { Settings } from './models/settings'
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
   REMOVE_SERVER = 'REMOVE_SERVER',
@@ -41,22 +41,8 @@ export interface IJoinChannelAction {
 }
 export interface IEditSettingsAction {
   readonly type: ActionTypeKeys.EDIT_SETTINGS
-  readonly scrollback: boolean
-  readonly scrollbackLines?: number
-  readonly timestamps: boolean
-  readonly timeformat?: string
-  readonly urlgrabber: boolean
-  readonly maxurl: number
-  readonly autoaway: boolean
-  readonly defquit: string
-  readonly defleave: string
-  readonly defaway: string
-  readonly showawayonce: boolean
-  readonly hidejoin: boolean
-  readonly hidenicknamechange: boolean
-  readonly downloadfolder: string
-  readonly soundChannel: boolean
-  readonly soundPrivate: boolean
+  readonly prop: keyof Settings
+  readonly value: string
 }
 
 export interface IAppendLogAction {
@@ -211,40 +197,12 @@ export function toggleSettingsTab(tab: string): IToggleTabAction {
   }
 }
 export function editSettings(
-  scrollback: boolean,
-  scrollbackLines: number,
-  timestamps: boolean,
-  timeformat: string,
-  urlgrabber: boolean,
-  maxurl: number,
-  autoaway: boolean,
-  defquit: string,
-  defleave: string,
-  defaway: string,
-  showawayonce: boolean,
-  hidejoin: boolean,
-  hidenicknamechange: boolean,
-  downloadfolder: string,
-  soundChannel: boolean,
-  soundPrivate: boolean
+  prop: keyof Settings,
+  value: string
 ): IEditSettingsAction {
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,
-    scrollback,
-    scrollbackLines,
-    timestamps,
-    timeformat,
-    urlgrabber,
-    maxurl,
-    autoaway,
-    defquit,
-    defleave,
-    defaway,
-    showawayonce,
-    hidejoin,
-    hidenicknamechange,
-    downloadfolder,
-    soundChannel,
-    soundPrivate
+    prop,
+    value
   }
 }

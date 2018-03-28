@@ -1,13 +1,16 @@
 import { ElectricState } from '../store'
-import { IEditSettings } from '../actions'
+import { IEditSettingsAction } from '../actions'
 
 export default function editSettings(
   state: ElectricState,
-  action: IEditSettings
+  action: IEditSettingsAction
 ): ElectricState {
   let newState = state
 
-  // TODO: Implement this
+  let before = newState.settings
+  console.log(before)
+  before.set(action.prop, action.value)
+  newState = newState.set('settings', before)
 
   return newState
 }
