@@ -1,9 +1,10 @@
 import { ElectricState } from '../store'
 import { IEditSettingsAction } from '../actions'
+import { ISettings } from '../models/settings'
 
-export default function editSettings(
+export default function editSettings<K extends keyof ISettings>(
   state: ElectricState,
-  action: IEditSettingsAction
+  action: IEditSettingsAction<K>
 ): ElectricState {
   let newState = state
 

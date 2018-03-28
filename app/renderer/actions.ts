@@ -1,5 +1,5 @@
 import { Message } from './models/message'
-import { Settings } from './models/settings'
+import { ISettings } from './models/settings'
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
   REMOVE_SERVER = 'REMOVE_SERVER',
@@ -39,9 +39,9 @@ export interface IJoinChannelAction {
   readonly serverId: number
   readonly channel: string
 }
-export interface IEditSettingsAction {
+export interface IEditSettingsAction<T extends keyof ISettings> {
   readonly type: ActionTypeKeys.EDIT_SETTINGS
-  readonly prop: keyof Settings
+  readonly prop: T
   readonly value: string
 }
 
@@ -78,7 +78,7 @@ export interface IToggleTabAction {
   readonly tab: string
 }
 
-export type ActionTypes =
+export type ActionTypes<K extends keyof ISettings> =
   | IAddServerAction
   | IRemoveServerAction
   | IEditServerAction
@@ -88,7 +88,7 @@ export type ActionTypes =
   | IViewChannelAction
   | IToggleAddServerModalAction
   | IToggleSettingsModalAction
-  | IEditSettingsAction
+  | IEditSettingsAction<K>
   | IToggleTabAction
 
 export function addServer(
@@ -196,10 +196,10 @@ export function toggleSettingsTab(tab: string): IToggleTabAction {
     tab
   }
 }
-export function editSettings(
-  prop: keyof Settings,
+export function editSettings<K extends keyof ISettings>(
+  prop: K,
   value: string
-): IEditSettingsAction {
+): IEditSettingsAction<K> {
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,
     prop,

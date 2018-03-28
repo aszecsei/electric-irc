@@ -1,6 +1,6 @@
 import { Record } from 'immutable'
 
-interface ISettings {
+export interface ISettings {
   scrollback: boolean
   scrollbackLines?: number
   timestamps: boolean
