@@ -1,7 +1,12 @@
 import { connect, Dispatch } from 'react-redux'
 import { ElectricState } from '../store'
-import { toggleSettingsModal, toggleSettingsTab } from '../actions'
+import {
+  toggleSettingsModal,
+  toggleSettingsTab,
+  editSettings
+} from '../actions'
 import SettingsModal from '../components/settingsmodal'
+import { ISettings } from '../models/settings'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
@@ -18,6 +23,9 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     onTabToggle: (arg: string) => {
       dispatch(toggleSettingsTab(arg))
       console.log(arg)
+    },
+    changeSetting: (event: keyof ISettings, value: any) => {
+      dispatch(editSettings(event, value))
     }
   }
 }

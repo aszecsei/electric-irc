@@ -42,7 +42,7 @@ export interface IJoinChannelAction {
 export interface IEditSettingsAction {
   readonly type: ActionTypeKeys.EDIT_SETTINGS
   readonly prop: string
-  readonly value: string
+  readonly value: any
 }
 
 export interface IAppendLogAction {
@@ -198,7 +198,7 @@ export function toggleSettingsTab(tab: string): IToggleTabAction {
 }
 export function editSettings<K extends keyof ISettings>(
   prop: K,
-  value: string
+  value: ISettings[K]
 ): IEditSettingsAction {
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,

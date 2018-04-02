@@ -7,26 +7,27 @@ import {
   Modal,
   TabPane,
   Row,
-  Col
+  Col,
+  Input
 } from 'reactstrap'
 import * as classnames from 'classnames'
-import { Settings } from '../models/settings'
-const defaultState = {
-  activeTab: '1'
-}
+import { ISettings, Settings } from '../models/settings'
+import FormGroup from 'reactstrap/lib/FormGroup'
+import Label from 'reactstrap/lib/Label'
+
 interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
   onTabToggle: (arg: string) => void
+  changeSetting: (event: keyof ISettings, value: any) => void
   toggleTab: string
   className: string
   settings: Settings
 }
 
-export class SettingsModal extends React.Component<ISettingsProps, any> {
+export class SettingsModal extends React.Component<ISettingsProps> {
   constructor(props: ISettingsProps) {
     super(props)
-    this.state = { ...defaultState }
   }
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)
@@ -77,6 +78,68 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
             <Row>
               <Col sm="12">
                 <h4>Welcome to Chatting</h4>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      checked={this.props.settings.scrollback}
+                      onChange={() =>
+                        this.props.changeSetting(
+                          'scrollback',
+                          !this.props.settings.scrollback
+                        )
+                      }
+                    />
+                    Enable Scrollback
+                  </Label>
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <Input
+                      type="number"
+                      disabled={!this.props.settings.scrollback}
+                      value={this.props.settings.scrollbackLines}
+                      onChange={event =>
+                        this.props.changeSetting(
+                          'scrollbackLines',
+                          event.target.value
+                        )
+                      }
+                    />
+                    Scrollback lines
+                  </Label>
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      checked={this.props.settings.timestamps}
+                      onChange={() =>
+                        this.props.changeSetting(
+                          'timestamps',
+                          !this.props.settings.timestamps
+                        )
+                      }
+                    />
+                    Enable TimeStamps
+                  </Label>
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <Input
+                      type="text"
+                      disabled={!this.props.settings.timestamps}
+                      value={this.props.settings.timeformat}
+                      onChange={event =>
+                        this.props.changeSetting(
+                          'scrollbackLines',
+                          event.target.value
+                        )
+                      }
+                    />
+                    Scrollback lines
+                  </Label>
+                </FormGroup>
               </Col>
             </Row>
           </TabPane>
