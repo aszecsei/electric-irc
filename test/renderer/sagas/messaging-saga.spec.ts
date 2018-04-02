@@ -45,8 +45,8 @@ describe('flow logic', () => {
       ])
     )
   })
-  const payload = {}
   let addAction: ActionTypes.IAddServerAction
+  const expectedYield = fork(rootSaga.handleServer, addAction, 0)
   function connect() {
     rootSaga.connect(addAction, 0)
   }
@@ -54,9 +54,26 @@ describe('flow logic', () => {
     expect(saga.next().value).to.deep.equal(
       take(ActionTypes.ActionTypeKeys.ADD_SERVER)
     )
-    expect(saga.next().value).to.contain(connect)
-    expect(saga.next().value).to.contain(
-      put(ActionTypes.addConnection(prevState.connections.get(0)))
-    )
+    expect(saga.next().value).to.deep.equal(expectedYield)
   })
 })
+//THIS test passes, but causes the test to hang so commented out.
+// describe('handle IO logic',() => {
+//   const chan1 = new ChannelFactory({ id: 1, name: '#channel1' })
+//   const chan2 = new ChannelFactory({ id: 2, name: '#channel2' })
+//   const chan3 = new ChannelFactory({ id: 3, name: '#channel3' })
+//   let client = rootSaga.createIRCClient('beep.com','fakenick',['test'])
+//   const conn1 = new ConnectionFactory({
+//     id: 1,
+//     name: 'Connection 1',
+//     channels: List([chan1, chan2])
+//   })
+//   const readExpectedYield = fork(rootSaga.read,client,conn1)
+//   const writeExpectedYield = fork(rootSaga.write,client,conn1)
+//   const saga = rootSaga.handleIO(client,conn1)
+
+//   it('should handle read and write',() => {
+//     expect(saga.next().value).to.deep.equal(readExpectedYield)
+//     expect(saga.next().value).to.deep.equal(writeExpectedYield)
+//   })
+// })

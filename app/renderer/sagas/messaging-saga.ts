@@ -8,7 +8,11 @@ import { ChannelFactory, Channel } from '../models/channel'
 
 import { List } from 'immutable'
 
-function createIRCClient(url: string, nickname: string, channels: string[]) {
+export function createIRCClient(
+  url: string,
+  nickname: string,
+  channels: string[]
+) {
   return new irc.Client(url, nickname, {
     channels: channels
   })

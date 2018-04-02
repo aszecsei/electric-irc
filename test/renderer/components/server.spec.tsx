@@ -10,6 +10,7 @@ import { List } from 'immutable'
 
 import * as server from '../../../app/renderer/components/server'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
+import { ChannelFactory } from '../../../app/renderer/models/channel'
 
 use(chaiEnzyme())
 use(sinonChai)
@@ -25,7 +26,14 @@ describe('server panel', function() {
       <server.Server
         onChannelClick={onClick}
         connection={
-          new ConnectionFactory({ name: 'Connection', channels: List([]) })
+          new ConnectionFactory({
+            id: 0,
+            name: 'Connection 1',
+            channels: List([
+              new ChannelFactory({ id: 1, name: '#channel1' }),
+              new ChannelFactory({ id: 2, name: '#channel2' })
+            ])
+          })
         }
       />
     )
