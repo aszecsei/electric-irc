@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
-
+import messageSaga from './sagas/messaging-saga'
 import { remote } from 'electron'
 
 import { defaultReducer, defaultStore } from './reducers/reducers'
@@ -90,7 +90,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 )
 // TODO: Start the message listening saga
-
+sagaMiddleware.run(messageSaga)
 ReactDOM.render(
   <Provider store={store}>
     <App />

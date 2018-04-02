@@ -3,10 +3,10 @@ import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { List } from 'immutable'
 
-import * as mAddServer from '../../../app/renderer/reducers/add-server'
+import * as mAddConnection from '../../../app/renderer/reducers/add-connection'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
-import { addServer } from '../../../app/renderer/actions'
+import { addConnection, ActionTypeKeys } from '../../../app/renderer/actions'
 import { ElectricState } from '../../../app/renderer/store'
 import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
@@ -14,7 +14,7 @@ import * as IRC from 'irc'
 
 use(sinonChai)
 
-describe('add-server reducer', function() {
+describe('add-connection reducer', function() {
   let sandbox: sinon.SinonSandbox
 
   let prevState = defaultStore
@@ -38,23 +38,25 @@ describe('add-server reducer', function() {
     )
   })
 
-  describe('adding a server', function() {
+  describe('adding a connection', function() {
     before(function() {
-      nextState = mAddServer.default(
+      nextState = mAddConnection.default(
         prevState,
-        addServer('Connection 2', 'beep.com', 'username', [
-          '#channel3',
-          '#channel4'
-        ])
+        addConnection(
+          new ConnectionFactory({
+            id: 0,
+            name: 'Connection 2',
+            channels: List([
+              new ChannelFactory({ id: 1, name: '#channel1' }),
+              new ChannelFactory({ id: 2, name: '#channel2' })
+            ])
+          })
+        )
       )
     })
 
     it('has one more connection', function() {
       expect(nextState.connections.count()).to.eq(2)
-    })
-
-    it('creates an IRC client', function() {
-      expect(IRC.Client).to.have.been.calledOnce
     })
   })
 

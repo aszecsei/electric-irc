@@ -9,15 +9,15 @@ import {
   IRemoveServerAction,
   ISendMessageAction,
   IViewChannelAction,
-  IToggleAddServerModalAction
+  IToggleAddServerModalAction,
+  IAddConnectionAction
 } from '../actions'
 
-import addServer from './add-server'
+import addConnection from './add-connection'
 import appendLog from './append-log'
 import editServer from './edit-server'
 import joinChannel from './join-channel'
 import removeServer from './remove-server'
-import sendMessage from './send-message'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
 
@@ -29,8 +29,8 @@ export function defaultReducer(
 ): ElectricState {
   // Note: We don't need break statements since we're returning values
   switch (action.type) {
-    case ActionTypeKeys.ADD_SERVER:
-      return addServer(state, action as IAddServerAction)
+    case ActionTypeKeys.ADD_CONNECTION:
+      return addConnection(state, action as IAddConnectionAction)
     case ActionTypeKeys.APPEND_LOG:
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:
@@ -39,8 +39,6 @@ export function defaultReducer(
       return joinChannel(state, action as IJoinChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
-    case ActionTypeKeys.SEND_MESSAGE:
-      return sendMessage(state, action as ISendMessageAction)
     case ActionTypeKeys.VIEW_CHANNEL:
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
