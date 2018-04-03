@@ -12,17 +12,19 @@ use(chaiEnzyme())
 describe('settingsModal', function() {
   let wrapper: ReactWrapper = null
   let instance: SettingsModal.SettingsModal = null
-  let onClick: sinon.SinonSpy = null
-  let onSubmit: sinon.SinonSpy = null
+  let onSettingsToggle: sinon.SinonSpy = null
+  let onTabToggle: sinon.SinonSpy = null
+  let changeSetting: sinon.SinonSpy = null
 
   before(function() {
     onClick = sinon.spy()
     onSubmit = sinon.spy()
     wrapper = mount(
       <SettingsModal.SettingsModal
-        visible={false}
-        onAddServerToggle={onClick}
-        onAddServerSubmit={onSubmit}
+        visible={true}
+        onSettingsToggle={onSettingsToggle}
+        onTabToggle={onTabToggle}
+        changeSetting={changeSetting}
       />
     )
     instance = wrapper.instance() as SettingsModal.SettingsModal
