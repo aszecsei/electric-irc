@@ -80,7 +80,7 @@
     "electron-builder": "^20.0.4",
     "electron-devtools-installer": "^2.2.3",
     "electron-mocha": "^6.0.0",
-    "electron-webpack": "^1.11.0",
+    "electron-webpack": "^2.0.1",
     "electron-webpack-ts": "^1.2.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
