@@ -18,8 +18,6 @@ describe('settingsModal', function() {
   let changeSetting: sinon.SinonSpy = null
 
   before(function() {
-    onClick = sinon.spy()
-    onSubmit = sinon.spy()
     wrapper = mount(
       <SettingsModal.SettingsModal
         toggleTab={'1'}
