@@ -66,9 +66,6 @@ describe('default reducer', function() {
     sandbox.stub(sendMessageReducer, 'default').returns(alteredState)
     sandbox.stub(viewChannelReducer, 'default').returns(alteredState)
     sandbox.stub(toggleAddReducer, 'default').returns(alteredState)
-    sandbox.stub(toggleSettingReducer, 'default').returns(alteredState)
-    sandbox.stub(changeSettingsReducer, 'default').returns(alteredState)
-    sandbox.stub(toggleTabReducer, 'default').returns(alteredState)
   })
 
   after(function() {
