@@ -1,4 +1,4 @@
-import { List, Record } from 'immutable'
+import { List, Record, Map } from 'immutable'
 import { Connection } from './models/connections'
 import { Channel } from './models/channel'
 
@@ -10,6 +10,7 @@ interface IElectricState {
   lastUsedChannelId: number
 
   addServerModalActive: boolean
+  themeProperties: Map<string, string>
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
@@ -19,7 +20,8 @@ export const ElectricStateFactory = Record<IElectricState>({
   lastUsedConnectionId: 0,
   lastUsedChannelId: 0,
 
-  addServerModalActive: false
+  addServerModalActive: false,
+  themeProperties: Map<string, string>([['--primary', '#FF0000']])
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>
