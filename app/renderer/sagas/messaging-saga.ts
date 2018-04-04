@@ -45,14 +45,36 @@ function subscribe(client: irc.Client, connection: Connection) {
   return eventChannel(emit => {
     client.addListener('raw', (message: irc.IMessage) => {
       // TODO: Get the actual channel
-      const channel = connection.channels.get(0)
+      const ms = JSON.parse(JSON.stringify(message)) //turns to hash
+      var channel //= connection.channels.get(0)
+      //console.log(ms['args'].length)
+      if (ms['args'].length > 0 && ms['args'][0][0] == '#') {
+        channel = connection.channels.find((x, y, z) => x.name == ms['args'][0])
+      } else {
+        channel = connection.channels.get(0)
+      }
+      //can get channel from ms iff it is a message type that is channel specific
       if (channel) {
+        //if(ms['args'][0][0]=="#"){//if directed at a channel
+        //}
+        var sender = ''
+        if (ms.hasOwnProperty('nick')) {
+          sender = ms['nick']
+        } else if (ms.hasOwnProperty('server')) {
+          sender = ms['server']
+        }
         emit(
           actions.appendLog(
             connection.id,
             channel.id,
             new MessageFactory({
-              text: JSON.stringify(message)
+              text: JSON.stringify(message),
+              prefix: ms['prefix'],
+              command: ms['command'],
+              rawCommand: ms['rawCommand'],
+              commandType: ms['commandType'],
+              args: ms['args'],
+              sender: sender
             })
           )
         )

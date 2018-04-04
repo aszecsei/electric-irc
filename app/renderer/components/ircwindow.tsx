@@ -4,6 +4,7 @@ import * as irc from 'irc'
 import { List } from 'immutable'
 
 import { MessageEntry } from './messageentry'
+import { MessageDisp } from './message'
 
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
@@ -21,7 +22,11 @@ export const ChatWindow: React.SFC<IChatWindowProps> = props => {
     <div className="chatwindow">
       <div className="logWindow">
         {props.messages
-          ? props.messages.map((message, i) => <p key={i}>{message.text}</p>)
+          ? props.messages.map((message, i) => (
+              <p key={i}>
+                <MessageDisp message={message} />
+              </p>
+            ))
           : []}
       </div>
       <div className="sendMessage flex">
