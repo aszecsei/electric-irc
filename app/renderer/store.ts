@@ -1,6 +1,7 @@
 import { List, Record, Map } from 'immutable'
 import { Connection } from './models/connections'
 import { Channel } from './models/channel'
+import { theme, backup } from './stylesheets/thememaps/themes'
 
 interface IElectricState {
   connections: List<Connection>
@@ -21,7 +22,7 @@ export const ElectricStateFactory = Record<IElectricState>({
   lastUsedChannelId: 0,
 
   addServerModalActive: false,
-  themeProperties: Map<string, string>([['--primary', '#FF0000']])
+  themeProperties: theme.get('dark') || backup
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>
