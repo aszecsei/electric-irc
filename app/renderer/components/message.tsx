@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as irc from 'irc'
+import { Emojis } from '../emojis/index'
 
 import { List } from 'immutable'
 
@@ -12,6 +13,27 @@ import { Message } from '../models/message'
 interface IMessageProps {
   message: Message
 }
+function emoji_process(str: string) {
+  const emojire = /:[a-z_]+:/i
+  var reres = emojire.exec(str)
+  var tmpstr = str
+  while (reres != null) {
+    if (Emojis.hasOwnProperty(reres[0])) {
+      const rere = new RegExp(reres[0], 'gi')
+      str = str.replace(rere, Emojis[reres[0]])
+    }
+    // else{
+    //   const rere=new RegExp(reres[0],'gi')
+    //   str=str.replace(rere,reres[0][0]+"\\"+reres[0].substring(1,reres[0].length))
+    // }
+    console.log(reres['index'])
+    console.log(reres['index'] + reres[0].length - 1)
+    tmpstr = tmpstr.substring(+reres['index'] + reres[0].length - 1)
+    console.log('*' + tmpstr + '*')
+    reres = emojire.exec(tmpstr)
+  }
+  return str
+}
 export const MessageDisp: React.SFC<IMessageProps> = props => {
   if (props.message.command == 'PRIVMSG' && props.message.args[0][0] == '#') {
     //general chat channel message
@@ -19,7 +41,7 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       <p className="mmessage">
         {props.message.sender + ': '}
         <br />
-        <b className="mmessagetext">{props.message.args[1]}</b>
+        <b className="mmessagetext">{emoji_process(props.message.args[1])}</b>
       </p>
     )
   }
@@ -41,7 +63,7 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       }
       str = str.substring(0, str.length - 2) + ')'
     }
-    return <p className="mmessage"> {str}</p>
+    return <p className="mmessage"> {emoji_process(str)}</p>
   }
   var re = /^[0-9]+$/
   if (
@@ -64,9 +86,9 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       <p className="mmessage">
         {props.message.sender + ': '}
         <br />
-        <b className="mmessagetext">{str}</b>
+        <b className="mmessagetext">{emoji_process(str)}</b>
       </p>
     )
   }
-  return <p className="mmessage">{props.message.text}</p>
+  return <p className="mmessage">{emoji_process(props.message.text)}</p>
 }
