@@ -14,9 +14,17 @@ interface IMessageProps {
 }
 export const MessageDisp: React.SFC<IMessageProps> = props => {
   if (props.message.command == 'PRIVMSG' && props.message.args[0][0] == '#') {
-    return <span> {props.message.sender + ': ' + props.message.args[1]}</span>
+    //general chat channel message
+    return (
+      <p className="mmessage">
+        {props.message.sender + ': '}
+        <br />
+        <b className="mmessagetext">{props.message.args[1]}</b>
+      </p>
+    )
   }
   if (props.message.args.length > 0 && props.message.args[0][0] == '#') {
+    //other messages asscociated with channels
     //for other messages like part,join,leave
     var str =
       props.message.sender +
@@ -33,7 +41,32 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       }
       str = str.substring(0, str.length - 2) + ')'
     }
-    return <span> {str}</span>
+    return <p className="mmessage"> {str}</p>
   }
-  return <span>{props.message.text}</span>
+  var re = /^[0-9]+$/
+  if (
+    re.exec(props.message.rawCommand) ||
+    props.message.rawCommand == 'NOTICE'
+  ) {
+    //numbered commands or notices
+    str = props.message.command + '(' + props.message.rawCommand + ')'
+    if (props.message.args.length > 1) {
+      //has args beyond us
+      str = str + ': [' //turn list into string
+      var i = 1
+      while (i < props.message.args.length) {
+        str = str + props.message.args[i] + ', '
+        i += 1
+      }
+      str = str.substring(0, str.length - 2) + ']'
+    }
+    return (
+      <p className="mmessage">
+        {props.message.sender + ': '}
+        <br />
+        <b className="mmessagetext">{str}</b>
+      </p>
+    )
+  }
+  return <p className="mmessage">{props.message.text}</p>
 }
