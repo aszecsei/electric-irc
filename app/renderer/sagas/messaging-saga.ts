@@ -45,18 +45,16 @@ function subscribe(client: irc.Client, connection: Connection) {
   return eventChannel(emit => {
     client.addListener('raw', (message: irc.IMessage) => {
       // TODO: Get the actual channel
+      //can get channel from ms iff it is a message type that is channel specific
       const ms = JSON.parse(JSON.stringify(message)) //turns to hash
       var channel //= connection.channels.get(0)
-      //console.log(ms['args'].length)
       if (ms['args'].length > 0 && ms['args'][0][0] == '#') {
         channel = connection.channels.find((x, y, z) => x.name == ms['args'][0])
       } else {
+        //maybe make fake 'channel'?
         channel = connection.channels.get(0)
       }
-      //can get channel from ms iff it is a message type that is channel specific
       if (channel) {
-        //if(ms['args'][0][0]=="#"){//if directed at a channel
-        //}
         var sender = ''
         if (ms.hasOwnProperty('nick')) {
           sender = ms['nick']
