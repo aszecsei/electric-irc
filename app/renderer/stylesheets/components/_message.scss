@@ -4,7 +4,6 @@
   border-color: var(--secondary-dark);
   background-color: var(--primary-dark);
   padding: 5px;
-  width: auto;
   display: inline-block;
   margin: 0px;
 }
@@ -12,7 +11,7 @@
   color: var(--primary-text);
 }
 .outermessage {
-  margin: 0px;
   margin-bottom: 5px;
   margin-left: 5px;
+  word-break: break-word;
 }

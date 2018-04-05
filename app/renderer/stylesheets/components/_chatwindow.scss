@@ -1,15 +1,19 @@
 .chatwindow {
-  flex-grow: 100;
+  width: 100%;
+  left: 0px;
 }
 
 .logWindow {
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-grow: 100;
+  overflow-y: scroll;
+  height: 93%;
+  position: relative;
 }
 
 .sendMessage {
   display: flex;
   bottom: 0;
-  position: absolute;
+  margin: 0.5%;
+  position: relative;
+  color: var(--primary-text);
+  height: 5%;
 }
