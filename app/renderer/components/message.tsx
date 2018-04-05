@@ -16,7 +16,7 @@ interface IMessageProps {
 function emoji_process(str: string) {
   const emojire = /:[a-z_]+:/i
   var reres = emojire.exec(str)
-  var tmpstr = str
+  var tmpstr = str //tmpstr for loop control
   while (reres != null) {
     if (Emojis.hasOwnProperty(reres[0])) {
       const rere = new RegExp(reres[0], 'gi')
@@ -26,10 +26,10 @@ function emoji_process(str: string) {
     //   const rere=new RegExp(reres[0],'gi')
     //   str=str.replace(rere,reres[0][0]+"\\"+reres[0].substring(1,reres[0].length))
     // }
-    console.log(reres['index'])
-    console.log(reres['index'] + reres[0].length - 1)
+    //console.log(reres['index'])
+    //console.log(reres['index'] + reres[0].length - 1)
     tmpstr = tmpstr.substring(+reres['index'] + reres[0].length - 1)
-    console.log('*' + tmpstr + '*')
+    //console.log('*' + tmpstr + '*')
     reres = emojire.exec(tmpstr)
   }
   return str
