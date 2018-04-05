@@ -1,9 +1,18 @@
 .mmessage {
   color: var(--secondary-text);
-  border-style: groove;
+  border-style: outset;
+  border-color: var(--secondary-dark);
+  background-color: var(--primary-dark);
+  padding: 5px;
   width: auto;
   display: inline-block;
+  margin: 0px;
 }
 .mmessagetext {
   color: var(--primary-text);
+}
+.outermessage {
+  margin: 0px;
+  margin-bottom: 5px;
+  margin-left: 5px;
 }

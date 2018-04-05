@@ -23,7 +23,7 @@ export const ChatWindow: React.SFC<IChatWindowProps> = props => {
       <div className="logWindow">
         {props.messages
           ? props.messages.map((message, i) => (
-              <p key={i}>
+              <p key={i} className="outermessage">
                 <MessageDisp message={message} />
               </p>
             ))
