@@ -22,6 +22,7 @@ export function connect(action: actions.IAddServerAction, id: number) {
   let chanId = 0
   const connection = new ConnectionFactory({
     id: id,
+    nickname: action.nickname,
     name: action.name,
     channels: List<Channel>(
       action.channels.map(chanName => {
@@ -44,38 +45,44 @@ export function connect(action: actions.IAddServerAction, id: number) {
 function subscribe(client: irc.Client, connection: Connection) {
   return eventChannel(emit => {
     client.addListener('raw', (message: irc.IMessage) => {
-      // TODO: Get the actual channel
-      //can get channel from ms iff it is a message type that is channel specific
-      const ms = JSON.parse(JSON.stringify(message)) //turns to hash
-      var channel //= connection.channels.get(0)
-      if (ms['args'].length > 0 && ms['args'][0][0] == '#') {
-        channel = connection.channels.find((x, y, z) => x.name == ms['args'][0])
-      } else {
-        //maybe make fake 'channel'?
-        channel = connection.channels.get(0)
-      }
-      if (channel) {
-        var sender = ''
-        if (ms.hasOwnProperty('nick')) {
-          sender = ms['nick']
-        } else if (ms.hasOwnProperty('server')) {
-          sender = ms['server']
-        }
-        emit(
-          actions.appendLog(
-            connection.id,
-            channel.id,
-            new MessageFactory({
-              text: JSON.stringify(message),
-              prefix: ms['prefix'],
-              command: ms['command'],
-              rawCommand: ms['rawCommand'],
-              commandType: ms['commandType'],
-              args: ms['args'],
-              sender: sender
-            })
+      if (message.command != 'PONG') {
+        //filter out PONGs
+        //TODO: if rename happens to us we update our nick in connection!!
+
+        //can get channel from ms iff it is a message type that is channel specific
+        const ms = JSON.parse(JSON.stringify(message)) //turns to hash
+        var channel
+        if (ms['args'].length > 0 && ms['args'][0][0] == '#') {
+          channel = connection.channels.find(
+            (x, y, z) => x.name == ms['args'][0]
           )
-        )
+        } else {
+          //maybe make fake 'channel' to [put server messages?
+          channel = connection.channels.get(0)
+        }
+        if (channel) {
+          var sender = ''
+          if (ms.hasOwnProperty('nick')) {
+            sender = ms['nick']
+          } else if (ms.hasOwnProperty('server')) {
+            sender = ms['server']
+          }
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              new MessageFactory({
+                text: JSON.stringify(message),
+                prefix: ms['prefix'],
+                command: ms['command'],
+                rawCommand: ms['rawCommand'],
+                commandType: ms['commandType'],
+                args: ms['args'],
+                sender: sender
+              })
+            )
+          )
+        }
       }
     })
     return () => {}
@@ -101,7 +108,15 @@ export function* write(client: irc.Client, connection: Connection) {
 
     if (channel) {
       // Send the message
-      client.say(channel.name, payload.message.text)
+      //TODO:catch /commands
+      const recommand = /^\/[a-z]+/i
+      const reres = recommand.exec(payload.message.text)
+      if (reres) {
+        const args = payload.message.text.split(' ').slice(1)
+        client.send(reres[0].substring(1), ...args)
+      } else {
+        client.say(channel.name, payload.message.text)
+      }
 
       // Append message to log
       yield put(actions.appendLog(connection.id, channel.id, payload.message))
