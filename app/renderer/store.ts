@@ -9,8 +9,8 @@ interface IElectricState {
   currentChannelId?: number
   lastUsedConnectionId: number
   lastUsedChannelId: number
-
   addServerModalActive: boolean
+  themeName: string
   themeProperties: Map<string, string>
 }
 
@@ -20,7 +20,7 @@ export const ElectricStateFactory = Record<IElectricState>({
   currentChannelId: undefined,
   lastUsedConnectionId: 0,
   lastUsedChannelId: 0,
-
+  themeName: 'dark',
   addServerModalActive: false,
   themeProperties: theme.get('dark') || backup
 })

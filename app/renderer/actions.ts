@@ -10,7 +10,8 @@ export enum ActionTypeKeys {
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
-  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL'
+  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
+  THEME_WHOLESALE = 'THEME_WHOLESALE'
 }
 
 export interface IAddServerAction {
@@ -68,6 +69,10 @@ export interface IToggleAddServerModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
   readonly visible?: boolean
 }
+export interface IThemeWholesaleAction {
+  readonly type: ActionTypeKeys.THEME_WHOLESALE
+  readonly themename: string
+}
 
 export type ActionTypes =
   | IAddServerAction
@@ -79,6 +84,7 @@ export type ActionTypes =
   | ISendMessageAction
   | IViewChannelAction
   | IToggleAddServerModalAction
+  | IThemeWholesaleAction
 
 export function addServer(
   name: string,
@@ -176,5 +182,11 @@ export function toggleAddServerModal(
   return {
     type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL,
     visible
+  }
+}
+export function themeWholesale(themename: string): IThemeWholesaleAction {
+  return {
+    type: ActionTypeKeys.THEME_WHOLESALE,
+    themename
   }
 }

@@ -10,7 +10,8 @@ import {
   ISendMessageAction,
   IViewChannelAction,
   IToggleAddServerModalAction,
-  IAddConnectionAction
+  IAddConnectionAction,
+  IThemeWholesaleAction
 } from '../actions'
 
 import addConnection from './add-connection'
@@ -20,6 +21,7 @@ import joinChannel from './join-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
+import themeWholesale from './theme-wholesale'
 
 export const defaultStore = new ElectricStateFactory({})
 
@@ -43,6 +45,8 @@ export function defaultReducer(
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
+    case ActionTypeKeys.THEME_WHOLESALE:
+      return themeWholesale(state, action as IThemeWholesaleAction)
     default:
       return state
   }
