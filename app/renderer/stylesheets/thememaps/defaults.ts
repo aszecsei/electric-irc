@@ -1,4 +1,5 @@
 import Immutable from 'immutable'
+import { color } from '../utils/colors'
 
 export let map: Immutable.Map<
   string,
@@ -7,7 +8,7 @@ export let map: Immutable.Map<
   'dark',
   Immutable.Map.of(
     '--bg',
-    'lighten($black, $lighten-amount)',
+    color.get('grey'),
     '--primary-text',
     '$white',
     '--secondary-text',
@@ -17,7 +18,7 @@ export let map: Immutable.Map<
     '--dividers',
     'rgba($white, 12)',
     '--primary',
-    '$blue',
+    '#350A6A',
     '--primary-light',
     'lighten($blue, $lighten-amount)',
     '--primary-dark',
