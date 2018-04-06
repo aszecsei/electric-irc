@@ -32,7 +32,46 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)
   }
-
+  toggleScrollback = (event: any) => {
+    this.props.changeSetting('scrollback', !this.props.settings.scrollback)
+    console.log(this.props.settings.scrollback)
+  }
+  setScrollback = (event: any) => {
+    this.props.changeSetting('scrollbackLines', event.target.value)
+  }
+  toggleTimestamps = (event: any) => {
+    this.props.changeSetting('timestamps', !this.props.settings.timestamps)
+  }
+  setTimestamps = (event: any) => {
+    this.props.changeSetting('timeformat', event.target.value)
+  }
+  toggleMarkAway = (event: any) => {
+    this.props.changeSetting('autoaway', !this.props.settings.autoaway)
+  }
+  setQuitMessage = (event: any) => {
+    this.props.changeSetting('defquit', event.target.value)
+  }
+  setLeaveMessage = (event: any) => {
+    this.props.changeSetting('defleave', event.target.value)
+  }
+  setAwayMessage = (event: any) => {
+    this.props.changeSetting('defaway', event.target.value)
+  }
+  toggleHideJoinMessage = (event: any) => {
+    this.props.changeSetting('hidejoin', !this.props.settings.hidejoin)
+  }
+  toggleHideNickChangeMessage = (event: any) => {
+    this.props.changeSetting(
+      'hidenicknamechange',
+      !this.props.settings.hidenicknamechange
+    )
+  }
+  toggleUrlGrabber = (event: any) => {
+    this.props.changeSetting('urlgrabber', !this.props.settings.urlgrabber)
+  }
+  setMaxUrl = (event: any) => {
+    this.props.changeSetting('maxurl', event.target.value)
+  }
   public render() {
     return (
       <Modal
@@ -83,12 +122,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="checkbox"
                       checked={this.props.settings.scrollback}
-                      onChange={() =>
-                        this.props.changeSetting(
-                          'scrollback',
-                          !this.props.settings.scrollback
-                        )
-                      }
+                      onChange={this.toggleScrollback}
                     />
                     Enable Scrollback
                   </Label>
@@ -99,12 +133,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="number"
                       disabled={!this.props.settings.scrollback}
                       value={this.props.settings.scrollbackLines}
-                      onChange={event =>
-                        this.props.changeSetting(
-                          'scrollbackLines',
-                          event.target.value
-                        )
-                      }
+                      onChange={this.setScrollback}
                     />
                     Scrollback lines
                   </Label>
@@ -114,12 +143,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="checkbox"
                       checked={this.props.settings.timestamps}
-                      onChange={() =>
-                        this.props.changeSetting(
-                          'timestamps',
-                          !this.props.settings.timestamps
-                        )
-                      }
+                      onChange={this.toggleTimestamps}
                     />
                     Enable TimeStamps
                   </Label>
@@ -130,12 +154,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="text"
                       disabled={!this.props.settings.timestamps}
                       value={this.props.settings.timeformat}
-                      onChange={event =>
-                        this.props.changeSetting(
-                          'timeformat',
-                          event.target.value
-                        )
-                      }
+                      onChange={this.setTimestamps}
                     />
                     Time Format
                   </Label>
@@ -145,12 +164,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="checkbox"
                       checked={this.props.settings.autoaway}
-                      onChange={() =>
-                        this.props.changeSetting(
-                          'autoaway',
-                          !this.props.settings.autoaway
-                        )
-                      }
+                      onChange={this.toggleMarkAway}
                     />
                     Automatically mark away
                   </Label>
@@ -160,9 +174,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="text"
                       value={this.props.settings.defquit}
-                      onChange={event =>
-                        this.props.changeSetting('defquit', event.target.value)
-                      }
+                      onChange={this.setQuitMessage}
                     />
                     Default Quit Message
                   </Label>
@@ -172,9 +184,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="text"
                       value={this.props.settings.defleave}
-                      onChange={event =>
-                        this.props.changeSetting('defleave', event.target.value)
-                      }
+                      onChange={this.setLeaveMessage}
                     />
                     Default Leave Message
                   </Label>
@@ -184,9 +194,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="text"
                       value={this.props.settings.defaway}
-                      onChange={event =>
-                        this.props.changeSetting('defaway', event.target.value)
-                      }
+                      onChange={this.setAwayMessage}
                     />
                     Default Away Message
                   </Label>
@@ -196,12 +204,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="checkbox"
                       checked={this.props.settings.hidejoin}
-                      onChange={() =>
-                        this.props.changeSetting(
-                          'hidejoin',
-                          !this.props.settings.hidejoin
-                        )
-                      }
+                      onChange={this.toggleHideJoinMessage}
                     />
                     Hide Join Messages
                   </Label>
@@ -211,12 +214,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     <Input
                       type="checkbox"
                       checked={this.props.settings.hidenicknamechange}
-                      onChange={() =>
-                        this.props.changeSetting(
-                          'hidenicknamechange',
-                          !this.props.settings.hidenicknamechange
-                        )
-                      }
+                      onChange={this.toggleHideNickChangeMessage}
                     />
                     Hide Nickname Change Messages
                   </Label>
@@ -231,12 +229,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                 <Input
                   type="checkbox"
                   checked={this.props.settings.urlgrabber}
-                  onChange={() =>
-                    this.props.changeSetting(
-                      'timestamps',
-                      !this.props.settings.urlgrabber
-                    )
-                  }
+                  onChange={this.toggleUrlGrabber}
                 />
                 Enable URL Grabber
               </Label>
@@ -247,9 +240,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                   type="number"
                   disabled={!this.props.settings.urlgrabber}
                   value={this.props.settings.maxurl}
-                  onChange={event =>
-                    this.props.changeSetting('maxurl', event.target.value)
-                  }
+                  onChange={this.setMaxUrl}
                 />
                 Maximum URL size
               </Label>
