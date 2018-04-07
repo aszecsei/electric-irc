@@ -20,9 +20,9 @@ export const ElectricStateFactory = Record<IElectricState>({
   currentChannelId: undefined,
   lastUsedConnectionId: 0,
   lastUsedChannelId: 0,
-  themeName: 'dark',
+  themeName: 'light',
   addServerModalActive: false,
-  themeProperties: theme.get('dark') || backup
+  themeProperties: theme.get('light') || backup
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>
