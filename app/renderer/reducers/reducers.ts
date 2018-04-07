@@ -9,9 +9,13 @@ import {
   IRemoveServerAction,
   ISendMessageAction,
   IViewChannelAction,
-  IToggleAddServerModalAction,
   IAddConnectionAction,
-  IThemeWholesaleAction
+  IChangeNickAction,
+  IToggleAddServerModalAction,
+  IThemeWholesaleAction,
+  IToggleSettingsModalAction,
+  IEditSettingsAction,
+  IToggleTabAction
 } from '../actions'
 
 import addConnection from './add-connection'
@@ -22,6 +26,10 @@ import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
 import themeWholesale from './theme-wholesale'
+import changeNick from './change-nick'
+import toggleSettingsModal from './toggle-settings-modal'
+import editSettings from './change-settings'
+import toggleTab from './toggle-tab'
 
 export const defaultStore = new ElectricStateFactory({})
 
@@ -47,6 +55,14 @@ export function defaultReducer(
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
     case ActionTypeKeys.THEME_WHOLESALE:
       return themeWholesale(state, action as IThemeWholesaleAction)
+    case ActionTypeKeys.CHANGE_NICK:
+      return changeNick(state, action as IChangeNickAction)
+    case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
+      return toggleSettingsModal(state, action as IToggleSettingsModalAction)
+    case ActionTypeKeys.EDIT_SETTINGS:
+      return editSettings(state, action as IEditSettingsAction)
+    case ActionTypeKeys.TOGGLE_TAB_SETTINGS:
+      return toggleTab(state, action as IToggleTabAction)
     default:
       return state
   }

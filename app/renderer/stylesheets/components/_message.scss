@@ -1,0 +1,17 @@
+.mmessage {
+  color: var(--secondary-text);
+  border-style: outset;
+  border-color: var(--secondary-dark);
+  background-color: var(--primary-dark);
+  padding: 5px;
+  display: inline-block;
+  margin: 0px;
+}
+.mmessagetext {
+  color: var(--primary-text);
+}
+.outermessage {
+  margin-bottom: 5px;
+  margin-left: 5px;
+  word-break: break-word;
+}

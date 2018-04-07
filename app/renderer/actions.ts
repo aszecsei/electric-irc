@@ -1,5 +1,7 @@
 import { Message } from './models/message'
 import { Connection } from './models/connections'
+import { Channel } from './models/channel'
+import { ISettings } from './models/settings'
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
@@ -10,10 +12,18 @@ export enum ActionTypeKeys {
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
+  CHANGE_NICK = 'CHANGE_NICK',
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
+  UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
+  EDIT_SETTINGS = 'EDIT_SETTINGS',
+  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
   THEME_WHOLESALE = 'THEME_WHOLESALE'
 }
-
+export interface IChangeNickAction {
+  readonly type: ActionTypeKeys.CHANGE_NICK
+  readonly id: number
+  readonly nickname: string
+}
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
   readonly name: string
@@ -42,7 +52,7 @@ export interface IEditServerAction {
 export interface IJoinChannelAction {
   readonly type: ActionTypeKeys.JOIN_CHANNEL
   readonly serverId: number
-  readonly channel: string
+  readonly channel: Channel
 }
 
 export interface IAppendLogAction {
@@ -64,10 +74,22 @@ export interface IViewChannelAction {
   readonly serverId: number
   readonly channelId: number
 }
-
 export interface IToggleAddServerModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
   readonly visible?: boolean
+}
+export interface IToggleSettingsModalAction {
+  readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
+  readonly visible?: boolean
+}
+export interface IToggleTabAction {
+  readonly type: ActionTypeKeys.TOGGLE_TAB_SETTINGS
+  readonly tab: string
+}
+export interface IEditSettingsAction {
+  readonly type: ActionTypeKeys.EDIT_SETTINGS
+  readonly prop: string
+  readonly value: any
 }
 export interface IThemeWholesaleAction {
   readonly type: ActionTypeKeys.THEME_WHOLESALE
@@ -84,6 +106,10 @@ export type ActionTypes =
   | ISendMessageAction
   | IViewChannelAction
   | IToggleAddServerModalAction
+  | IToggleSettingsModalAction
+  | IEditSettingsAction
+  | IToggleTabAction
+  | IChangeNickAction
   | IThemeWholesaleAction
 
 export function addServer(
@@ -100,7 +126,13 @@ export function addServer(
     channels
   }
 }
-
+export function changeNick(id: number, nickname: string): IChangeNickAction {
+  return {
+    type: ActionTypeKeys.CHANGE_NICK,
+    id,
+    nickname
+  }
+}
 export function addConnection(connection: Connection): IAddConnectionAction {
   return {
     type: ActionTypeKeys.ADD_CONNECTION,
@@ -130,7 +162,7 @@ export function editServer(
 
 export function joinChannel(
   serverId: number,
-  channel: string
+  channel: Channel
 ): IJoinChannelAction {
   return {
     type: ActionTypeKeys.JOIN_CHANNEL,
@@ -188,5 +220,29 @@ export function themeWholesale(themename: string): IThemeWholesaleAction {
   return {
     type: ActionTypeKeys.THEME_WHOLESALE,
     themename
+  }
+}
+export function toggleSettingsModal(
+  visible?: boolean
+): IToggleSettingsModalAction {
+  return {
+    type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL,
+    visible
+  }
+}
+export function toggleSettingsTab(tab: string): IToggleTabAction {
+  return {
+    type: ActionTypeKeys.TOGGLE_TAB_SETTINGS,
+    tab
+  }
+}
+export function editSettings<K extends keyof ISettings>(
+  prop: K,
+  value: ISettings[K]
+): IEditSettingsAction {
+  return {
+    type: ActionTypeKeys.EDIT_SETTINGS,
+    prop,
+    value
   }
 }
