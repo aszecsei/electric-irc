@@ -9,8 +9,12 @@ import {
   IRemoveServerAction,
   ISendMessageAction,
   IViewChannelAction,
+  IAddConnectionAction,
+  IChangeNickAction,
   IToggleAddServerModalAction,
-  IAddConnectionAction
+  IToggleSettingsModalAction,
+  IEditSettingsAction,
+  IToggleTabAction
 } from '../actions'
 
 import addConnection from './add-connection'
@@ -20,7 +24,10 @@ import joinChannel from './join-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
-
+import changeNick from './change-nick'
+import toggleSettingsModal from './toggle-settings-modal'
+import editSettings from './change-settings'
+import toggleTab from './toggle-tab'
 export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
@@ -43,6 +50,14 @@ export function defaultReducer(
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
+    case ActionTypeKeys.CHANGE_NICK:
+      return changeNick(state, action as IChangeNickAction)
+    case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
+      return toggleSettingsModal(state, action as IToggleSettingsModalAction)
+    case ActionTypeKeys.EDIT_SETTINGS:
+      return editSettings(state, action as IEditSettingsAction)
+    case ActionTypeKeys.TOGGLE_TAB_SETTINGS:
+      return toggleTab(state, action as IToggleTabAction)
     default:
       return state
   }
