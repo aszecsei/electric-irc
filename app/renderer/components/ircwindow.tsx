@@ -16,26 +16,58 @@ interface IChatWindowProps {
   messages: List<Message> | undefined
   onSendMessage: (message: Message, conn: Connection, channel: Channel) => void
 }
-
-export const ChatWindow: React.SFC<IChatWindowProps> = props => {
-  return (
-    <div className="chatwindow">
-      <div className="logWindow">
-        {props.messages
-          ? props.messages.map((message, i) => (
-              <p key={i} className="outermessage">
-                <MessageDisp message={message} />
-              </p>
-            ))
-          : []}
+export class ChatWindow extends React.Component<IChatWindowProps> {
+  constructor(props: IChatWindowProps) {
+    super(props)
+  }
+  componentDidUpdate() {
+    var el = this.refs.logWindow as HTMLDivElement
+    el.scrollTop = el.scrollHeight
+  }
+  render() {
+    return (
+      <div className="chatwindow">
+        <div className="logWindow" ref="logWindow">
+          {this.props.messages
+            ? this.props.messages.map((message, i) => (
+                <p key={i} className="outermessage">
+                  <MessageDisp message={message} />
+                </p>
+              ))
+            : []}
+        </div>
+        <div className="sendMessage flex">
+          <MessageEntry
+            connection={this.props.connection}
+            channel={this.props.channel}
+            onSendMessage={this.props.onSendMessage}
+          />
+        </div>
       </div>
-      <div className="sendMessage flex">
-        <MessageEntry
-          connection={props.connection}
-          channel={props.channel}
-          onSendMessage={props.onSendMessage}
-        />
-      </div>
-    </div>
-  )
+    )
+  }
 }
+// export const ChatWindow2: React.SFC<IChatWindowProps> = props => {
+//   //console.log(props.channel)
+//   return (
+//     <div className="chatwindow">
+//       <div className="logWindow">
+//         {props.messages
+//           ? props.messages.map((message, i) => (
+//               <p key={i} className="outermessage">
+//                 <MessageDisp message={message} />
+//               </p>
+//             ))
+//           : []}
+//         <input id="hidden_scroll_to"  ref={input => input && input.focus()}/>
+//       </div>
+//       <div className="sendMessage flex">
+//         <MessageEntry
+//           connection={props.connection}
+//           channel={props.channel}
+//           onSendMessage={props.onSendMessage}
+//         />
+//       </div>
+//     </div>
+//   )
+// }

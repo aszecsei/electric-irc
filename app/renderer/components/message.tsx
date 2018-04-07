@@ -22,14 +22,7 @@ function emoji_process(str: string) {
       const rere = new RegExp(reres[0], 'gi')
       str = str.replace(rere, Emojis[reres[0]])
     }
-    // else{
-    //   const rere=new RegExp(reres[0],'gi')
-    //   str=str.replace(rere,reres[0][0]+"\\"+reres[0].substring(1,reres[0].length))
-    // }
-    //console.log(reres['index'])
-    //console.log(reres['index'] + reres[0].length - 1)
     tmpstr = tmpstr.substring(+reres['index'] + reres[0].length - 1)
-    //console.log('*' + tmpstr + '*')
     reres = emojire.exec(tmpstr)
   }
   return str
@@ -56,7 +49,7 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       props.message.args[0]
     if (props.message.args.length > 1) {
       str = str + ' ('
-      var i = 1
+      var i = 0
       while (i < props.message.args.length) {
         str = str + props.message.args[i] + ', '
         i += 1
@@ -75,7 +68,7 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
     if (props.message.args.length > 1) {
       //has args beyond us
       str = str + ': [' //turn list into string
-      var i = 1
+      var i = 0
       while (i < props.message.args.length) {
         str = str + props.message.args[i] + ', '
         i += 1
@@ -90,5 +83,20 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       </p>
     )
   }
-  return <p className="mmessage">{emoji_process(props.message.text)}</p>
+  if (props.message.command == 'NICK') {
+    return (
+      <p className="mmessage">
+        {props.message.sender +
+          ' has changed their name to ' +
+          props.message.args[0]}
+      </p>
+    )
+  }
+  return (
+    <p className="mmessage">
+      {props.message.sender + ': '}
+      <br />
+      <b className="mmessagetext">{emoji_process(props.message.text)}</b>
+    </p>
+  )
 }

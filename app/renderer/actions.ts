@@ -1,5 +1,6 @@
 import { Message } from './models/message'
 import { Connection } from './models/connections'
+import { Channel } from './models/channel'
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
@@ -10,9 +11,14 @@ export enum ActionTypeKeys {
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
-  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL'
+  UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
+  CHANGE_NICK = 'CHANGE_NICK'
 }
-
+export interface IChangeNickAction {
+  readonly type: ActionTypeKeys.CHANGE_NICK
+  readonly id: number
+  readonly nickname: string
+}
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
   readonly name: string
@@ -41,7 +47,7 @@ export interface IEditServerAction {
 export interface IJoinChannelAction {
   readonly type: ActionTypeKeys.JOIN_CHANNEL
   readonly serverId: number
-  readonly channel: string
+  readonly channel: Channel
 }
 
 export interface IAppendLogAction {
@@ -94,7 +100,13 @@ export function addServer(
     channels
   }
 }
-
+export function changeNick(id: number, nickname: string): IChangeNickAction {
+  return {
+    type: ActionTypeKeys.CHANGE_NICK,
+    id,
+    nickname
+  }
+}
 export function addConnection(connection: Connection): IAddConnectionAction {
   return {
     type: ActionTypeKeys.ADD_CONNECTION,
@@ -124,7 +136,7 @@ export function editServer(
 
 export function joinChannel(
   serverId: number,
-  channel: string
+  channel: Channel
 ): IJoinChannelAction {
   return {
     type: ActionTypeKeys.JOIN_CHANNEL,

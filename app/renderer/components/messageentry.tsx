@@ -26,6 +26,7 @@ export class MessageEntry extends React.Component<
   }
 
   handleSubmit = (event: any) => {
+    this.setState({ value: '' })
     //TODO: do nothing instead of display message if client raises error(ie try to do '/privmsg #elec2 hi' when not joined #elect2)
     if (this.props.connection && this.props.channel) {
       //TODO: intercept /command strings
@@ -44,10 +45,6 @@ export class MessageEntry extends React.Component<
           command = 'PRIVMSG'
           args = [this.state.value.substring(i + 1, ii), subtext]
           text = this.state.value
-          console.log(text)
-          console.log(args)
-          console.log(i)
-          console.log(ii)
           if (args[0][0] == '#') {
             channel = this.props.connection.channels.find(
               (x, y, z) => x.name == args[0]
