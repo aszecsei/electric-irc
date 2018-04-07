@@ -1,5 +1,6 @@
 import Immutable from 'immutable'
-import { color } from '../utils/colors'
+import { color, lighten, darken } from '../utils/colors'
+import * as polished from 'polished'
 
 export let map: Immutable.Map<
   string,
@@ -8,9 +9,9 @@ export let map: Immutable.Map<
   'dark',
   Immutable.Map.of(
     '--bg',
-    color.get('grey'),
+    polished.lighten(lighten, color.get('black')!),
     '--primary-text',
-    '$white',
+    color.get('white'),
     '--secondary-text',
     'rgba($white, 70)',
     '--disabled-text',
@@ -18,16 +19,16 @@ export let map: Immutable.Map<
     '--dividers',
     'rgba($white, 12)',
     '--primary',
-    '#350A6A',
+    color.get('blue'),
     '--primary-light',
-    'lighten($blue, $lighten-amount)',
+    polished.lighten(lighten, color.get('blue')!),
     '--primary-dark',
-    'darken($blue, $darken-amount)',
+    polished.darken(darken, color.get('blue')!),
     '--secondary',
-    '$yellow',
+    color.get('yellow'),
     '--secondary-light',
-    'lighten($yellow, $lighten-amount)',
+    polished.lighten(lighten, color.get('yellow')!),
     '--secondary-dark',
-    'darken($yellow, $darken-amount)'
+    polished.darken(darken, color.get('yellow')!)
   )
 )

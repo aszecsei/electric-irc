@@ -37,3 +37,5 @@ export const color: Map<string, string> = Map.of(
   'black',
   '#111'
 )
+export const lighten = 0.1
+export const darken = 0.1
