@@ -13,7 +13,7 @@ export let map: Immutable.Map<
     '--primary-text',
     color.get('white'),
     '--secondary-text',
-    'rgba($white, 70)',
+    polished.rgba(color.get('white'),.7),
     '--disabled-text',
     'rgba($white, 50)',
     '--dividers',
