@@ -15,6 +15,10 @@ import * as editServerReducer from '../../../app/renderer/reducers/edit-server'
 import * as joinChannelReducer from '../../../app/renderer/reducers/join-channel'
 import * as removeServerReducer from '../../../app/renderer/reducers/remove-server'
 import * as viewChannelReducer from '../../../app/renderer/reducers/view-channel'
+import * as toggleAddReducer from '../../../app/renderer/reducers/toggle-add-server-modal'
+import * as toggleSettingReducer from '../../../app/renderer/reducers/toggle-settings-modal'
+import * as changeSettingsReducer from '../../../app/renderer/reducers/change-settings'
+import * as toggleTabReducer from '../../../app/renderer/reducers/toggle-tab'
 import { MessageFactory } from '../../../app/renderer/models/message'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
@@ -61,6 +65,10 @@ describe('default reducer', function() {
     sandbox.stub(joinChannelReducer, 'default').returns(alteredState)
     sandbox.stub(removeServerReducer, 'default').returns(alteredState)
     sandbox.stub(viewChannelReducer, 'default').returns(alteredState)
+    sandbox.stub(toggleAddReducer, 'default').returns(alteredState)
+    sandbox.stub(toggleSettingReducer, 'default').returns(alteredState)
+    sandbox.stub(toggleTabReducer, 'default').returns(alteredState)
+    sandbox.stub(changeSettingsReducer, 'default').returns(alteredState)
   })
 
   after(function() {
