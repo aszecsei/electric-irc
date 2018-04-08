@@ -14,13 +14,14 @@ import {
   IToggleAddServerModalAction,
   IToggleSettingsModalAction,
   IEditSettingsAction,
-  IToggleTabAction
+  IToggleTabAction,
+  IAddChannelAction
 } from '../actions'
 
 import addConnection from './add-connection'
 import appendLog from './append-log'
 import editServer from './edit-server'
-import joinChannel from './join-channel'
+import addChannel from './add-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
@@ -43,7 +44,7 @@ export function defaultReducer(
     case ActionTypeKeys.EDIT_SERVER:
       return editServer(state, action as IEditServerAction)
     case ActionTypeKeys.JOIN_CHANNEL:
-      return joinChannel(state, action as IJoinChannelAction)
+      return addChannel(state, action as IAddChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
     case ActionTypeKeys.VIEW_CHANNEL:

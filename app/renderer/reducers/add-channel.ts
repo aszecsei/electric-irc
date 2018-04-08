@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { ElectricState } from '../store'
-import { IJoinChannelAction } from '../actions'
+import { IAddChannelAction } from '../actions'
 
 function replace_at<K>(list: List<K>, ind: number, newElement: K) {
   if (ind !== -1) {
@@ -9,9 +9,9 @@ function replace_at<K>(list: List<K>, ind: number, newElement: K) {
     return list
   }
 }
-export default function joinChannel(
+export default function addChannel(
   state: ElectricState,
-  action: IJoinChannelAction
+  action: IAddChannelAction
 ): ElectricState {
   const index = state.connections.findKey(value => {
     return value.id === action.serverId
@@ -31,8 +31,6 @@ export default function joinChannel(
         'connections',
         replace_at(state.connections, index as number, newConn)
       )
-      //console.log(state)
-      //console.log(newState)
       return newState
     }
   }

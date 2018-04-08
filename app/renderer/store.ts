@@ -1,14 +1,13 @@
 import { List, Record } from 'immutable'
 import { Connection } from './models/connections'
 import { Channel } from './models/channel'
-import { SettingFactory, Settings } from './models/settings'
+import { SettingsFactory, Settings } from './models/settings'
+import { Guid } from './models'
 
 interface IElectricState {
   connections: List<Connection>
-  currentConnectionId?: number
-  currentChannelId?: number
-  lastUsedConnectionId: number
-  lastUsedChannelId: number
+  currentConnectionId?: Guid
+  currentChannelId?: Guid
   settingsModalActive: boolean
   addServerModalActive: boolean
   settings: Settings
@@ -19,11 +18,9 @@ export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  lastUsedConnectionId: 0,
-  lastUsedChannelId: 0,
   settingsModalActive: true,
   addServerModalActive: false,
-  settings: SettingFactory(),
+  settings: SettingsFactory(),
   toggleTab: '1'
 })
 

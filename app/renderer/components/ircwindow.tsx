@@ -30,9 +30,9 @@ export class ChatWindow extends React.Component<IChatWindowProps> {
         <div className="logWindow" ref="logWindow">
           {this.props.messages
             ? this.props.messages.map((message, i) => (
-                <p key={i} className="outermessage">
+                <div key={i} className="outermessage">
                   <MessageDisp message={message} />
-                </p>
+                </div>
               ))
             : []}
         </div>
