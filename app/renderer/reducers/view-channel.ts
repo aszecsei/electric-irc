@@ -6,6 +6,14 @@ export default function sendMessage(
   action: IViewChannelAction
 ): ElectricState {
   let newState = state
+  newState = newState.set(
+    'lastUsedConnectionId',
+    newState.get('currentConnectionId', undefined)
+  )
+  newState = newState.set(
+    'lastUsedChannelId',
+    newState.get('currentChannelId', undefined)
+  )
   newState = newState.set('currentConnectionId', undefined)
   newState = newState.set('currentChannelId', undefined)
 
@@ -26,6 +34,9 @@ export default function sendMessage(
       newState = newState.set('currentChannelId', action.channelId)
     }
   }
-
+  console.log('&&&&&&&&&&&state change on view change&&&&&&&&&&&&')
+  console.log(state)
+  console.log(newState)
+  console.log('&&&&&&&&&&&&&&&&&&&&&&&')
   return newState
 }

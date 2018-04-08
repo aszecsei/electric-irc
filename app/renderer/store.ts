@@ -7,8 +7,8 @@ interface IElectricState {
   connections: List<Connection>
   currentConnectionId?: number
   currentChannelId?: number
-  lastUsedConnectionId: number
-  lastUsedChannelId: number
+  lastUsedConnectionId?: number
+  lastUsedChannelId?: number
   settingsModalActive: boolean
   addServerModalActive: boolean
   settings: Settings
@@ -19,8 +19,8 @@ export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  lastUsedConnectionId: 0,
-  lastUsedChannelId: 0,
+  lastUsedConnectionId: undefined,
+  lastUsedChannelId: undefined,
   settingsModalActive: true,
   addServerModalActive: false,
   settings: SettingFactory(),

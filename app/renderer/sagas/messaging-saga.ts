@@ -5,7 +5,6 @@ import * as actions from '../actions'
 import { Connection, ConnectionFactory } from '../models/connections'
 import { MessageFactory } from '../models/message'
 import { ChannelFactory, Channel } from '../models/channel'
-
 import { List } from 'immutable'
 
 export function createIRCClient(
@@ -21,7 +20,7 @@ export function createIRCClient(
 export function connect(action: actions.IAddServerAction, id: number) {
   let chanId = 0
   var channels = ['#']
-  channels = channels.concat(action.channels)
+  //channels = channels.concat(action.channels)
   const connection = new ConnectionFactory({
     id: id,
     nickname: action.nickname,
@@ -43,40 +42,44 @@ export function connect(action: actions.IAddServerAction, id: number) {
     chanId
   }
 }
-//tried to do like the suscribe but it miserably didn't work
-// function joinChannel(client: irc.Client, connection: Connection){
-//   return eventChannel(emit =>{
-//     client.addListener('join',(channel:irc.IChannel,nick:string,message:irc.IMessage)=>{
-//       console.log(connection)
-//       if(nick==client.nick){
-//         console.log(channel)
-//         console.log(connection.channels)
-//         emit(actions.joinChannel(connection.id,new ChannelFactory({
-//           id:connection.channels.size+1,
-//           name:channel.name
-//         })))
-//       }
-//     })
-//     return () => {}
-//   })
-// }
-function subscribe(client: irc.Client, connection: Connection) {
+function* subscribe(client: irc.Client, connection: Connection) {
   return eventChannel(emit => {
+    //join listener
+    client.addListener(
+      'join',
+      (channel: irc.IChannel, nick: string, message: irc.IMessage) => {
+        console.log('a')
+        console.log(connection)
+        console.log('b')
+        console.log(nick)
+        if (nick == client.nick) {
+          console.log('c')
+          console.log(channel.toString())
+          console.log('d')
+          console.log(connection.channels)
+          emit(actions.joinChannel(connection.id, channel.toString()))
+        }
+      }
+    )
     client.addListener('raw', (message: irc.IMessage) => {
       if (message.command != 'PONG') {
         //filter out PONGs
-
         //can get channel from ms iff it is a message type that is channel specific
         const ms = JSON.parse(JSON.stringify(message)) //turns to hash
         var channel
+        console.log('*****************')
         if (ms['args'].length > 0 && ms['args'][0][0] == '#') {
           channel = connection.channels.find(
             (x, y, z) => x.name == ms['args'][0]
           )
         } else {
-          //maybe make fake 'channel' to [put server messages?
           channel = connection.channels.get(0)
         }
+        console.log(connection) //you will see that this does not print out the same version of the connection in the store( only the original version of the connection)
+        console.log(client)
+        console.log(channel)
+        console.log(message)
+        console.log('*****************')
         if (channel) {
           var sender = ''
           if (ms.hasOwnProperty('nick')) {
@@ -140,15 +143,9 @@ function subscribe(client: irc.Client, connection: Connection) {
     return () => {}
   })
 }
-// export function* readJoin(client: irc.Client, connection: Connection) {
-//   const channel2 = yield call(joinChannel, client, connection)
-//   while (true) {
-//     let action2 = yield take(channel2)
-//     yield put(action2)
-//   }
-// }
 export function* read(client: irc.Client, connection: Connection) {
   const channel = yield call(subscribe, client, connection)
+
   while (true) {
     let action = yield take(channel)
     yield put(action)
@@ -160,6 +157,7 @@ export function* write(client: irc.Client, connection: Connection) {
     const payload: actions.ISendMessageAction = yield take(
       actions.ActionTypeKeys.SEND_MESSAGE
     )
+    console.log(payload.channelId)
     const channel = connection.channels.find(value => {
       return value.id === payload.channelId
     })
@@ -172,24 +170,6 @@ export function* write(client: irc.Client, connection: Connection) {
       const reres = recommand.exec(payload.message.text)
       if (reres) {
         const args = payload.message.text.split(' ').slice(1)
-        if (/^\/join /i.test(payload.message.text)) {
-          const chann = connection.channels.find(value => {
-            return value.name == args[0]
-          })
-          if (!chann) {
-            yield put(
-              actions.joinChannel(
-                connection.id,
-                new ChannelFactory({
-                  id: connection.channels.size + 1,
-                  name: args[0]
-                })
-              )
-            )
-          } else {
-            return
-          }
-        }
         client.send(reres[0].substring(1), ...args)
       } else if (client.chans[channel.name]) {
         client.say(channel.name, payload.message.text)
@@ -208,7 +188,6 @@ export function* write(client: irc.Client, connection: Connection) {
 }
 
 export function* handleIO(client: irc.Client, connection: Connection) {
-  //yield fork(readJoin, client, connection)
   yield fork(read, client, connection)
   yield fork(write, client, connection)
 }

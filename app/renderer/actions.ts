@@ -51,7 +51,7 @@ export interface IEditServerAction {
 export interface IJoinChannelAction {
   readonly type: ActionTypeKeys.JOIN_CHANNEL
   readonly serverId: number
-  readonly channel: Channel
+  readonly channel: string
 }
 
 export interface IAppendLogAction {
@@ -155,7 +155,7 @@ export function editServer(
 
 export function joinChannel(
   serverId: number,
-  channel: Channel
+  channel: string
 ): IJoinChannelAction {
   return {
     type: ActionTypeKeys.JOIN_CHANNEL,
