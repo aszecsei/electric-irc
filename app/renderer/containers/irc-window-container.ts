@@ -26,7 +26,7 @@ const mapStateToProps = (state: ElectricState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
   return {
-    onSendMessage: (message: Message, conn: Connection, channel: Channel) => {
+    onSendMessage: (message: string, conn: Connection, channel: Channel) => {
       dispatch(sendMessage(conn.id, channel.id, message))
     }
   }

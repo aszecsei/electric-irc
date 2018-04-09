@@ -28,7 +28,7 @@ export function parseMessage(
   nick: string,
   to: string,
   text: string,
-  message: IRC.IMessage
+  message?: IRC.IMessage
 ) {
   return new MessageFactory({
     id: Guid.create(),

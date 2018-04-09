@@ -1,38 +1,18 @@
-import { List } from 'immutable'
 import { ElectricState } from '../store'
 import { IAddChannelAction } from '../actions'
 
-function replace_at<K>(list: List<K>, ind: number, newElement: K) {
-  if (ind !== -1) {
-    return list.set(ind, newElement)
-  } else {
-    return list
-  }
-}
 export default function addChannel(
   state: ElectricState,
   action: IAddChannelAction
 ): ElectricState {
-  const index = state.connections.findKey(value => {
+  const index = state.connections.findIndex(value => {
     return value.id === action.serverId
   })
-  const conn = state.connections.find(value => {
-    return value.id === action.serverId
-  })
+  const conn = state.connections.get(index)
   if (conn) {
-    const chann = conn.channels.find(value => {
-      return value.name == action.channel.name
-    })
-    if (!chann) {
-      var chans = conn.channels
-      chans = chans.push(action.channel)
-      const newConn = conn.set('channels', chans)
-      const newState = state.set(
-        'connections',
-        replace_at(state.connections, index as number, newConn)
-      )
-      return newState
-    }
+    const chans = conn.channels.push(action.channel)
+    const newConn = conn.set('channels', chans)
+    return state.set('connections', state.connections.set(index, newConn))
   }
   return state
 }

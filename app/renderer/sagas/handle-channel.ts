@@ -72,6 +72,8 @@ export function* read(
   }
 }
 
+const joinRegex = new RegExp(/^\/join\s*(#.*)$/)
+
 export function* write(
   client: IRC.Client,
   connection: Connection,
@@ -82,10 +84,24 @@ export function* write(
       actions.ActionTypeKeys.SEND_MESSAGE
     )
     if (payload.serverId == connection.id && payload.channelId == channel.id) {
-      // Send the message
       // TODO: Intercept all '/command's
-      client.say(channel.name, payload.message.text)
-      yield put(actions.appendLog(connection.id, channel.id, payload.message))
+      const joinResults = joinRegex.exec(payload.message)
+      if (joinResults) {
+        const newChanName = joinResults[1]
+        yield put(actions.joinChannel(connection.id, newChanName))
+      } else {
+        // Send the message
+        client.say(channel.name, payload.message)
+        // TODO: Retrieve current nickname?
+        // Alt solution: have special value for appending own messages
+        yield put(
+          actions.appendLog(
+            connection.id,
+            channel.id,
+            parseMessage(connection.nickname, channel.name, payload.message)
+          )
+        )
+      }
     }
   }
 }

@@ -69,7 +69,7 @@ export interface ISendMessageAction {
   readonly type: ActionTypeKeys.SEND_MESSAGE
   readonly serverId: Guid
   readonly channelId: Guid
-  readonly message: Message
+  readonly message: string
 }
 
 export interface IViewChannelAction {
@@ -196,7 +196,7 @@ export function appendLog(
 export function sendMessage(
   serverId: Guid,
   channelId: Guid,
-  message: Message
+  message: string
 ): ISendMessageAction {
   return {
     type: ActionTypeKeys.SEND_MESSAGE,

@@ -14,7 +14,7 @@ interface IChatWindowProps {
   connection: Connection | undefined
   channel: Channel | undefined
   messages: List<Message> | undefined
-  onSendMessage: (message: Message, conn: Connection, channel: Channel) => void
+  onSendMessage: (message: string, conn: Connection, channel: Channel) => void
 }
 export class ChatWindow extends React.Component<IChatWindowProps> {
   constructor(props: IChatWindowProps) {

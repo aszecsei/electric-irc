@@ -43,7 +43,7 @@ export function defaultReducer(
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:
       return editServer(state, action as IEditServerAction)
-    case ActionTypeKeys.JOIN_CHANNEL:
+    case ActionTypeKeys.ADD_CHANNEL:
       return addChannel(state, action as IAddChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
