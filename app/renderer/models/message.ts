@@ -1,7 +1,7 @@
 import { Record } from 'immutable'
 import * as IRC from 'irc'
 
-import { Guid } from '.'
+import { Guid } from './guid'
 
 export enum MessageType {
   MESSAGE,
