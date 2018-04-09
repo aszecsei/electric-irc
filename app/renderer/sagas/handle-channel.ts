@@ -12,16 +12,37 @@ import {
   parseNickChange,
   parseNumericMessage,
   parseNoticeMessage,
-  parseJoinMessage
+  parseJoinMessage,
+  parseQuitMessage,
+  parsePartMessage,
+  parseKickMessage,
+  parseKillMessage
 } from '../models'
 import { getConnection, getChannelByName } from './selectors'
 
+function raw(
+  client: IRC.Client,
+  connection: Connection,
+  channel: Channel,
+  message: IRC.IMessage
+) {}
+const raw_no_log = [
+  'KICK',
+  'PART',
+  'KILL',
+  'QUIT',
+  'JOIN',
+  'NOTICE',
+  'PRIVMSG',
+  'NICK'
+]
 function subscribe(
   client: IRC.Client,
   connection: Connection,
   channel: Channel
 ) {
   return eventChannel(emit => {
+    //raw
     client.addListener('raw', (message: IRC.IMessage) => {
       // We receive a message on a channel
       if ('#' == channel.name) {
@@ -31,7 +52,7 @@ function subscribe(
         if (re.exec(message.rawCommand)) {
           //there isn's an event in node-irc that handles all numerical replies
           if (ms['rawCommand'] == '433') {
-            //TODO:change nick
+            //TODO maybe:change nick in store?
           }
           emit(
             actions.appendLog(
@@ -43,9 +64,95 @@ function subscribe(
         }
       }
     })
+    //kick
+    client.addListener(
+      'kick',
+      (
+        ichannel: IRC.IChannel,
+        nick: string,
+        by: string,
+        reason: string,
+        message: IRC.IMessage
+      ) => {
+        if (ichannel.toString() == channel.name) {
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parseKickMessage(nick, by, reason, channel.name)
+            )
+          )
+        }
+      }
+    )
+
+    //part
+    client.addListener(
+      'part',
+      (
+        ichannel: IRC.IChannel,
+        nick: string,
+        reason: string,
+        message: IRC.IMessage
+      ) => {
+        if (ichannel.toString() == channel.name) {
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parsePartMessage(nick, reason, channel.name)
+            )
+          )
+        }
+      }
+    )
+
+    //kill
+    client.addListener(
+      'kill',
+      (
+        nick: string,
+        reason: string,
+        channels: string[],
+        message: IRC.IMessage
+      ) => {
+        if (channels.includes(channel.name) || channel.name == '#') {
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parseKillMessage(nick, reason)
+            )
+          )
+        }
+      }
+    )
+
+    //quit
+    client.addListener(
+      'quit',
+      (
+        nick: string,
+        reason: string,
+        channels: string[],
+        message: IRC.IMessage
+      ) => {
+        if (channels.includes(channel.name) || channel.name == '#') {
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parseQuitMessage(nick, reason)
+            )
+          )
+        }
+      }
+    )
+
+    //join
     client.addListener(
       'join',
-      (ichannel: IRC.IChannel, nick: string, message: Irc.IMessage) => {
+      (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
         if (ichannel.toString() == channel.name) {
           emit(
             actions.appendLog(
@@ -57,16 +164,12 @@ function subscribe(
         }
       }
     )
+
+    //notice
     client.addListener(
       'notice',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
         if (to == channel.name || (to[0] != '#' && '#' == channel.name)) {
-          // console.log(nick)
-          // console.log(to)
-          // console.log(text)
-          // console.log(message)
-          // console.log(channel)
-          // console.log(connection)
           var sender = ''
           if (nick) {
             sender = nick
@@ -84,6 +187,9 @@ function subscribe(
         }
       }
     )
+    //TODO: PRIV MESSAGE user 2 user
+
+    //channel messages
     client.addListener(
       'message#',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
@@ -100,6 +206,8 @@ function subscribe(
         }
       }
     )
+
+    //nick
     client.addListener(
       'nick',
       (
@@ -109,7 +217,10 @@ function subscribe(
         message: IRC.IMessage
       ) => {
         // Someone changed their nickname
-        if (channels.includes(channel.name)) {
+        if (
+          channels.includes(channel.name) ||
+          (channel.name == '#' && newnick == client.nick)
+        ) {
           emit(
             actions.appendLog(
               connection.id,
@@ -117,16 +228,11 @@ function subscribe(
               parseNickChange(oldnick, newnick, channels, message)
             )
           )
+          //Checks if we're the ones whose nickname changed
           if (newnick == client.nick) {
-            // console.log("****************")
-            // console.log(oldnick)
-            // console.log(newnick)
-            // console.log(client)
-            // console.log("****************")
-            emit(actions.changeNick(connection.id, newnick))
+            emit(actions.changeNick(connection.id, newnick)) //doesnt stick to state... ALIC HELP!!
           }
         }
-        // TODO: Check if we're the ones whose nickname changed
       }
     )
 
@@ -146,9 +252,10 @@ export function* read(
   }
 }
 
-const joinRegex = new RegExp(/^\/join\s*(#.+)$/)
+const joinRegex = /^\/join\s*(#.+)$/
 
-const nickRegex = new RegExp(/^\/nick\s*([a-zA-Z0-9_\-]+)$/)
+const nickRegex = /^\/nick\s*([a-zA-Z0-9_\-]+)$/
+const cmdRegex = /^\/[a-z]+/i
 export function* write(
   client: IRC.Client,
   connection: Connection,
@@ -162,6 +269,7 @@ export function* write(
       // TODO: Intercept all '/command's
       const joinResults = joinRegex.exec(payload.message)
       const nickResults = nickRegex.exec(payload.message)
+      const cmdResults = cmdRegex.exec(payload.message)
       if (nickResults) {
         const newNickName = nickResults[1]
         client.send('nick', newNickName)
@@ -169,6 +277,9 @@ export function* write(
       } else if (joinResults) {
         const newChanName = joinResults[1]
         yield put(actions.joinChannel(connection.id, newChanName))
+      } else if (cmdResults) {
+        const args = payload.message.split(' ')
+        client.send(args[0].slice(1), ...args.slice(1))
       } else {
         // Send the message
         client.say(channel.name, payload.message)

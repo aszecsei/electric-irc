@@ -8,7 +8,11 @@ export enum MessageType {
   NICKCHANGE,
   SERVER,
   NOTICE,
-  JOIN
+  JOIN,
+  QUIT,
+  PART,
+  KICK,
+  KILL
 }
 
 interface IMessage {
@@ -26,6 +30,64 @@ export const MessageFactory = Record<IMessage>({
   text: '',
   sender: ''
 })
+export function parseKillMessage(nick: string, reason: string) {
+  var str = nick + ' has been KILLed'
+  if (reason && reason != '') {
+    str = str + ' (' + reason + ')'
+  }
+  str = str + '!'
+  return new MessageFactory({
+    id: Guid.create(),
+    type: MessageType.KILL,
+    text: str
+  })
+}
+export function parseKickMessage(
+  nick: string,
+  by: string,
+  reason: string,
+  channel: string
+) {
+  var str = by + ' has KICKed ' + nick + ' from ' + channel
+  if (reason && reason != '') {
+    str = str + ' for "' + reason + '"'
+  }
+  str = str + '!'
+  return new MessageFactory({
+    id: Guid.create(),
+    type: MessageType.KICK,
+    text: str
+  })
+}
+
+export function parsePartMessage(
+  nick: string,
+  reason: string,
+  channel: string
+) {
+  var str = nick + ' has PARTed from ' + channel
+  if (reason && reason != '') {
+    str = str + ' (' + reason + ')'
+  }
+  str = str + '!'
+  return new MessageFactory({
+    id: Guid.create(),
+    type: MessageType.PART,
+    text: str
+  })
+}
+export function parseQuitMessage(nick: string, reason: string) {
+  var str = nick + ' has QUIT'
+  if (reason && reason != '') {
+    str = str + ' (' + reason + ')'
+  }
+  str = str + '!'
+  return new MessageFactory({
+    id: Guid.create(),
+    type: MessageType.QUIT,
+    text: str
+  })
+}
 export function parseJoinMessage(nick: string, channel: string) {
   return new MessageFactory({
     id: Guid.create(),
