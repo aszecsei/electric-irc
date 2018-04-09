@@ -16,7 +16,7 @@ import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
 import * as SettingsModal from '../../../app/renderer/components/settingsmodal'
 import * as sinon from 'sinon'
-import { SettingFactory } from '../../../app/renderer/models/settings'
+import { SettingsFactory } from '../../../app/renderer/models/settings'
 
 use(chaiEnzyme())
 
@@ -37,7 +37,7 @@ describe('settingsModal', function() {
         toggleTab={'1'}
         visible={true}
         className={'test'}
-        settings={SettingFactory()}
+        settings={SettingsFactory()}
         onSettingsToggle={onSettingsToggle}
         onTabToggle={onTabToggle}
         changeSetting={changeSetting}
