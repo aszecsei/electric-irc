@@ -10,17 +10,17 @@ export enum ActionTypeKeys {
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
-  CHANGE_NICK = 'CHANGE_NICK',
+  //CHANGE_NICK = 'CHANGE_NICK',
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
   UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
   EDIT_SETTINGS = 'EDIT_SETTINGS',
   TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS'
 }
-export interface IChangeNickAction {
-  readonly type: ActionTypeKeys.CHANGE_NICK
-  readonly id: Guid
-  readonly nickname: string
-}
+// export interface IChangeNickAction {
+//   readonly type: ActionTypeKeys.CHANGE_NICK
+//   readonly id: Guid
+//   readonly nickname: string
+// }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
   readonly name: string
@@ -108,7 +108,7 @@ export type ActionTypes =
   | IToggleSettingsModalAction
   | IEditSettingsAction
   | IToggleTabAction
-  | IChangeNickAction
+// | IChangeNickAction
 
 export function addServer(
   name: string,
@@ -124,13 +124,13 @@ export function addServer(
     channels
   }
 }
-export function changeNick(id: Guid, nickname: string): IChangeNickAction {
-  return {
-    type: ActionTypeKeys.CHANGE_NICK,
-    id,
-    nickname
-  }
-}
+// export function changeNick(id: Guid, nickname: string): IChangeNickAction {
+//   return {
+//     type: ActionTypeKeys.CHANGE_NICK,
+//     id,
+//     nickname
+//   }
+// }
 export function addConnection(connection: Connection): IAddConnectionAction {
   return {
     type: ActionTypeKeys.ADD_CONNECTION,
