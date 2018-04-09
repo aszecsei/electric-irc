@@ -254,10 +254,6 @@ function subscribe(
               parseNickChange(oldnick, newnick, channels, message)
             )
           )
-          //Checks if we're the ones whose nickname changed
-          if (newnick == client.nick) {
-            emit(actions.changeNick(connection.id, newnick)) //doesnt stick to state... ALIC HELP!!
-          }
         }
       }
     )
