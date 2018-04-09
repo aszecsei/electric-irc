@@ -11,6 +11,7 @@ import { List } from 'immutable'
 import * as server from '../../../app/renderer/components/server'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
+import { Guid } from '../../../app/renderer/models/guid'
 
 use(chaiEnzyme())
 use(sinonChai)
@@ -21,17 +22,19 @@ describe('server panel', function() {
   let onClick: sinon.SinonSpy = null
 
   before(function() {
+    const id = Guid.create()
     onClick = sinon.spy()
     wrapper = mount(
       <server.Server
         onChannelClick={onClick}
+        curChanID={id}
         connection={
           new ConnectionFactory({
-            id: 0,
+            id: Guid.create(),
             name: 'Connection 1',
             channels: List([
-              new ChannelFactory({ id: 1, name: '#channel1' }),
-              new ChannelFactory({ id: 2, name: '#channel2' })
+              new ChannelFactory({ id: id, name: '#channel1' }),
+              new ChannelFactory({ id: Guid.create(), name: '#channel2' })
             ])
           })
         }

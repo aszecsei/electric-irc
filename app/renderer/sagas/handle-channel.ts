@@ -76,7 +76,7 @@ function subscribe(
           actions.appendLog(
             connection.id,
             channel.id,
-            parseNumericMessage(ms['server'], message)
+            parseNumericMessage(sender, message)
           )
         )
         //   }
@@ -105,7 +105,7 @@ function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseKickMessage(nick, by, reason, channel.name)
+              parseKickMessage(nick, by, channel.name, reason)
             )
           )
         }
@@ -126,7 +126,7 @@ function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parsePartMessage(nick, reason, channel.name)
+              parsePartMessage(nick, channel.name, reason)
             )
           )
         }

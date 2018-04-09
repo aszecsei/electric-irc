@@ -30,8 +30,8 @@ export const MessageFactory = Record<IMessage>({
   text: '',
   sender: ''
 })
-export function parseKillMessage(nick: string, reason: string) {
-  var str = nick + ' has been KILLed'
+export function parseKillMessage(nick: string, reason?: string) {
+  var str = nick + ' has been KILLED'
   if (reason && reason != '') {
     str = str + ' (' + reason + ')'
   }
@@ -45,10 +45,10 @@ export function parseKillMessage(nick: string, reason: string) {
 export function parseKickMessage(
   nick: string,
   by: string,
-  reason: string,
-  channel: string
+  channel: string,
+  reason?: string
 ) {
-  var str = by + ' has KICKed ' + nick + ' from ' + channel
+  var str = by + ' has KICKED ' + nick + ' from ' + channel
   if (reason && reason != '') {
     str = str + ' for "' + reason + '"'
   }
@@ -59,13 +59,12 @@ export function parseKickMessage(
     text: str
   })
 }
-
 export function parsePartMessage(
   nick: string,
-  reason: string,
-  channel: string
+  channel: string,
+  reason?: string
 ) {
-  var str = nick + ' has PARTed from ' + channel
+  var str = nick + ' has PARTED from ' + channel
   if (reason && reason != '') {
     str = str + ' (' + reason + ')'
   }
@@ -76,7 +75,7 @@ export function parsePartMessage(
     text: str
   })
 }
-export function parseQuitMessage(nick: string, reason: string) {
+export function parseQuitMessage(nick: string, reason?: string) {
   var str = nick + ' has QUIT'
   if (reason && reason != '') {
     str = str + ' (' + reason + ')'
@@ -92,9 +91,10 @@ export function parseJoinMessage(nick: string, channel: string) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.JOIN,
-    text: nick + ' has JOINED ' + channel
+    text: nick + ' has JOINED ' + channel + '.'
   })
 }
+
 export function parseNoticeMessage(
   from: string,
   to: string,
@@ -141,12 +141,11 @@ export function parseMessage(
     sender: nick
   })
 }
-
 export function parseNickChange(
   oldnick: string,
   newnick: string,
   channels: string[],
-  message: IRC.IMessage
+  message?: IRC.IMessage
 ) {
   return new MessageFactory({
     id: Guid.create(),

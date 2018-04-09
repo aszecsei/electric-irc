@@ -10,7 +10,7 @@ import {
   ISendMessageAction,
   IViewChannelAction,
   IAddConnectionAction,
-  IChangeNickAction,
+  //IChangeNickAction,
   IToggleAddServerModalAction,
   IToggleSettingsModalAction,
   IEditSettingsAction,
@@ -25,7 +25,7 @@ import addChannel from './add-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
-import changeNick from './change-nick'
+//import changeNick from './change-nick'
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
@@ -51,8 +51,8 @@ export function defaultReducer(
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
-    case ActionTypeKeys.CHANGE_NICK:
-      return changeNick(state, action as IChangeNickAction)
+    // case ActionTypeKeys.CHANGE_NICK:
+    //   return changeNick(state, action as IChangeNickAction)
     case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
       return toggleSettingsModal(state, action as IToggleSettingsModalAction)
     case ActionTypeKeys.EDIT_SETTINGS:
