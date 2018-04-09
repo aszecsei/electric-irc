@@ -26,6 +26,8 @@ function raw(
   channel: Channel,
   message: IRC.IMessage
 ) {}
+//as you add listeners for specific things add the string that would appear as the command string in message
+//by adding to this list the raw listener won't log the message type.
 const raw_no_log = [
   'KICK',
   'PART',
@@ -34,8 +36,10 @@ const raw_no_log = [
   'JOIN',
   'NOTICE',
   'PRIVMSG',
-  'NICK'
+  'NICK',
+  'PONG'
 ]
+
 function subscribe(
   client: IRC.Client,
   connection: Connection,
@@ -44,24 +48,46 @@ function subscribe(
   return eventChannel(emit => {
     //raw
     client.addListener('raw', (message: IRC.IMessage) => {
+      const ms = JSON.parse(JSON.stringify(message)) //turns to hash
+      //if the raw message is associated with a channel the channel name is the first elementin args
+      var channel2
+      if (ms['args'][0][0] == '#') {
+        channel2 = ms['args'][0]
+      } else {
+        channel2 = '#'
+      }
       // We receive a message on a channel
-      if ('#' == channel.name) {
-        const ms = JSON.parse(JSON.stringify(message))
+      if (channel2 == channel.name && !raw_no_log.includes(message.command)) {
         console.log(JSON.stringify(message))
-        var re = /^[0-9]+$/
-        if (re.exec(message.rawCommand)) {
-          //there isn's an event in node-irc that handles all numerical replies
-          if (ms['rawCommand'] == '433') {
-            //TODO maybe:change nick in store?
-          }
-          emit(
-            actions.appendLog(
-              connection.id,
-              channel.id,
-              parseNumericMessage(ms['server'], message)
-            )
-          )
+        // var re = /^[0-9]+$/
+        // if (re.exec(message.rawCommand)) {
+        //   //there isn's an event in node-irc that handles all numerical replies
+        //   if (ms['rawCommand'] == '433') {
+        //     //TODO maybe:change nick in store?
+        //   }
+        var sender = ''
+        if (ms.hasOwnProperty('nick')) {
+          sender = ms['nick']
+        } else if (ms.hasOwnProperty('server')) {
+          sender = ms['server']
         }
+        //emmits generic messages
+        emit(
+          actions.appendLog(
+            connection.id,
+            channel.id,
+            parseNumericMessage(ms['server'], message)
+          )
+        )
+        //   }
+        // }else{
+        //   emit(
+        //     actions.appendLog(
+        //       connection.id,
+        //       channel.id,
+        //       parseoOtherMessage(ms['server'], message)
+        //     )
+        //   )
       }
     })
     //kick
