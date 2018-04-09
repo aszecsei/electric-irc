@@ -24,6 +24,7 @@ export default function changeNick(
       'connections',
       replace_at(state.connections, index as number, newConn)
     )
+    //console.log(newState)
     return newState
   }
   return state
