@@ -5,6 +5,8 @@ export {
   Message,
   MessageFactory,
   parseMessage,
-  parseNickChange
+  parseNickChange,
+  parseNumericMessage,
+  parseNoticeMessage
 } from './message'
 export { Settings, SettingsFactory } from './settings'

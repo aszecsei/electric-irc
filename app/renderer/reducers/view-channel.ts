@@ -26,6 +26,6 @@ export default function sendMessage(
       newState = newState.set('currentChannelId', action.channelId)
     }
   }
-
+  console.log(newState.currentChannelId)
   return newState
 }

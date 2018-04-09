@@ -6,7 +6,15 @@ import { Message } from '../models'
 interface IMessageProps {
   message: Message
 }
-function emoji_process(str: string) {
+function image_process(str: string) {
+  const imgulrre = /https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|img)$/i
+  var reres = imgulrre.exec(str)
+  if (reres) {
+    return <img className="imgPrev" src={reres[0]} />
+  }
+  return null
+}
+function emoji_process(str: string): string {
   const emojire = /:[a-z_]+:/i
   var reres = emojire.exec(str)
   var tmpstr = str //tmpstr for loop control
@@ -26,6 +34,7 @@ export const MessageDisp: React.SFC<IMessageProps> = props => {
       {props.message.sender + ': '}
       <br />
       <b className="mmessagetext">{emoji_process(props.message.text)}</b>
+      {image_process(props.message.text)}
     </p>
   )
 }

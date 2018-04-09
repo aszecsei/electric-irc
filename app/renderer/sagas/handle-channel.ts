@@ -9,7 +9,9 @@ import {
   Connection,
   Channel,
   parseMessage,
-  parseNickChange
+  parseNickChange,
+  parseNumericMessage,
+  parseNoticeMessage
 } from '../models'
 import { getConnection, getChannelByName } from './selectors'
 
@@ -20,8 +22,53 @@ function subscribe(
 ) {
   return eventChannel(emit => {
     client.addListener('raw', (message: IRC.IMessage) => {
-      console.log(JSON.stringify(message))
+      // We receive a message on a channel
+      if ('#' == channel.name) {
+        const ms = JSON.parse(JSON.stringify(message))
+        console.log(JSON.stringify(message))
+        var re = /^[0-9]+$/
+        if (re.exec(message.rawCommand)) {
+          //there isn's an event in node-irc that handles all numerical replies
+          if (ms['rawCommand'] == '433') {
+            //TODO:change nick
+          }
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parseNumericMessage(ms['server'], message)
+            )
+          )
+        }
+      }
     })
+    client.addListener(
+      'notice',
+      (nick: string, to: string, text: string, message: IRC.IMessage) => {
+        if (to == channel.name || (to[0] != '#' && '#' == channel.name)) {
+          console.log(nick)
+          console.log(to)
+          console.log(text)
+          console.log(message)
+          console.log(channel)
+          console.log(connection)
+          var sender = ''
+          if (nick) {
+            sender = nick
+          } else {
+            const ms = JSON.parse(JSON.stringify(message))
+            sender = ms['server']
+          }
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parseNoticeMessage(sender, to, message)
+            )
+          )
+        }
+      }
+    )
     client.addListener(
       'message#',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
