@@ -19,6 +19,7 @@ export function createIRCClient(
   channels: string[]
 ) {
   return new IRC.Client(url, nickname, {
+    userName: 'electricirc',
     channels: channels
   })
 }

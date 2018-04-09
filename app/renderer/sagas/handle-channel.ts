@@ -19,9 +19,13 @@ function subscribe(
   channel: Channel
 ) {
   return eventChannel(emit => {
+    client.addListener('raw', (message: IRC.IMessage) => {
+      console.log(JSON.stringify(message))
+    })
     client.addListener(
       'message#',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
+        console.log(`${nick} says ${text} to ${to}!`)
         // We receive a message on a channel
         if (to == channel.name) {
           emit(
