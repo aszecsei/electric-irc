@@ -43,6 +43,7 @@ export class Server extends React.Component<IServerProps, IServerState> {
   }
   //this next function checks to see if the channel that this 'a' link refers to is the one selected
   //and adds a special format to the selected one so user can see that is the one selected
+  //can be deleted after somthing better
   bold_if_selected(
     connection: Connection,
     channel: Channel,
@@ -68,6 +69,7 @@ export class Server extends React.Component<IServerProps, IServerState> {
       )
     }
   }
+
   render() {
     const server = this.props.connection
     return (
