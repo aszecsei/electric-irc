@@ -7,7 +7,8 @@ export enum MessageType {
   MESSAGE,
   NICKCHANGE,
   SERVER,
-  NOTICE
+  NOTICE,
+  JOIN
 }
 
 interface IMessage {
@@ -25,6 +26,13 @@ export const MessageFactory = Record<IMessage>({
   text: '',
   sender: ''
 })
+export function parseJoinMessage(nick: string, channel: string) {
+  return new MessageFactory({
+    id: Guid.create(),
+    type: MessageType.JOIN,
+    text: nick + ' has JOINED ' + channel
+  })
+}
 export function parseNoticeMessage(
   from: string,
   to: string,

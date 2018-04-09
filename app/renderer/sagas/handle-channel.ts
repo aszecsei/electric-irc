@@ -11,7 +11,8 @@ import {
   parseMessage,
   parseNickChange,
   parseNumericMessage,
-  parseNoticeMessage
+  parseNoticeMessage,
+  parseJoinMessage
 } from '../models'
 import { getConnection, getChannelByName } from './selectors'
 
@@ -43,15 +44,29 @@ function subscribe(
       }
     })
     client.addListener(
+      'join',
+      (ichannel: IRC.IChannel, nick: string, message: Irc.IMessage) => {
+        if (ichannel.toString() == channel.name) {
+          emit(
+            actions.appendLog(
+              connection.id,
+              channel.id,
+              parseJoinMessage(nick, channel.name)
+            )
+          )
+        }
+      }
+    )
+    client.addListener(
       'notice',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
         if (to == channel.name || (to[0] != '#' && '#' == channel.name)) {
-          console.log(nick)
-          console.log(to)
-          console.log(text)
-          console.log(message)
-          console.log(channel)
-          console.log(connection)
+          // console.log(nick)
+          // console.log(to)
+          // console.log(text)
+          // console.log(message)
+          // console.log(channel)
+          // console.log(connection)
           var sender = ''
           if (nick) {
             sender = nick
@@ -102,6 +117,14 @@ function subscribe(
               parseNickChange(oldnick, newnick, channels, message)
             )
           )
+          if (newnick == client.nick) {
+            // console.log("****************")
+            // console.log(oldnick)
+            // console.log(newnick)
+            // console.log(client)
+            // console.log("****************")
+            emit(actions.changeNick(connection.id, newnick))
+          }
         }
         // TODO: Check if we're the ones whose nickname changed
       }
@@ -123,8 +146,9 @@ export function* read(
   }
 }
 
-const joinRegex = new RegExp(/^\/join\s*(#.*)$/)
+const joinRegex = new RegExp(/^\/join\s*(#.+)$/)
 
+const nickRegex = new RegExp(/^\/nick\s*([a-zA-Z0-9_\-]+)$/)
 export function* write(
   client: IRC.Client,
   connection: Connection,
@@ -137,7 +161,12 @@ export function* write(
     if (payload.serverId == connection.id && payload.channelId == channel.id) {
       // TODO: Intercept all '/command's
       const joinResults = joinRegex.exec(payload.message)
-      if (joinResults) {
+      const nickResults = nickRegex.exec(payload.message)
+      if (nickResults) {
+        const newNickName = nickResults[1]
+        client.send('nick', newNickName)
+        //yield put(actions.joinChannel(connection.id, newNickName))
+      } else if (joinResults) {
         const newChanName = joinResults[1]
         yield put(actions.joinChannel(connection.id, newChanName))
       } else {
@@ -145,11 +174,13 @@ export function* write(
         client.say(channel.name, payload.message)
         // TODO: Retrieve current nickname?
         // Alt solution: have special value for appending own messages
+        //console.log(client)
         yield put(
           actions.appendLog(
             connection.id,
             channel.id,
-            parseMessage(connection.nickname, channel.name, payload.message)
+            //parseMessage(connection.nickname, channel.name, payload.message)
+            parseMessage(client.nick, channel.name, payload.message)
           )
         )
       }

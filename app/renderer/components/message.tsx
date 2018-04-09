@@ -28,13 +28,29 @@ function emoji_process(str: string): string {
   }
   return str
 }
-export const MessageDisp: React.SFC<IMessageProps> = props => {
+function has_sender(message: Message) {
   return (
     <p className="mmessage">
-      {props.message.sender + ': '}
+      {message.sender + ': '}
       <br />
-      <b className="mmessagetext">{emoji_process(props.message.text)}</b>
-      {image_process(props.message.text)}
+      <b className="mmessagetext">{emoji_process(message.text)}</b>
+      {image_process(message.text)}
     </p>
   )
+}
+
+function no_sender(message: Message) {
+  return (
+    <p className="mmessage">
+      <b className="mmessagetext">{emoji_process(message.text)}</b>
+      {image_process(message.text)}
+    </p>
+  )
+}
+export const MessageDisp: React.SFC<IMessageProps> = props => {
+  if (!props.message.sender || props.message.sender == '') {
+    return no_sender(props.message)
+  } else {
+    return has_sender(props.message)
+  }
 }
