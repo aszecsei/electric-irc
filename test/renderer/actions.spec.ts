@@ -3,12 +3,14 @@ import { List } from 'immutable'
 
 import * as Actions from '../../app/renderer/actions'
 import { MessageFactory } from '../../app/renderer/models/message'
+import { Guid, ChannelFactory } from '../../app/renderer/models'
 
 describe('actions', function() {
   describe('removeServer', function() {
     let result: Actions.IRemoveServerAction
+    let guid = Guid.create()
     before(function() {
-      result = Actions.removeServer(12)
+      result = Actions.removeServer(guid)
     })
 
     it('should create an action with type REMOVE_SERVER', function() {
@@ -16,7 +18,7 @@ describe('actions', function() {
     })
 
     it('should include a payload of the server ID', function() {
-      expect(result.id).to.eq(12)
+      expect(result.id).to.eq(guid)
     })
   })
 
@@ -24,8 +26,9 @@ describe('actions', function() {
     let result: Actions.IEditServerAction
     const newName = 'New Name'
     const newURL = 'New URL'
+    let guid = Guid.create()
     before(function() {
-      result = Actions.editServer(15, newName, newURL)
+      result = Actions.editServer(guid, newName, newURL)
     })
 
     it('should create an action with type EDIT_SERVER', function() {
@@ -33,7 +36,7 @@ describe('actions', function() {
     })
 
     it('should include a payload of the server ID', function() {
-      expect(result.id).to.eq(15)
+      expect(result.id).to.eq(guid)
     })
 
     it('should include a payload of the new server name', function() {
@@ -45,13 +48,16 @@ describe('actions', function() {
     })
   })
 
-  describe('joinChannel', function() {
-    let result: Actions.IJoinChannelAction
-    const serverId = 155
+  describe('addChannel', function() {
+    let result: Actions.IAddChannelAction
+    const serverId = Guid.create()
     const channelName = '#channel'
+    const channel = new ChannelFactory({
+      name: channelName
+    })
 
     before(function() {
-      result = Actions.joinChannel(serverId, channelName)
+      result = Actions.addChannel(serverId, channel)
     })
 
     it('should include a payload of the server ID', function() {
@@ -59,14 +65,14 @@ describe('actions', function() {
     })
 
     it('should include a payload of the name of the channel to join', function() {
-      expect(result.channel).to.eq(channelName)
+      expect(result.channel).to.eq(channel)
     })
   })
 
   describe('appendLog', function() {
     let result: Actions.IAppendLogAction
-    const serverId = 122
-    const channelId = 12
+    const serverId = Guid.create()
+    const channelId = Guid.create()
     const msg = new MessageFactory({ text: 'Hello, world!' })
 
     before(function() {
@@ -88,9 +94,9 @@ describe('actions', function() {
 
   describe('sendMessage', function() {
     let result: Actions.ISendMessageAction
-    const serverId = 122
-    const channelId = 12
-    const msg = new MessageFactory({ text: 'Hello, world!' })
+    const serverId = Guid.create()
+    const channelId = Guid.create()
+    const msg = 'Hello, world!'
 
     before(function() {
       result = Actions.sendMessage(serverId, channelId, msg)

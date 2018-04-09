@@ -1,7 +1,7 @@
 import { fork, take } from 'redux-saga/effects'
 import * as actions from '../actions'
 
-import { handleServer } from '.'
+import { handleServer } from './handle-server'
 
 export function* flow() {
   while (true) {
