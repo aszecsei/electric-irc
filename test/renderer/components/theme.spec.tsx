@@ -12,9 +12,9 @@ import * as themes from '../../../app/renderer/stylesheets/thememaps/themes'
 
 use(chaiEnzyme())
 describe('theme component', function() {
+  let properties = themes.backup
   before(() => {
-    properties = themes.backup
-    wrapper = mount(<Theme properties={this.properties} />)
+    wrapper = mount(<Theme properties={properties} />)
   })
   it('should exist', function() {
     expect(Theme).to.exist
