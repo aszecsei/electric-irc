@@ -14,7 +14,7 @@ use(chaiEnzyme())
 describe('theme component', function() {
   before(() => {
     properties = themes.backup
-    wrapper = mount(<Theme properties={properties} />)
+    wrapper = mount(<Theme properties={this.properties} />)
   })
   it('should exist', function() {
     expect(Theme).to.exist
