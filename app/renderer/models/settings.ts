@@ -19,7 +19,7 @@ export interface ISettings {
   soundPrivate: boolean
 }
 
-export const SettingFactory = Record<ISettings>({
+export const SettingsFactory = Record<ISettings>({
   scrollback: true,
   scrollbackLines: 500,
   timestamps: true,

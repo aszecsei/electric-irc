@@ -3,9 +3,11 @@ import * as React from 'react'
 import { Server } from './server'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
+import { Guid } from '../models/guid'
 
 interface ISidebarProps {
   connections: List<Connection>
+  curChanID: Guid | undefined
   onChannelClick: (conn: Connection, channel: Channel) => void
   onAddServerClick: () => void
 }
@@ -31,6 +33,7 @@ export const Sidebar: React.SFC<ISidebarProps> = props => {
             key={i}
             connection={connection}
             onChannelClick={props.onChannelClick}
+            curChanID={props.curChanID}
           />
         ))}
         <li>
