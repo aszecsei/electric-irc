@@ -8,6 +8,7 @@ interface ISidebarProps {
   connections: List<Connection>
   onChannelClick: (conn: Connection, channel: Channel) => void
   onAddServerClick: () => void
+  onSettingsClick: () => void
 }
 
 export const Sidebar: React.SFC<ISidebarProps> = props => {
@@ -35,6 +36,11 @@ export const Sidebar: React.SFC<ISidebarProps> = props => {
         ))}
         <li>
           <a href="#">About</a>
+        </li>
+        <li>
+          <a href="#" onClick={props.onSettingsClick}>
+            Settings
+          </a>
         </li>
       </ul>
     </nav>

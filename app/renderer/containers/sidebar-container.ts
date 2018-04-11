@@ -1,7 +1,11 @@
 import { connect, Dispatch } from 'react-redux'
 import { Sidebar } from '../components/sidebar'
 import { ElectricState } from '../store'
-import { viewChannel, toggleAddServerModal } from '../actions'
+import {
+  viewChannel,
+  toggleAddServerModal,
+  toggleSettingsModal
+} from '../actions'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 
@@ -18,6 +22,9 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     onAddServerClick: () => {
       dispatch(toggleAddServerModal(true))
+    },
+    onSettingsClick: () => {
+      dispatch(toggleSettingsModal(true))
     }
   }
 }
