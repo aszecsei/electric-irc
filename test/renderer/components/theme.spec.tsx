@@ -13,6 +13,7 @@ import * as themes from '../../../app/renderer/stylesheets/thememaps/themes'
 use(chaiEnzyme())
 describe('theme component', function() {
   let properties = themes.backup
+  let wrapper: ReactWrapper = null
   before(() => {
     wrapper = mount(<Theme properties={properties} />)
   })
@@ -20,6 +21,10 @@ describe('theme component', function() {
     expect(Theme).to.exist
   })
   it('should exist', function() {
-    wrapper.expect(wrapper.ComponentDidMount()).to.be.called
+    const theme = sinon.stub(Theme.prototype, 'handleNewProperties')
+    theme.reset()
+    let themein = themes.backup
+    wrapper.setProps({ themein })
+    expect(theme).to.have.been.called()
   })
 })
