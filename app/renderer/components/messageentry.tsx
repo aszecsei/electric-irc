@@ -1,5 +1,5 @@
 import * as React from 'react'
-
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { Message, MessageFactory } from '../models/message'
@@ -41,17 +41,18 @@ export class MessageEntry extends React.Component<
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Send Message:
-          <input
+      <Form inline onSubmit={this.handleSubmit}>
+        <FormGroup>
+          <Label for="message">Send Message:</Label>
+          <Input
             type="text"
             value={this.state.value}
             onChange={this.handleChange}
+            id="message"
           />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+          <Button>Submit</Button>
+        </FormGroup>
+      </Form>
     )
   }
 }

@@ -5,7 +5,7 @@
 
 .logWindow {
   overflow-y: scroll;
-  height: 93%;
+  height: 90%;
   position: relative;
 }
 
@@ -15,5 +15,12 @@
   margin: 0.5%;
   position: relative;
   color: var(--primary-text);
-  height: 5%;
+  height: 8%;
+  border-radius: 25px;
+  border: 2px solid var(--primary-light);
+  justify-content: center;
+  align-items: center;
+}
+#message {
+  background-color: var(--bg);
 }
