@@ -26,8 +26,6 @@ export class MessageEntry extends React.Component<
   }
 
   handleSubmit = (event: any) => {
-    this.setState({ value: '' })
-    //TODO: do nothing instead of display message if client raises error(ie try to do '/privmsg #elec2 hi' when not joined #elect2)
     if (this.props.connection && this.props.channel) {
       this.props.onSendMessage(
         this.state.value,
@@ -37,6 +35,7 @@ export class MessageEntry extends React.Component<
     } else {
       console.error('Tried to send message without connection or channel')
     }
+    this.setState({ value: '' })
     event.preventDefault()
   }
 
