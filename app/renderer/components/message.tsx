@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Emojis } from '../emojis'
-const opn = require('opn')
+import opn = require("opn");
 import { Message } from '../models'
 
 interface IMessageProps {
@@ -8,8 +8,7 @@ interface IMessageProps {
 }
 function test(event: any) {
   event.preventDefault()
-  var shell = require('shell')
-  shell.openExternal(event.target.href)
+  opn(event.target.href as string)
 }
 const urlre = /((https?:\/\/)|([a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?@))?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*(\?[^\s]*)?/i
 //puts a <a> tag aroung links. keep <text> i purposly made my own html tag, it does not break anything and no errors are caused
@@ -26,7 +25,7 @@ function link_process(str: string) {
       x.push(<text>{emoji_process(tempstr.substring(0, reres.index))}</text>)
     }
     x.push(
-      <a href={reres[0]} onClick={test}>
+      <a href={reres[2]?reres[0]:"http://"+reres[0]} onClick={test}>
         {reres[0]}
       </a>
     )

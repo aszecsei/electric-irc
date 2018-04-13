@@ -102,6 +102,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "@types/opn": "^5.1.0",
     "@types/reactstrap": "^5.0.17",
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",
@@ -110,6 +111,7 @@
     "irc": "^0.5.2",
     "jquery": "^3.3.1",
     "material-design-icons": "^3.0.1",
+    "opn": "^5.3.0",
     "popper.js": "^1.12.9",
     "react": "16.0.0",
     "react-dom": "16.0.0",
