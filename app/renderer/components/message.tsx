@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Emojis } from '../emojis'
-
+const opn = require('opn')
 import { Message } from '../models'
 
 interface IMessageProps {
