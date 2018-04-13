@@ -21,3 +21,11 @@
   max-width: 90%;
   max-height: auto;
 }
+.mmessage a:link {
+  color: var(--secondary-light);
+  text-decoration: underline;
+}
+.mmessage a {
+  color: var(--secondary-dark);
+  text-decoration: underline;
+}
