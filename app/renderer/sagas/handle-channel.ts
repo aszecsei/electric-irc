@@ -19,6 +19,7 @@ import {
   parseKillMessage
 } from '../models'
 import { getConnection, getChannelByName } from './selectors'
+import { URL } from 'url'
 
 function raw(
   client: IRC.Client,
@@ -58,7 +59,7 @@ function subscribe(
       }
       // We receive a message on a channel
       if (channel2 == channel.name && !raw_no_log.includes(message.command)) {
-        console.log(JSON.stringify(message))
+        //console.log(JSON.stringify(message))
         // var re = /^[0-9]+$/
         // if (re.exec(message.rawCommand)) {
         //   //there isn's an event in node-irc that handles all numerical replies
@@ -180,6 +181,33 @@ function subscribe(
       'join',
       (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
         if (ichannel.toString() == channel.name) {
+          var xhttp2 = new XMLHttpRequest()
+          xhttp2.open(
+            'GET',
+            'https://electric-centric.herokuapp.com/server/join?server=' +
+              connection.url +
+              '&channel=%23' +
+              channel.name.slice(1),
+            true
+          )
+          xhttp2.send()
+          var xhttp = new XMLHttpRequest()
+          xhttp.open(
+            'GET',
+            'https://electric-centric.herokuapp.com/message?servers=' +
+              connection.url +
+              '&channels=%23' +
+              channel.name.slice(1),
+            false
+          )
+          xhttp.send()
+          const messages = JSON.parse(xhttp.responseText)
+          console.log(messages)
+          if (messages['status'] == 203) {
+            emit(
+              actions.mergeLog(connection.id, channel.id, messages['message'])
+            )
+          }
           emit(
             actions.appendLog(
               connection.id,

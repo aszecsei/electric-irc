@@ -5,6 +5,13 @@ import * as React from 'react'
 import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
 import * as AddModal from '../../../app/renderer/components/addmodal'
+import {
+  Connection,
+  ConnectionFactory
+} from '../../../app/renderer/models/connections'
+import { Channel, ChannelFactory } from '../../../app/renderer/models/channel'
+import { List } from 'immutable'
+import { Guid } from '../../../app/renderer/models/guid'
 import * as sinon from 'sinon'
 import Input from 'reactstrap/lib/Input'
 
@@ -24,6 +31,17 @@ describe('addmodal', function() {
     wrapper = mount(
       <AddModal.AddModal
         visible={false}
+        connections={List<Connection>([
+          new ConnectionFactory({
+            id: Guid.create(),
+            name: 'Connection 1',
+            url: 'xxx',
+            channels: List([
+              new ChannelFactory({ id: Guid.create(), name: '#channel1' }),
+              new ChannelFactory({ id: Guid.create(), name: '#channel2' })
+            ])
+          })
+        ])}
         onAddServerToggle={onClick}
         onAddServerSubmit={onSubmit}
       />
@@ -44,6 +62,26 @@ describe('addmodal', function() {
       expect(instance.state.nickname).to.eq('test')
     })
     it('should not change state if not valid', function() {
+      value = 'sta'
+      inputName = mount(
+        <Input value={value} onChange={instance.handleChangeName} />
+      )
+      inputName.instance().value = 'st'
+      inputName.simulate('change')
+      expect(instance.state.nickname).to.eq('sta')
+    })
+  })
+  describe('handleirc', function() {
+    it('should change state of name if valid', function() {
+      value = 'test'
+      inputName = mount(
+        <Input value={value} onChange={instance.handleChangeName} />
+      )
+      inputName.instance().value = 'test'
+      inputName.simulate('change')
+      expect(instance.state.nickname).to.eq('test')
+    })
+    it('should not change state if not valid', function() {
       value = 'st'
       inputName = mount(
         <Input value={value} onChange={instance.handleChangeName} />
@@ -51,12 +89,6 @@ describe('addmodal', function() {
       inputName.instance().value = 'st'
       inputName.simulate('change')
       expect(instance.state.nickname).to.eq('st')
-    })
-  })
-  describe('handleirc', function() {
-    it('should change state of irc if valid', function() {
-      instance.handleChangeIRC({ target: { value: 'test.net' } })
-      expect(instance.state.url).to.eq('test.net')
     })
   })
   describe('handle server name', function() {

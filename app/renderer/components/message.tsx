@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Emojis } from '../emojis'
-import opn from 'opn'
+//import opn from 'opn'
 import { Message } from '../models'
-const op = require('opn')
+const opn = require('opn')
 interface IMessageProps {
   message: Message
 }
 function test(event: any) {
   event.preventDefault()
-  op(event.target.href as string)
+  opn(event.target.href as string)
 }
 const urlre = /((https?:\/\/)|([a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?@))?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*(\?[^\s]*)?/i
 //puts a <a> tag aroung links. keep <text> i purposly made my own html tag, it does not break anything and no errors are caused
@@ -39,7 +39,7 @@ function link_process(str: string) {
   return x
 }
 function image_process(str: string) {
-  const imgurlre = /https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|bmp|img)/i
+  const imgurlre = /((https?:\/\/)|([a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?@))?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*\.(jpg|jpeg|png|gif|bmp|img)(\?[^\s]*)?/i
   var reres = imgurlre.exec(str)
   if (reres) {
     return <img className="imgPrev" src={reres[0]} />
@@ -65,6 +65,7 @@ function has_sender(message: Message) {
     <p className="mmessage">
       {link_process(message.sender)}
       <text>{': '}</text>
+      <text className="time">{message.sent.toLocaleString()}</text>
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
@@ -76,6 +77,8 @@ function has_sender(message: Message) {
 function no_sender(message: Message) {
   return (
     <p className="mmessage">
+      <text className="time">{message.sent.toLocaleString()}</text>
+      <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
       {image_process(message.text)}

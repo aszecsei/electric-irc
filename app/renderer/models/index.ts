@@ -12,6 +12,7 @@ export {
   parseQuitMessage,
   parsePartMessage,
   parseKickMessage,
-  parseKillMessage
+  parseKillMessage,
+  MessageType
 } from './message'
 export { Settings, SettingsFactory } from './settings'

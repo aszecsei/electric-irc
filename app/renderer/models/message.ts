@@ -20,17 +20,22 @@ interface IMessage {
   type: MessageType
   text: string
   sender: string
+  sent: Date
 }
-
 const emptyGUID = Guid.createEmpty()
 
 export const MessageFactory = Record<IMessage>({
   id: emptyGUID,
   type: MessageType.MESSAGE,
   text: '',
-  sender: ''
+  sender: '',
+  sent: new Date()
 })
-export function parseKillMessage(nick: string, reason?: string) {
+export function parseKillMessage(
+  nick: string,
+  reason?: string,
+  sent: Date = new Date()
+) {
   var str = nick + ' has been KILLED'
   if (reason && reason != '') {
     str = str + ' (' + reason + ')'
@@ -39,14 +44,16 @@ export function parseKillMessage(nick: string, reason?: string) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.KILL,
-    text: str
+    text: str,
+    sent: sent
   })
 }
 export function parseKickMessage(
   nick: string,
   by: string,
   channel: string,
-  reason?: string
+  reason?: string,
+  sent: Date = new Date()
 ) {
   var str = by + ' has KICKED ' + nick + ' from ' + channel
   if (reason && reason != '') {
@@ -56,13 +63,15 @@ export function parseKickMessage(
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.KICK,
-    text: str
+    text: str,
+    sent: sent
   })
 }
 export function parsePartMessage(
   nick: string,
   channel: string,
-  reason?: string
+  reason?: string,
+  sent: Date = new Date()
 ) {
   var str = nick + ' has PARTED from ' + channel
   if (reason && reason != '') {
@@ -72,10 +81,16 @@ export function parsePartMessage(
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.PART,
-    text: str
+    text: str,
+    sent: sent
   })
 }
-export function parseQuitMessage(nick: string, reason?: string) {
+//export function parserMessageFromServer(command:string,)
+export function parseQuitMessage(
+  nick: string,
+  reason?: string,
+  sent: Date = new Date()
+) {
   var str = nick + ' has QUIT'
   if (reason && reason != '') {
     str = str + ' (' + reason + ')'
@@ -84,14 +99,20 @@ export function parseQuitMessage(nick: string, reason?: string) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.QUIT,
-    text: str
+    text: str,
+    sent: sent
   })
 }
-export function parseJoinMessage(nick: string, channel: string) {
+export function parseJoinMessage(
+  nick: string,
+  channel: string,
+  sent: Date = new Date()
+) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.JOIN,
-    text: nick + ' has JOINED ' + channel + '.'
+    text: nick + ' has JOINED ' + channel + '.',
+    sent: sent
   })
 }
 
@@ -132,13 +153,15 @@ export function parseMessage(
   nick: string,
   to: string,
   text: string,
-  message?: IRC.IMessage
+  message?: IRC.IMessage,
+  sent: Date = new Date()
 ) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.MESSAGE,
     text: text,
-    sender: nick
+    sender: nick,
+    sent: sent
   })
 }
 export function parseNickChange(
