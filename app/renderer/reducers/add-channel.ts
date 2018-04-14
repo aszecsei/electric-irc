@@ -1,5 +1,6 @@
 import { ElectricState } from '../store'
 import { IAddChannelAction } from '../actions'
+import { print } from 'util'
 
 export default function addChannel(
   state: ElectricState,
@@ -12,7 +13,12 @@ export default function addChannel(
   if (conn) {
     const chans = conn.channels.push(action.channel)
     const newConn = conn.set('channels', chans)
-    return state.set('connections', state.connections.set(index, newConn))
+    const newState = state.set(
+      'connections',
+      state.connections.set(index, newConn)
+    )
+    print(newState)
+    return newState
   }
   return state
 }
