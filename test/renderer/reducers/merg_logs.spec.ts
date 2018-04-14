@@ -94,6 +94,48 @@ describe('add-connection reducer', function() {
             message: 'world',
             sent: '1971-01-01T00:00:00.010Z',
             command: 'PRIVMSG'
+          },
+          {
+            sender: 'bob',
+            channel_name: 'hello',
+            message: 'world',
+            sent: '1971-01-01T00:00:00.010Z',
+            command: 'QUIT'
+          },
+          {
+            sender: 'bob',
+            channel_name: 'hello',
+            message: 'world',
+            sent: '1971-01-01T00:00:00.010Z',
+            command: 'KICK'
+          },
+          {
+            sender: 'bob',
+            channel_name: 'hello',
+            message: 'world',
+            sent: '1971-01-01T00:00:00.010Z',
+            command: 'PART'
+          },
+          {
+            sender: 'bob',
+            channel_name: 'hello',
+            message: 'world',
+            sent: '1971-01-01T00:00:00.010Z',
+            command: 'KILL'
+          },
+          {
+            sender: 'bob',
+            channel_name: 'hello',
+            message: 'world',
+            sent: '1971-01-01T00:00:00.010Z',
+            command: 'JOIN'
+          },
+          {
+            sender: 'bob',
+            channel_name: 'hello',
+            message: 'world',
+            sent: '1970-01-01T00:00:00.010Z',
+            command: ''
           }
         ])
       )
@@ -105,7 +147,7 @@ describe('add-connection reducer', function() {
           .get(0)
           .channels.get(0)
           .log.count()
-      ).to.eq(6)
+      ).to.eq(12)
     })
   })
 })
