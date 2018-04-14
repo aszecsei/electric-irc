@@ -20,21 +20,30 @@ function link_process(str: string) {
   var reres = urlre.exec(str)
   var tempstr = str
   var x = []
+  var ii = 0
   while (reres) {
     if (reres.index > 0) {
-      x.push(<text>{emoji_process(tempstr.substring(0, reres.index))}</text>)
+      x.push(
+        <text key={ii}>{emoji_process(tempstr.substring(0, reres.index))}</text>
+      )
+      ii++
     }
     x.push(
-      <a href={reres[2] ? reres[0] : 'http://' + reres[0]} onClick={test}>
+      <a
+        key={ii}
+        href={reres[2] ? reres[0] : 'http://' + reres[0]}
+        onClick={test}
+      >
         {reres[0]}
       </a>
     )
+    ii++
     const i = reres.index + reres[0].length
     tempstr = tempstr.substring(i)
     reres = urlre.exec(tempstr)
   }
   if (tempstr.length != 0) {
-    x.push(<text>{emoji_process(tempstr)}</text>)
+    x.push(<text key={ii}>{emoji_process(tempstr)}</text>)
   }
   return x
 }
