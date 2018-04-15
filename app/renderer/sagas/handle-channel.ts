@@ -197,17 +197,21 @@ function subscribe(
             'https://electric-centric.herokuapp.com/message?servers=' +
               connection.url +
               '&channels=%23' +
-              channel.name.slice(1),
-            false
+              channel.name.slice(1) +
+              '&order=sent DESC&limit=50',
+            true
           )
-          xhttp.send()
-          const messages = JSON.parse(xhttp.responseText)
-          console.log(messages)
-          if (messages['status'] == 203) {
-            emit(
-              actions.mergeLog(connection.id, channel.id, messages['message'])
-            )
+          xhttp.onreadystatechange = function() {
+            console.log(this.responseText)
+            const messages = JSON.parse(this.responseText)
+            console.log(messages)
+            if (messages['status'] == 203) {
+              emit(
+                actions.mergeLog(connection.id, channel.id, messages['message'])
+              )
+            }
           }
+          xhttp.send()
           emit(
             actions.appendLog(
               connection.id,

@@ -95,8 +95,7 @@ function merge(log: List<Message>, servlog: List<Message>) {
     })
     i++
   }
-  //these sort's might not even be neccessary, for log already sorted in theory and we can add order url arg to make sent time asc (though think it's already that by defult)
-  //test data may not be sorted so if we make the assumption makesure to put test data in order to pass test
+
   log = log.sort((m1: Message, m2: Message) => {
     if (m1.sent.getTime() < m2.sent.getTime()) {
       return -1
