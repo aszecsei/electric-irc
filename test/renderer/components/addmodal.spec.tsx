@@ -61,34 +61,34 @@ describe('addmodal', function() {
       inputName.simulate('change')
       expect(instance.state.nickname).to.eq('test')
     })
-    it('should not change state if not valid', function() {
-      value = 'sta'
+    it('should change state if not valid', function() {
+      value = '5st'
       inputName = mount(
         <Input value={value} onChange={instance.handleChangeName} />
       )
-      inputName.instance().value = 'st'
+      inputName.instance().value = '5st'
       inputName.simulate('change')
-      expect(instance.state.nickname).to.eq('sta')
+      expect(instance.state.nickname).to.eq('5st')
     })
   })
   describe('handleirc', function() {
     it('should change state of name if valid', function() {
       value = 'test'
       inputName = mount(
-        <Input value={value} onChange={instance.handleChangeName} />
+        <Input value={value} onChange={instance.handleChangeIRC} />
       )
       inputName.instance().value = 'test'
       inputName.simulate('change')
-      expect(instance.state.nickname).to.eq('test')
+      expect(instance.state.url).to.eq('test')
     })
-    it('should not change state if not valid', function() {
-      value = 'st'
+    it('should change state if not valid', function() {
+      value = 'xxx'
       inputName = mount(
-        <Input value={value} onChange={instance.handleChangeName} />
+        <Input value={value} onChange={instance.handleChangeIRC} />
       )
-      inputName.instance().value = 'st'
+      inputName.instance().value = 'xxx'
       inputName.simulate('change')
-      expect(instance.state.nickname).to.eq('st')
+      expect(instance.state.url).to.eq('xxx')
     })
   })
   describe('handle server name', function() {
