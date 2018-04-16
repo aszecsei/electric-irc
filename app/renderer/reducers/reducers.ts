@@ -10,23 +10,26 @@ import {
   ISendMessageAction,
   IViewChannelAction,
   IAddConnectionAction,
-  IChangeNickAction,
+  //IChangeNickAction,
   IToggleAddServerModalAction,
   IThemeWholesaleAction,
   IToggleSettingsModalAction,
   IEditSettingsAction,
-  IToggleTabAction
+  IToggleTabAction,
+  IAddChannelAction
 } from '../actions'
 
 import addConnection from './add-connection'
 import appendLog from './append-log'
 import editServer from './edit-server'
-import joinChannel from './join-channel'
+import addChannel from './add-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
+
 import themeWholesale from './theme-wholesale'
 import changeNick from './change-nick'
+
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
@@ -45,8 +48,8 @@ export function defaultReducer(
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:
       return editServer(state, action as IEditServerAction)
-    case ActionTypeKeys.JOIN_CHANNEL:
-      return joinChannel(state, action as IJoinChannelAction)
+    case ActionTypeKeys.ADD_CHANNEL:
+      return addChannel(state, action as IAddChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
     case ActionTypeKeys.VIEW_CHANNEL:
@@ -55,8 +58,8 @@ export function defaultReducer(
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
     case ActionTypeKeys.THEME_WHOLESALE:
       return themeWholesale(state, action as IThemeWholesaleAction)
-    case ActionTypeKeys.CHANGE_NICK:
-      return changeNick(state, action as IChangeNickAction)
+    // case ActionTypeKeys.CHANGE_NICK:
+    //   return changeNick(state, action as IChangeNickAction)
     case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
       return toggleSettingsModal(state, action as IToggleSettingsModalAction)
     case ActionTypeKeys.EDIT_SETTINGS:
