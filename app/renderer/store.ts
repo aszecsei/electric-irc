@@ -29,9 +29,6 @@ export const ElectricStateFactory = Record<IElectricState>({
   themeProperties: theme.get('light') || backup,
   settingsModalActive: true,
   settings: SettingsFactory(),
-  settingsModalActive: true,
-  addServerModalActive: false,
-  settings: SettingsFactory(),
   toggleTab: '1'
 })
 
