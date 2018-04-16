@@ -14,8 +14,10 @@ import * as AddModal from '../../../app/renderer/components/addmodal'
 use(chaiEnzyme())
 describe('theme component', function() {
   let properties = themes.backup
-  let wrapper: ReactWrapper = null
+  let wrapper: any = null
+  let wrapper2: any = null
   let instance: any = null
+  let instance2: any = null
   let theme: any = null
   before(() => {
     wrapper = mount(
@@ -23,14 +25,23 @@ describe('theme component', function() {
         <div />
       </Theme>
     )
+    wrapper2 = shallow(
+      <Theme properties={themes.theme.get('dark')!}>
+        <div />
+      </Theme>
+    )
     instance = wrapper.instance()
+    instance2 = wrapper2.instance()
   })
   it('should exist', function() {
     expect(Theme).to.exist
   })
-  it('should change state of name if valid', function() {
-    const spy = sinon.spy(Theme.prototype, 'componentWillReceiveProps')
+  it('should change properties', function() {
     instance.properties = themes.theme.get('light')!
+    expect(instance.handleNewProperties()).to.be.calledOnce
+  })
+  it('should change properties', function() {
+    instance2.properties = themes.theme.get('light')!
     expect(instance.handleNewProperties()).to.be.calledOnce
   })
 })
