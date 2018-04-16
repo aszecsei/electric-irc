@@ -19,7 +19,7 @@ describe('theme component', function() {
   let theme: any = null
   before(() => {
     wrapper = mount(
-      <Theme properties={properties}>
+      <Theme properties={themes.theme.get('dark')!}>
         <div />
       </Theme>
     )
