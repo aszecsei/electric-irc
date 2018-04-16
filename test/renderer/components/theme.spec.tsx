@@ -29,7 +29,7 @@ describe('theme component', function() {
     expect(Theme).to.exist
   })
   it('should change state of name if valid', function() {
-    instance.componentWillReceiveProps(themes.theme.get('light'))
+    instance.componentWillReceiveProps(themes.theme.get('light')!)
     expect(instance.handleNewProperties()).to.be.calledOnce
   })
 })
