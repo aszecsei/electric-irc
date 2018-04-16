@@ -15,7 +15,11 @@ describe('theme component', function() {
   let properties = themes.backup
   let wrapper: ReactWrapper = null
   before(() => {
-    wrapper = mount(<Theme properties={properties} />)
+    wrapper = mount(
+      <Theme properties={properties}>
+        <div />
+      </Theme>
+    )
   })
   it('should exist', function() {
     expect(Theme).to.exist
