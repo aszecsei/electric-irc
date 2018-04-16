@@ -29,7 +29,8 @@ describe('theme component', function() {
     expect(Theme).to.exist
   })
   it('should change state of name if valid', function() {
-    instance.setProps({ properties: themes.theme.get('light') })
+    const spy = sinon.spy(Theme.prototype, 'componentWillReceiveProps')
+    instance.properties = themes.theme.get('light')!
     expect(instance.handleNewProperties()).to.be.calledOnce
   })
 })
