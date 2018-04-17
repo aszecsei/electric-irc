@@ -112,7 +112,7 @@
     "material-design-icons": "^3.0.1",
     "popper.js": "^1.12.9",
     "react": "16.3.2",
-    "react-dom": "16.0.0",
+    "react-dom": "16.3.2",
     "react-redux": "^5.0.7",
     "reactstrap": "^5.0.0-beta",
     "redux": "^3.7.2",
