@@ -1,5 +1,5 @@
 import { call, fork, put, select, take } from 'redux-saga/effects'
-import { eventChannel } from 'redux-saga'
+import * as sagas from 'redux-saga'
 import * as IRC from 'irc'
 
 import * as actions from '../actions'
@@ -20,13 +20,8 @@ import {
 } from '../models'
 import { getConnection, getChannelByName } from './selectors'
 import { URL } from 'url'
+import { print } from 'util'
 
-function raw(
-  client: IRC.Client,
-  connection: Connection,
-  channel: Channel,
-  message: IRC.IMessage
-) {}
 //as you add listeners for specific things add the string that would appear as the command string in message
 //by adding to this list the raw listener won't log the message type.
 const raw_no_log = [
@@ -41,14 +36,15 @@ const raw_no_log = [
   'PONG'
 ]
 
-function subscribe(
+export function subscribe(
   client: IRC.Client,
   connection: Connection,
   channel: Channel
 ) {
-  return eventChannel(emit => {
+  return sagas.eventChannel(emit => {
     //raw
     client.addListener('raw', (message: IRC.IMessage) => {
+      print('raw\n')
       const ms = JSON.parse(JSON.stringify(message)) //turns to hash
       //if the raw message is associated with a channel the channel name is the first elementin args
       var channel2
@@ -59,13 +55,6 @@ function subscribe(
       }
       // We receive a message on a channel
       if (channel2 == channel.name && !raw_no_log.includes(message.command)) {
-        //console.log(JSON.stringify(message))
-        // var re = /^[0-9]+$/
-        // if (re.exec(message.rawCommand)) {
-        //   //there isn's an event in node-irc that handles all numerical replies
-        //   if (ms['rawCommand'] == '433') {
-        //     //TODO maybe:change nick in store?
-        //   }
         var sender = ''
         if (ms.hasOwnProperty('nick')) {
           sender = ms['nick']
@@ -80,15 +69,6 @@ function subscribe(
             parseNumericMessage(sender, message)
           )
         )
-        //   }
-        // }else{
-        //   emit(
-        //     actions.appendLog(
-        //       connection.id,
-        //       channel.id,
-        //       parseoOtherMessage(ms['server'], message)
-        //     )
-        //   )
       }
     })
     //kick
@@ -101,6 +81,7 @@ function subscribe(
         reason: string,
         message: IRC.IMessage
       ) => {
+        print('kick\n')
         if (ichannel.toString() == channel.name) {
           emit(
             actions.appendLog(
@@ -122,6 +103,7 @@ function subscribe(
         reason: string,
         message: IRC.IMessage
       ) => {
+        print('part\n')
         if (ichannel.toString() == channel.name) {
           emit(
             actions.appendLog(
@@ -143,6 +125,7 @@ function subscribe(
         channels: string[],
         message: IRC.IMessage
       ) => {
+        print('kill\n')
         if (channels.includes(channel.name) || channel.name == '#') {
           emit(
             actions.appendLog(
@@ -164,6 +147,7 @@ function subscribe(
         channels: string[],
         message: IRC.IMessage
       ) => {
+        print('quit\n')
         if (channels.includes(channel.name) || channel.name == '#') {
           emit(
             actions.appendLog(
@@ -180,6 +164,7 @@ function subscribe(
     client.addListener(
       'join',
       (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
+        print('join\n')
         if (ichannel.toString() == channel.name) {
           var xhttp2 = new XMLHttpRequest()
           xhttp2.open(
@@ -202,9 +187,10 @@ function subscribe(
             true
           )
           xhttp.onreadystatechange = function() {
-            console.log(this.responseText)
+            print('OOPS###########################################')
+            //console.log(this.responseText)
             const messages = JSON.parse(this.responseText)
-            console.log(messages)
+            //console.log(messages)
             if (messages['status'] == 203) {
               emit(
                 actions.mergeLog(connection.id, channel.id, messages['message'])
@@ -227,12 +213,14 @@ function subscribe(
     client.addListener(
       'notice',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
+        print('notice\n')
         if (to == channel.name || (to[0] != '#' && '#' == channel.name)) {
           var sender = ''
-          if (nick) {
+          const ms = JSON.parse(JSON.stringify(message))
+          print(ms)
+          if (nick && nick != '') {
             sender = nick
           } else {
-            const ms = JSON.parse(JSON.stringify(message))
             sender = ms['server']
           }
           emit(
@@ -251,7 +239,8 @@ function subscribe(
     client.addListener(
       'message#',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
-        console.log(`${nick} says ${text} to ${to}!`)
+        print('message\n')
+        //console.log(`${nick} says ${text} to ${to}!`)
         // We receive a message on a channel
         if (to == channel.name) {
           emit(
@@ -274,6 +263,7 @@ function subscribe(
         channels: string[],
         message: IRC.IMessage
       ) => {
+        print('nick\n')
         // Someone changed their nickname
         if (
           channels.includes(channel.name) ||
