@@ -84,8 +84,8 @@ function merge(log: List<Message>, servlog: List<Message>) {
     //filter out duplicates O(n*m)
     const m = log.get(i)
     servlog = servlog.filter(m2 => {
-      const a = m!.sent.getTime() - 300 <= m2!.sent.getTime()
-      const b = m2!.sent.getTime() <= m!.sent.getTime() + 300
+      const a = m!.sent.getTime() - 5000 <= m2!.sent.getTime()
+      const b = m2!.sent.getTime() <= m!.sent.getTime() + 5000
       const c = m!.sender == m2!.sender
       const d = m!.type == m2!.type
       const e =
