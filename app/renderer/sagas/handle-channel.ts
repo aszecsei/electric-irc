@@ -189,8 +189,7 @@ export function subscribe(
             'https://electric-centric.herokuapp.com/message?servers=' +
               connection.url +
               '&channels=%23' +
-              channel.name.slice(1) +
-              '&order=sent DESC&limit=50',
+              channel.name.slice(1),
             true
           )
           xhttp.onreadystatechange = function() {
