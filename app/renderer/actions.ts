@@ -14,13 +14,9 @@ export enum ActionTypeKeys {
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
   UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
   EDIT_SETTINGS = 'EDIT_SETTINGS',
-  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS'
+  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
+  MERGE_LOGS = 'MERGE_LOGS'
 }
-// export interface IChangeNickAction {
-//   readonly type: ActionTypeKeys.CHANGE_NICK
-//   readonly id: Guid
-//   readonly nickname: string
-// }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
   readonly name: string
@@ -58,6 +54,12 @@ export interface IAddChannelAction {
   readonly channel: Channel
 }
 
+export interface IMergeLogsAction {
+  readonly type: ActionTypeKeys.MERGE_LOGS
+  readonly serverId: Guid
+  readonly channelId: Guid
+  readonly json: any[] //message property of the parsed json for list of messages from server
+}
 export interface IAppendLogAction {
   readonly type: ActionTypeKeys.APPEND_LOG
   readonly serverId: Guid
@@ -108,6 +110,7 @@ export type ActionTypes =
   | IToggleSettingsModalAction
   | IEditSettingsAction
   | IToggleTabAction
+  | IMergeLogsAction
 // | IChangeNickAction
 
 export function addServer(
@@ -177,6 +180,18 @@ export function addChannel(
     type: ActionTypeKeys.ADD_CHANNEL,
     serverId,
     channel
+  }
+}
+export function mergeLog(
+  serverId: Guid,
+  channelId: Guid,
+  json: any[]
+): IMergeLogsAction {
+  return {
+    type: ActionTypeKeys.MERGE_LOGS,
+    serverId,
+    channelId,
+    json
   }
 }
 

@@ -31,6 +31,7 @@ export function connect(action: actions.IAddServerAction) {
     id: Guid.create(),
     nickname: action.nickname,
     name: action.name,
+    url: action.url,
     channels: List<Channel>(
       channels.map(chanName => {
         return new ChannelFactory({
