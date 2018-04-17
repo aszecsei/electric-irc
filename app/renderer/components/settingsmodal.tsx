@@ -8,12 +8,12 @@ import {
   TabPane,
   Row,
   Col,
-  Input
+  Input,
+  FormGroup,
+  Label
 } from 'reactstrap'
 import * as classnames from 'classnames'
 import { ISettings, Settings } from '../models/settings'
-import FormGroup from 'reactstrap/lib/FormGroup'
-import Label from 'reactstrap/lib/Label'
 
 interface ISettingsProps {
   visible: boolean
@@ -83,7 +83,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.props.toggleTab == '1' })}
+              className={classnames({ active: this.props.toggleTab === '1' })}
               onClick={() => {
                 this.toggletab('1')
               }}

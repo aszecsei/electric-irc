@@ -31,28 +31,27 @@ export const MessageFactory = Record<IMessage>({
   sender: ''
 })
 export function parseKillMessage(nick: string, reason?: string) {
-  var str = nick + ' has been KILLED'
-  if (reason && reason != '') {
-    str = str + ' (' + reason + ')'
-  }
-  str = str + '!'
+  const str =
+    reason && reason !== ''
+      ? `${nick} has been KILLED (${reason})`
+      : `${nick} has been KILLED`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.KILL,
     text: str
   })
 }
+
 export function parseKickMessage(
   nick: string,
   by: string,
   channel: string,
   reason?: string
 ) {
-  var str = by + ' has KICKED ' + nick + ' from ' + channel
-  if (reason && reason != '') {
-    str = str + ' for "' + reason + '"'
-  }
-  str = str + '!'
+  const str =
+    reason && reason !== ''
+      ? `${by} has KICKED ${nick} from ${channel} for "${reason}"`
+      : `${by} has KICKED ${nick} from ${channel}`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.KICK,
@@ -64,11 +63,10 @@ export function parsePartMessage(
   channel: string,
   reason?: string
 ) {
-  var str = nick + ' has PARTED from ' + channel
-  if (reason && reason != '') {
-    str = str + ' (' + reason + ')'
-  }
-  str = str + '!'
+  const str =
+    reason && reason !== ''
+      ? `${nick} has PARTED from ${channel} (${reason})`
+      : `${nick} has PARTED from ${channel}`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.PART,
@@ -76,11 +74,10 @@ export function parsePartMessage(
   })
 }
 export function parseQuitMessage(nick: string, reason?: string) {
-  var str = nick + ' has QUIT'
-  if (reason && reason != '') {
-    str = str + ' (' + reason + ')'
-  }
-  str = str + '!'
+  const str =
+    reason && reason !== ''
+      ? `${nick} has QUIT (${reason})`
+      : `${nick} has QUIT`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.QUIT,
@@ -91,7 +88,7 @@ export function parseJoinMessage(nick: string, channel: string) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.JOIN,
-    text: nick + ' has JOINED ' + channel + '.'
+    text: `${nick} has JOINED ${channel}`
   })
 }
 
@@ -100,23 +97,23 @@ export function parseNoticeMessage(
   to: string,
   message: IRC.IMessage
 ) {
-  const sender = '(' + from + ') NOTICE to ' + to
+  const sender = `(${from}) NOTICE to ${to}`
   const str = message.args[1]
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.NOTICE,
     text: str,
-    sender: sender
+    sender
   })
 }
 export function parseNumericMessage(server: string, message: IRC.IMessage) {
-  var str = message.command + '(' + message.rawCommand + ')'
+  let str = `${message.command}(${message.rawCommand})`
   if (message.args.length >= 1) {
-    //has args beyond us
-    str = str + ': [' //turn list into string
-    var i = 0
+    // has args beyond us
+    str = str + ': [' // turn list into string
+    let i = 0
     while (i < message.args.length) {
-      str = str + message.args[i] + ', '
+      str = `${str}${message.args[i]}, `
       i += 1
     }
     str = str.substring(0, str.length - 2) + ']'
@@ -137,7 +134,7 @@ export function parseMessage(
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.MESSAGE,
-    text: text,
+    text,
     sender: nick
   })
 }

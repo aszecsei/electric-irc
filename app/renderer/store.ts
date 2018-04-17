@@ -30,7 +30,7 @@ export function getCurrentConnection(
   state: ElectricState
 ): Connection | undefined {
   return state.connections.find(connection => {
-    return connection.id == state.currentConnectionId
+    return connection.id === state.currentConnectionId
   })
 }
 
@@ -38,7 +38,7 @@ export function getCurrentChannel(state: ElectricState): Channel | undefined {
   const conn = getCurrentConnection(state)
   if (conn) {
     return conn.channels.find(channel => {
-      return channel.id == state.currentChannelId
+      return channel.id === state.currentChannelId
     })
   }
   return undefined

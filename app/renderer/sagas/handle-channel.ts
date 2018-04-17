@@ -18,16 +18,10 @@ import {
   parseKickMessage,
   parseKillMessage
 } from '../models'
-import { getConnection, getChannelByName } from './selectors'
+import { getConnection } from './selectors'
 
-function raw(
-  client: IRC.Client,
-  connection: Connection,
-  channel: Channel,
-  message: IRC.IMessage
-) {}
-//as you add listeners for specific things add the string that would appear as the command string in message
-//by adding to this list the raw listener won't log the message type.
+// as you add listeners for specific things add the string that would appear as the command string in message
+// by adding to this list the raw listener won't log the message type.
 const raw_no_log = [
   'KICK',
   'PART',
@@ -46,18 +40,13 @@ function subscribe(
   channel: Channel
 ) {
   return eventChannel(emit => {
-    //raw
+    // raw
     client.addListener('raw', (message: IRC.IMessage) => {
-      const ms = JSON.parse(JSON.stringify(message)) //turns to hash
-      //if the raw message is associated with a channel the channel name is the first elementin args
-      var channel2
-      if (ms['args'][0][0] == '#') {
-        channel2 = ms['args'][0]
-      } else {
-        channel2 = '#'
-      }
+      const ms = JSON.parse(JSON.stringify(message)) // turns to hash
+      // if the raw message is associated with a channel the channel name is the first elementin args
+      const channel2 = ms.args[0][0] === '#' ? ms.args[0] : '#'
       // We receive a message on a channel
-      if (channel2 == channel.name && !raw_no_log.includes(message.command)) {
+      if (channel2 === channel.name && !raw_no_log.includes(message.command)) {
         console.log(JSON.stringify(message))
         // var re = /^[0-9]+$/
         // if (re.exec(message.rawCommand)) {
@@ -65,13 +54,8 @@ function subscribe(
         //   if (ms['rawCommand'] == '433') {
         //     //TODO maybe:change nick in store?
         //   }
-        var sender = ''
-        if (ms.hasOwnProperty('nick')) {
-          sender = ms['nick']
-        } else if (ms.hasOwnProperty('server')) {
-          sender = ms['server']
-        }
-        //emmits generic messages
+        const sender = ms.hasOwnProperty('nick') ? ms.nick : ms.server
+        // emits generic messages
         emit(
           actions.appendLog(
             connection.id,
@@ -90,7 +74,7 @@ function subscribe(
         //   )
       }
     })
-    //kick
+    // kick
     client.addListener(
       'kick',
       (
@@ -100,7 +84,7 @@ function subscribe(
         reason: string,
         message: IRC.IMessage
       ) => {
-        if (ichannel.toString() == channel.name) {
+        if (ichannel.toString() === channel.name) {
           emit(
             actions.appendLog(
               connection.id,
@@ -112,7 +96,7 @@ function subscribe(
       }
     )
 
-    //part
+    // part
     client.addListener(
       'part',
       (
@@ -121,7 +105,7 @@ function subscribe(
         reason: string,
         message: IRC.IMessage
       ) => {
-        if (ichannel.toString() == channel.name) {
+        if (ichannel.toString() === channel.name) {
           emit(
             actions.appendLog(
               connection.id,
@@ -133,7 +117,7 @@ function subscribe(
       }
     )
 
-    //kill
+    // kill
     client.addListener(
       'kill',
       (
@@ -142,7 +126,7 @@ function subscribe(
         channels: string[],
         message: IRC.IMessage
       ) => {
-        if (channels.includes(channel.name) || channel.name == '#') {
+        if (channels.includes(channel.name) || channel.name === '#') {
           emit(
             actions.appendLog(
               connection.id,
@@ -154,7 +138,7 @@ function subscribe(
       }
     )
 
-    //quit
+    // quit
     client.addListener(
       'quit',
       (
@@ -163,7 +147,7 @@ function subscribe(
         channels: string[],
         message: IRC.IMessage
       ) => {
-        if (channels.includes(channel.name) || channel.name == '#') {
+        if (channels.includes(channel.name) || channel.name === '#') {
           emit(
             actions.appendLog(
               connection.id,
@@ -175,11 +159,11 @@ function subscribe(
       }
     )
 
-    //join
+    // join
     client.addListener(
       'join',
       (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
-        if (ichannel.toString() == channel.name) {
+        if (ichannel.toString() === channel.name) {
           emit(
             actions.appendLog(
               connection.id,
@@ -191,18 +175,13 @@ function subscribe(
       }
     )
 
-    //notice
+    // notice
     client.addListener(
       'notice',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
-        if (to == channel.name || (to[0] != '#' && '#' == channel.name)) {
-          var sender = ''
-          if (nick) {
-            sender = nick
-          } else {
-            const ms = JSON.parse(JSON.stringify(message))
-            sender = ms['server']
-          }
+        if (to === channel.name || (to[0] !== '#' && '#' === channel.name)) {
+          const ms = JSON.parse(JSON.stringify(message))
+          const sender = nick ? nick : ms.server
           emit(
             actions.appendLog(
               connection.id,
@@ -213,15 +192,15 @@ function subscribe(
         }
       }
     )
-    //TODO: PRIV MESSAGE user 2 user
+    // TODO: PRIV MESSAGE user 2 user
 
-    //channel messages
+    // channel messages
     client.addListener(
       'message#',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
         console.log(`${nick} says ${text} to ${to}!`)
         // We receive a message on a channel
-        if (to == channel.name) {
+        if (to === channel.name) {
           emit(
             actions.appendLog(
               connection.id,
@@ -233,7 +212,7 @@ function subscribe(
       }
     )
 
-    //nick
+    // nick
     client.addListener(
       'nick',
       (
@@ -245,7 +224,7 @@ function subscribe(
         // Someone changed their nickname
         if (
           channels.includes(channel.name) ||
-          (channel.name == '#' && newnick == client.nick)
+          (channel.name === '#' && newnick === client.nick)
         ) {
           emit(
             actions.appendLog(
@@ -258,7 +237,7 @@ function subscribe(
       }
     )
 
-    return () => {}
+    return () => null
   })
 }
 
@@ -267,9 +246,9 @@ export function* read(
   connection: Connection,
   channel: Channel
 ) {
-  const eventChannel = yield call(subscribe, client, connection, channel)
-  while (true) {
-    let action = yield take(eventChannel)
+  const evChannel = yield call(subscribe, client, connection, channel)
+  for (;;) {
+    const action = yield take(evChannel)
     yield put(action)
   }
 }
@@ -283,11 +262,14 @@ export function* write(
   connection: Connection,
   channel: Channel
 ) {
-  while (true) {
+  for (;;) {
     const payload: actions.ISendMessageAction = yield take(
       actions.ActionTypeKeys.SEND_MESSAGE
     )
-    if (payload.serverId == connection.id && payload.channelId == channel.id) {
+    if (
+      payload.serverId === connection.id &&
+      payload.channelId === channel.id
+    ) {
       // TODO: Intercept all '/command's
       const joinResults = joinRegex.exec(payload.message)
       const nickResults = nickRegex.exec(payload.message)
@@ -295,7 +277,7 @@ export function* write(
       if (nickResults) {
         const newNickName = nickResults[1]
         client.send('nick', newNickName)
-        //yield put(actions.joinChannel(connection.id, newNickName))
+        // yield put(actions.joinChannel(connection.id, newNickName))
       } else if (joinResults) {
         const newChanName = joinResults[1]
         yield put(actions.joinChannel(connection.id, newChanName))
@@ -307,12 +289,12 @@ export function* write(
         client.say(channel.name, payload.message)
         // TODO: Retrieve current nickname?
         // Alt solution: have special value for appending own messages
-        //console.log(client)
+        // console.log(client)
         yield put(
           actions.appendLog(
             connection.id,
             channel.id,
-            //parseMessage(connection.nickname, channel.name, payload.message)
+            // parseMessage(connection.nickname, channel.name, payload.message)
             parseMessage(client.nick, channel.name, payload.message)
           )
         )
@@ -331,8 +313,8 @@ export function* handleChannel(
 }
 
 export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
-  while (true) {
-    let payload: actions.IJoinChannelAction = yield take(
+  for (;;) {
+    const payload: actions.IJoinChannelAction = yield take(
       actions.ActionTypeKeys.JOIN_CHANNEL
     )
     const newChannel = ChannelFactory({
@@ -340,7 +322,7 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
       name: payload.channelName
     })
     yield put(actions.addChannel(serverId, newChannel))
-    let conn: Connection = yield select(getConnection, serverId)
+    const conn: Connection = yield select(getConnection, serverId)
     yield fork(handleChannel, client, conn, newChannel)
 
     // TODO: Handle this as an event emitter

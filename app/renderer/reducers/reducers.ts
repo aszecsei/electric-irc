@@ -10,7 +10,7 @@ import {
   ISendMessageAction,
   IViewChannelAction,
   IAddConnectionAction,
-  //IChangeNickAction,
+  // IChangeNickAction,
   IToggleAddServerModalAction,
   IToggleSettingsModalAction,
   IEditSettingsAction,
@@ -25,7 +25,7 @@ import addChannel from './add-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
-//import changeNick from './change-nick'
+// import changeNick from './change-nick'
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
