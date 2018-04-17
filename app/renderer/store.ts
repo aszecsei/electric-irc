@@ -10,6 +10,7 @@ interface IElectricState {
   currentChannelId?: Guid
   settingsModalActive: boolean
   addServerModalActive: boolean
+  addChannelModalActive: boolean
   settings: Settings
   toggleTab: string
 }
@@ -20,6 +21,7 @@ export const ElectricStateFactory = Record<IElectricState>({
   currentChannelId: undefined,
   settingsModalActive: true,
   addServerModalActive: false,
+  addChannelModalActive: false,
   settings: SettingsFactory(),
   toggleTab: '1'
 })

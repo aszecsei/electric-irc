@@ -14,7 +14,8 @@ export enum ActionTypeKeys {
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
   UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
   EDIT_SETTINGS = 'EDIT_SETTINGS',
-  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS'
+  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
+  UI_TOGGLE_ADD_CHANNEL_MODAL = 'UI : TOGGLE_ADD_CHANEL_MODAL'
 }
 // export interface IChangeNickAction {
 //   readonly type: ActionTypeKeys.CHANGE_NICK
@@ -81,6 +82,10 @@ export interface IToggleAddServerModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
   readonly visible?: boolean
 }
+export interface IToggleAddChannelModalAction {
+  readonly type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL
+  readonly visible?: boolean
+}
 export interface IToggleSettingsModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
   readonly visible?: boolean
@@ -108,6 +113,7 @@ export type ActionTypes =
   | IToggleSettingsModalAction
   | IEditSettingsAction
   | IToggleTabAction
+  | IToggleAddChannelModalAction
 // | IChangeNickAction
 
 export function addServer(
@@ -222,6 +228,14 @@ export function toggleAddServerModal(
 ): IToggleAddServerModalAction {
   return {
     type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL,
+    visible
+  }
+}
+export function toggleAddChannelModal(
+  visible?: boolean
+): IToggleAddChannelModalAction {
+  return {
+    type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL,
     visible
   }
 }

@@ -15,7 +15,8 @@ import {
   IToggleSettingsModalAction,
   IEditSettingsAction,
   IToggleTabAction,
-  IAddChannelAction
+  IAddChannelAction,
+  IToggleAddChannelModalAction
 } from '../actions'
 
 import addConnection from './add-connection'
@@ -29,6 +30,7 @@ import toggleAddServerModal from './toggle-add-server-modal'
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
+import toggleAddChannelModal from './toggle-add-channel-modal'
 export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
@@ -59,6 +61,11 @@ export function defaultReducer(
       return editSettings(state, action as IEditSettingsAction)
     case ActionTypeKeys.TOGGLE_TAB_SETTINGS:
       return toggleTab(state, action as IToggleTabAction)
+    case ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL:
+      return toggleAddChannelModal(
+        state,
+        action as IToggleAddChannelModalAction
+      )
     default:
       return state
   }
