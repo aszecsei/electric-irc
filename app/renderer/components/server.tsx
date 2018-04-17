@@ -41,15 +41,15 @@ export class Server extends React.Component<IServerProps, IServerState> {
       this.props.onChannelClick(client, channel)
     }
   }
-  //this next function checks to see if the channel that this 'a' link refers to is the one selected
-  //and adds a special format to the selected one so user can see that is the one selected
-  //can be deleted after somthing better
+  // this next function checks to see if the channel that this 'a' link refers to is the one selected
+  // and adds a special format to the selected one so user can see that is the one selected
+  // can be deleted after somthing better
   bold_if_selected(
     connection: Connection,
     channel: Channel,
     curChanID: Guid | undefined
   ) {
-    if (channel.id == curChanID) {
+    if (channel.id === curChanID) {
       return (
         <a
           href="#"

@@ -15,14 +15,8 @@ import {
 } from '../models'
 import { print } from 'util'
 
-function replace<K>(list: List<K>, oldElement: K, newElement: K) {
-  const oldIndex = list.indexOf(oldElement)
-  if (oldIndex !== -1) {
-    return list.set(oldIndex, newElement)
-  } else {
-    return list
-  }
-}
+import { replace } from '../utilities/replace'
+
 function whichType(jmessage: any): Message {
   switch (jmessage['command']) {
     case 'PRIVMSG':

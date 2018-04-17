@@ -7,14 +7,14 @@ import { Channel } from '../models/channel'
 import { Message } from '../models/message'
 
 const mapStateToProps = (state: ElectricState) => {
-  let conn: Connection | undefined = undefined
-  let chan: Channel | undefined = undefined
+  let conn: Connection | undefined
+  let chan: Channel | undefined
   conn = state.connections.find(connection => {
-    return connection.id == state.currentConnectionId
+    return connection.id === state.currentConnectionId
   })
   if (conn) {
     chan = conn.channels.find(channel => {
-      return channel.id == state.currentChannelId
+      return channel.id === state.currentChannelId
     })
   }
   return {

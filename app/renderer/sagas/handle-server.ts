@@ -20,12 +20,12 @@ export function createIRCClient(
 ) {
   return new IRC.Client(url, nickname, {
     userName: 'electricirc',
-    channels: channels
+    channels
   })
 }
 
 export function connect(action: actions.IAddServerAction) {
-  var channels = ['#']
+  let channels = ['#']
   channels = channels.concat(action.channels)
   const connection = new ConnectionFactory({
     id: Guid.create(),
@@ -58,26 +58,32 @@ export function* handleServer(payload: actions.IAddServerAction) {
   console.log('Adding channels...')
   let channelTasks = List<Task>([])
   for (let i = 0; i < typedConnection.channels.count(); i++) {
-    let task = yield fork(
-      handleChannel,
-      ircClient,
-      typedConnection,
-      typedConnection.channels.get(i)!
-    )
-    channelTasks = channelTasks.push(task)
+    const channel = typedConnection.channels.get(i)
+    if (channel) {
+      const task = yield fork(
+        handleChannel,
+        ircClient,
+        typedConnection,
+        channel
+      )
+      channelTasks = channelTasks.push(task)
+    }
   }
 
   // Handle added channels
-  let joinTask = yield fork(handleJoinChannels, ircClient, typedConnection.id)
+  const joinTask = yield fork(handleJoinChannels, ircClient, typedConnection.id)
 
   // TODO: This will have to change to make sure we're talking about the right server...
-  let action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
+  const action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
 
   console.log('Canceling channel listeners...')
   for (let i = 0; i < channelTasks.count(); i++) {
-    yield cancel(channelTasks.get(i)!)
+    const task = channelTasks.get(i)
+    if (task) {
+      yield cancel(task)
+    }
   }
   yield cancel(joinTask)
 
-  ircClient.disconnect('Bye!!!', () => {})
+  ircClient.disconnect('Bye!!!', () => null)
 }

@@ -56,4 +56,22 @@ describe('add-channel reducer', function() {
       expect(nextState.connections.get(0).channels.count()).to.eq(2)
     })
   })
+  describe('adding a channel to a non-existent server', function() {
+    before(function() {
+      nextState = raddChannel.default(
+        prevState,
+        addChannel(
+          Guid.createEmpty(),
+          new ChannelFactory({
+            id: Guid.create(),
+            name: '#channel2'
+          })
+        )
+      )
+    })
+
+    it('should not modify the state', function() {
+      expect(nextState).to.eq(prevState)
+    })
+  })
 })

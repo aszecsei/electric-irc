@@ -19,36 +19,14 @@
     "release": "yarn compile && electron-builder -mwl --ia32 --x64",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "precommit": "lint-staged",
-    "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\""
+    "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
+    "lint": "tslint --project . -t verbose"
   },
   "lint-staged": {
     "{app,test}/**/*.{ts,tsx,scss}": [
       "prettier --write --no-semi --single-quote",
       "git add"
     ]
-  },
-  "nyc": {
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "exclude": [
-      "**/*.d.ts",
-      "test",
-      "dist",
-      "app/main",
-      "coverage"
-    ],
-    "reporter": [
-      "lcov",
-      "text"
-    ],
-    "lines": 20,
-    "statements": 20,
-    "functions": 0,
-    "branches": 0,
-    "check-coverage": true,
-    "all": true
   },
   "main": "app/main/index.ts",
   "license": "MIT",
@@ -98,6 +76,11 @@
     "sinon-chai": "^3.0.0",
     "spectron": "^3.7.2",
     "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.10.0",
+    "tslint-eslint-rules": "^5.1.0",
+    "tslint-react": "^3.5.1",
+    "tslint-react-recommended": "^1.0.15",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },

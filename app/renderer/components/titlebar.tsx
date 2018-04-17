@@ -2,10 +2,10 @@ import * as React from 'react'
 import * as classNames from 'classnames'
 
 export interface ITitlebarProps {
+  draggable?: boolean
   handleClose?(event: any): void
   handleMinimize?(event: any): void
   handleMaximize?(event: any): void
-  draggable?: boolean
 }
 
 export class Titlebar extends React.Component<ITitlebarProps, any> {
@@ -21,7 +21,7 @@ export class Titlebar extends React.Component<ITitlebarProps, any> {
   }
 
   public render() {
-    let classes = classNames('titlebar', {
+    const classes = classNames('titlebar', {
       'webkit-draggable': this.state.draggable
     })
     return (

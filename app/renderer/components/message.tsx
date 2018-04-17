@@ -49,7 +49,7 @@ function link_process(str: string) {
 }
 function image_process(str: string) {
   const imgurlre = /((https?:\/\/)|([a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?@))?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*\.(jpg|jpeg|png|gif|bmp|img)(\?[^\s]*)?/i
-  var reres = imgurlre.exec(str)
+  const reres = imgurlre.exec(str)
   if (reres) {
     return <img className="imgPrev" src={reres[0]} />
   }
@@ -57,14 +57,14 @@ function image_process(str: string) {
 }
 function emoji_process(str: string): string {
   const emojire = /:[a-z_]+:/i
-  var reres = emojire.exec(str)
-  var tmpstr = str //tmpstr for loop control
-  while (reres != null) {
+  let reres = emojire.exec(str)
+  let tmpstr = str // tmpstr for loop control
+  while (reres !== null) {
     if (Emojis.hasOwnProperty(reres[0])) {
       const rere = new RegExp(reres[0], 'gi')
       str = str.replace(rere, Emojis[reres[0]])
     }
-    tmpstr = tmpstr.substring(+reres['index'] + reres[0].length - 1)
+    tmpstr = tmpstr.substring(+reres.index + reres[0].length - 1)
     reres = emojire.exec(tmpstr)
   }
   return str
@@ -95,7 +95,7 @@ function no_sender(message: Message) {
   )
 }
 export const MessageDisp: React.SFC<IMessageProps> = props => {
-  if (!props.message.sender || props.message.sender == '') {
+  if (!props.message.sender || props.message.sender === '') {
     return no_sender(props.message)
   } else {
     return has_sender(props.message)
