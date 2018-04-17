@@ -19,6 +19,7 @@ use(chaiEnzyme())
 describe('message component', function() {
   describe('has sender', function() {
     describe('normal message', function() {
+      let now = new Date()
       let wrapper1 = mount(
         <MessageDisp
           message={
@@ -26,7 +27,8 @@ describe('message component', function() {
               id: Guid.create(),
               type: MessageType.MESSAGE,
               text: 'hello',
-              sender: 'boby'
+              sender: 'boby',
+              sent: now
             })
           }
         />
@@ -35,10 +37,11 @@ describe('message component', function() {
         expect(MessageDisp).to.exist
       })
       it('should have the sender and message as text', function() {
-        expect(wrapper1).to.have.text('boby: hello')
+        expect(wrapper1).to.have.text('boby: ' + now.toLocaleString() + 'hello')
       })
     })
     describe('emoji message', function() {
+      let now = new Date()
       let wrapper1 = mount(
         <MessageDisp
           message={
@@ -46,7 +49,8 @@ describe('message component', function() {
               id: Guid.create(),
               type: MessageType.MESSAGE,
               text: ':sob::b::sob:b:sob::BB:',
-              sender: 'boby'
+              sender: 'boby',
+              sent: now
             })
           }
         />
@@ -57,6 +61,7 @@ describe('message component', function() {
       it('should have the sender and message as text with emojis replaced in', function() {
         expect(wrapper1).to.have.text(
           'boby: ' +
+            now.toLocaleString() +
             Emojis[':sob:'] +
             Emojis[':b:'] +
             Emojis[':sob:'] +
@@ -67,6 +72,7 @@ describe('message component', function() {
       })
     })
     describe('image message', function() {
+      let now = new Date()
       let wrapper1 = mount(
         <MessageDisp
           message={
@@ -75,7 +81,8 @@ describe('message component', function() {
               type: MessageType.MESSAGE,
               text:
                 'take a look at this. http://somthing.somthing/something.jpg',
-              sender: 'boby'
+              sender: 'boby',
+              sent: now
             })
           }
         />
@@ -85,22 +92,26 @@ describe('message component', function() {
       })
       it('should have the sender and message as text and an image tag', function() {
         expect(wrapper1).to.have.text(
-          'boby: take a look at this. http://somthing.somthing/something.jpg'
+          'boby: ' +
+            now.toLocaleString() +
+            'take a look at this. http://somthing.somthing/something.jpg'
         )
         expect(wrapper1.find('img')).to.exist
       })
     })
   })
 
-  describe('has sender', function() {
+  describe('has no sender', function() {
     describe('normal message', function() {
+      let now = new Date()
       let wrapper1 = mount(
         <MessageDisp
           message={
             new MessageFactory({
               id: Guid.create(),
               type: MessageType.MESSAGE,
-              text: 'hello'
+              text: 'hello',
+              sent: now
             })
           }
         />
@@ -109,17 +120,19 @@ describe('message component', function() {
         expect(MessageDisp).to.exist
       })
       it('should have the sender and message as text', function() {
-        expect(wrapper1).to.have.text('hello')
+        expect(wrapper1).to.have.text(now.toLocaleString() + 'hello')
       })
     })
     describe('emoji message', function() {
+      let now = new Date()
       let wrapper1 = mount(
         <MessageDisp
           message={
             new MessageFactory({
               id: Guid.create(),
               type: MessageType.MESSAGE,
-              text: ':sob::b::sob:b:sob::BB:'
+              text: ':sob::b::sob:b:sob::BB:',
+              sent: now
             })
           }
         />
@@ -129,7 +142,8 @@ describe('message component', function() {
       })
       it('should have the message as text with emojis replaced in', function() {
         expect(wrapper1).to.have.text(
-          Emojis[':sob:'] +
+          now.toLocaleString() +
+            Emojis[':sob:'] +
             Emojis[':b:'] +
             Emojis[':sob:'] +
             'b' +
@@ -139,6 +153,7 @@ describe('message component', function() {
       })
     })
     describe('image message', function() {
+      let now = new Date()
       let wrapper1 = mount(
         <MessageDisp
           message={
@@ -146,7 +161,8 @@ describe('message component', function() {
               id: Guid.create(),
               type: MessageType.MESSAGE,
               text:
-                'take a look at this. http://somthing.somthing/something.jpg'
+                'take a look at this. http://somthing.somthing/something.jpg',
+              sent: now
             })
           }
         />
@@ -156,7 +172,8 @@ describe('message component', function() {
       })
       it('should have the message as text and an image tag', function() {
         expect(wrapper1).to.have.text(
-          'take a look at this. http://somthing.somthing/something.jpg'
+          now.toLocaleString() +
+            'take a look at this. http://somthing.somthing/something.jpg'
         )
         expect(wrapper1.find('img')).to.exist
       })

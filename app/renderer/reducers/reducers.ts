@@ -15,7 +15,8 @@ import {
   IToggleSettingsModalAction,
   IEditSettingsAction,
   IToggleTabAction,
-  IAddChannelAction
+  IAddChannelAction,
+  IMergeLogsAction
 } from '../actions'
 
 import addConnection from './add-connection'
@@ -29,6 +30,7 @@ import toggleAddServerModal from './toggle-add-server-modal'
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
+import mergeLog from './merge_logs'
 export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
@@ -53,6 +55,8 @@ export function defaultReducer(
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
     // case ActionTypeKeys.CHANGE_NICK:
     //   return changeNick(state, action as IChangeNickAction)
+    case ActionTypeKeys.MERGE_LOGS:
+      return mergeLog(state, action as IMergeLogsAction)
     case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
       return toggleSettingsModal(state, action as IToggleSettingsModalAction)
     case ActionTypeKeys.EDIT_SETTINGS:
