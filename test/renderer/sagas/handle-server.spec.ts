@@ -67,5 +67,11 @@ describe('messaging saga', function() {
     it('should create a new connection with the appropriate name', function() {
       expect(result.connection.name).to.eq(serverName)
     })
+
+    after(function() {
+      sandbox.restore()
+    })
   })
+
+  describe('handle server', function() {})
 })
