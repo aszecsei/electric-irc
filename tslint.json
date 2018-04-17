@@ -10,7 +10,8 @@
         "no-console": false,
         "no-implicit-dependencies": false,
         "no-submodule-imports": false,
-        "only-arrow-functions": false
+        "only-arrow-functions": false,
+        "no-unused-expression": false
     },
     "rulesDirectory": []
 }
