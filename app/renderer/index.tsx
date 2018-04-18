@@ -9,6 +9,7 @@ import { remote } from 'electron'
 import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
+import ThemeContainer from './containers/theme-container'
 import SidebarContainer from './containers/sidebar-container'
 import AddModalContainer from './containers/add-modal-container'
 import ChatWindowContainer from './containers/irc-window-container'
@@ -65,24 +66,26 @@ export class App extends React.Component<any, IAppState> {
 
   render() {
     return (
-      <div className="container-fluid">
-        <SettingsModalContainer className="" />
-        <Titlebar
-          draggable={true}
-          handleClose={this.handleClose}
-          handleMinimize={this.handleMinimize}
-          handleMaximize={this.handleMaximize}
-        >
-          Electric IRC
-        </Titlebar>
+      <ThemeContainer>
+        <div className="container-fluid">
+          <SettingsModalContainer className="" />
+          <Titlebar
+            draggable={true}
+            handleClose={this.handleClose}
+            handleMinimize={this.handleMinimize}
+            handleMaximize={this.handleMaximize}
+          >
+            Electric IRC
+          </Titlebar>
 
-        <AddModalContainer />
+          <AddModalContainer />
 
-        <div id="content" className="flex container-fluid">
-          <SidebarContainer />
-          <ChatWindowContainer />
+          <div id="content" className="flex container-fluid">
+            <SidebarContainer />
+            <ChatWindowContainer />
+          </div>
         </div>
-      </div>
+      </ThemeContainer>
     )
   }
 }

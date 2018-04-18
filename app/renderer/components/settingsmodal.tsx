@@ -14,6 +14,7 @@ import {
 } from 'reactstrap'
 import * as classnames from 'classnames'
 import { ISettings, Settings } from '../models/settings'
+import { theme } from '../stylesheets/thememaps/themes'
 
 interface ISettingsProps {
   visible: boolean
@@ -23,6 +24,8 @@ interface ISettingsProps {
   toggleTab: string
   className: string
   settings: Settings
+  changeTheme: (theme: string) => void
+  currentTheme: string
 }
 
 export class SettingsModal extends React.Component<ISettingsProps> {
@@ -71,6 +74,9 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   }
   setMaxUrl = (event: any) => {
     this.props.changeSetting('maxurl', event.target.value)
+  }
+  changeTheme = (event: any) => {
+    this.props.changeTheme(event.target.value)
   }
   public render() {
     return (
@@ -246,7 +252,24 @@ export class SettingsModal extends React.Component<ISettingsProps> {
               </Label>
             </FormGroup>
           </TabPane>
-          <TabPane tabId="3" />
+          <TabPane tabId="3">
+            <Input
+              type="select"
+              name="themeselect"
+              id="themeselect"
+              value={this.props.currentTheme}
+              onChange={this.changeTheme}
+            >
+              {theme
+                .keySeq()
+                .toArray()
+                .map((key: string) => (
+                  <option value={key} key={key}>
+                    {key}
+                  </option>
+                ))}
+            </Input>
+          </TabPane>
         </TabContent>
       </Modal>
     )

@@ -20,7 +20,7 @@
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "precommit": "lint-staged",
     "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
-    "lint": "tslint --project . -t verbose"
+    "lint": "tslint -c tslint.json -t verbose './{app,test}/**/*.{ts,tsx}'"
   },
   "lint-staged": {
     "{app,test}/**/*.{ts,tsx,scss}": [
@@ -95,6 +95,7 @@
     "jquery": "^3.3.1",
     "material-design-icons": "^3.0.1",
     "opn": "^5.3.0",
+    "polished": "^1.9.2",
     "popper.js": "^1.12.9",
     "react": "16.3.2",
     "react-dom": "16.3.2",
