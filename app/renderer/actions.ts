@@ -58,7 +58,7 @@ export interface IMergeLogsAction {
   readonly type: ActionTypeKeys.MERGE_LOGS
   readonly serverId: Guid
   readonly channelId: Guid
-  readonly json: any[] //message property of the parsed json for list of messages from server
+  readonly json: any[] // message property of the parsed json for list of messages from server
 }
 export interface IAppendLogAction {
   readonly type: ActionTypeKeys.APPEND_LOG
