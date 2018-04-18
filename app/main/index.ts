@@ -10,9 +10,9 @@ let mainWindow: BrowserWindow | null
 
 export function createMainWindow() {
   const window = new BrowserWindow({
-    width: 1280,
+    frame: false, // TODO: Change this once custom titlebar code works
     height: 720,
-    frame: false // TODO: Change this once custom titlebar code works
+    width: 1280
   })
   const url = isDevelopment
     ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`

@@ -11,7 +11,8 @@
         "no-implicit-dependencies": false,
         "no-submodule-imports": false,
         "only-arrow-functions": false,
-        "no-unused-expression": false
+        "no-unused-expression": false,
+        "indent": [true, "spaces", 2]
     },
     "rulesDirectory": []
 }
