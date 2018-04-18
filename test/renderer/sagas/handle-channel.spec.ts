@@ -576,7 +576,7 @@ describe('requestServer', function() {
     const x = requestServer(conn, chan)
     x.next()
     expect(XMLHttpRequest.prototype.send).to.be.calledTwice
-    //expect(actions.mergeLog).to.be.called
+    // expect(actions.mergeLog).to.be.called
     stubm.restore()
     stubp.restore()
     stubx.restore()
@@ -606,7 +606,7 @@ describe('requestServer', function() {
     const stubm = sinon.stub(actions, 'mergeLog').returns(fakeAction)
     const x = requestServer(conn, chan)
     x.next()
-    //expect(XMLHttpRequest.prototype.send).to.be.calledTwice
+    // expect(XMLHttpRequest.prototype.send).to.be.calledTwice
     expect(actions.mergeLog).to.be.called
     stubm.restore()
     stubp.restore()
@@ -709,7 +709,7 @@ describe('write', function() {
       const x = insideWrite(mockC, conn, chan, pay)
       x.next()
       expect(mockC.say).to.be.called
-      //expect(actions.appendLog).to.be.called
+      // expect(actions.appendLog).to.be.called
       stuba.restore()
       stubm.restore()
     })
@@ -736,7 +736,7 @@ describe('write', function() {
       const stuba = sinon.stub(actions, 'appendLog').returns(fakeAction)
       const x = insideWrite(mockC, conn, chan, pay)
       x.next()
-      //expect(mockC.say).to.be.called
+      // expect(mockC.say).to.be.called
       expect(actions.appendLog).to.be.called
       stuba.restore()
       stubm.restore()
