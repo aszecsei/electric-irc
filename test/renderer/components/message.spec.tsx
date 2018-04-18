@@ -37,7 +37,7 @@ describe('message component', function() {
         expect(MessageDisp).to.exist
       })
       it('should have the sender and message as text', function() {
-        expect(wrapper1).to.have.text(`boby: ${now.toLocaleString()} hello`)
+        expect(wrapper1).to.have.text(`boby: ${now.toLocaleString()}hello`)
       })
     })
     describe('emoji message', function() {
