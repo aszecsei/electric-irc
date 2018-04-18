@@ -33,7 +33,7 @@ describe('server panel', function() {
             id: Guid.create(),
             name: 'Connection 1',
             channels: List([
-              new ChannelFactory({ id: id, name: '#channel1' }),
+              new ChannelFactory({ id, name: '#channel1' }),
               new ChannelFactory({ id: Guid.create(), name: '#channel2' })
             ])
           })

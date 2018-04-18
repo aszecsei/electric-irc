@@ -68,7 +68,7 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
   handleChangeIRC = (event: any) => {
     if (
       !this.props.connections.find(v => {
-        return event.target.value == v.url
+        return event.target.value === v.url
       })
     ) {
       this.setState({
@@ -115,7 +115,7 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
     console.log(this.props.connections)
     if (
       !this.props.connections.find(v => {
-        return this.state.url == v.url
+        return this.state.url === v.url
       })
     ) {
       this.props.onAddServerSubmit(

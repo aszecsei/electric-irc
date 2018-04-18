@@ -22,9 +22,9 @@ use(sinonChai)
 
 describe('add-channel reducer', function() {
   let prevState = defaultStore
-  let nextState: ElectricState = undefined
-  let connid = Guid.create()
-  let chanid = Guid.create()
+  let nextState: ElectricState
+  const connid = Guid.create()
+  const chanid = Guid.create()
   before(function() {
     prevState = prevState.set(
       'connections',
@@ -54,6 +54,24 @@ describe('add-channel reducer', function() {
     })
     it('has one more channel', function() {
       expect(nextState.connections.get(0).channels.count()).to.eq(2)
+    })
+  })
+  describe('adding a channel to a non-existent server', function() {
+    before(function() {
+      nextState = raddChannel.default(
+        prevState,
+        addChannel(
+          Guid.createEmpty(),
+          new ChannelFactory({
+            id: Guid.create(),
+            name: '#channel2'
+          })
+        )
+      )
+    })
+
+    it('should not modify the state', function() {
+      expect(nextState).to.eq(prevState)
     })
   })
 })
