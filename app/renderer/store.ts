@@ -14,6 +14,7 @@ interface IElectricState {
   addServerModalActive: boolean
   themeName: string
   themeProperties: Map<string, string>
+  addChannelModalActive: boolean
   settings: Settings
   toggleTab: string
 }
@@ -24,10 +25,11 @@ export const ElectricStateFactory = Record<IElectricState>({
   currentChannelId: undefined,
   lastUsedConnectionId: 0,
   lastUsedChannelId: 0,
-  themeName: 'light',
+  themeName: 'dark',
   addServerModalActive: false,
   themeProperties: theme.get('light') || backup,
   settingsModalActive: true,
+  addChannelModalActive: false,
   settings: SettingsFactory(),
   toggleTab: '1'
 })
