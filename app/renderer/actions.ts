@@ -86,7 +86,7 @@ export interface IToggleAddServerModalAction {
 }
 export interface IToggleAddChannelModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL
-  readonly visible?: boolean
+  readonly connid: Guid | undefined
 }
 export interface IToggleSettingsModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
@@ -258,11 +258,11 @@ export function themeWholesale(themename: string): IThemeWholesaleAction {
   }
 }
 export function toggleAddChannelModal(
-  visible?: boolean
+  connid?: Guid | undefined
 ): IToggleAddChannelModalAction {
   return {
     type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL,
-    visible
+    connid
   }
 }
 export function toggleSettingsModal(

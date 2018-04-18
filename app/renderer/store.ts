@@ -14,24 +14,22 @@ interface IElectricState {
   addServerModalActive: boolean
   themeName: string
   themeProperties: Map<string, string>
-  addChannelModalActive: boolean
   settings: Settings
   toggleTab: string
+  addChannelConnId?: Guid // if add channel modal should be not visable this need to be undefined
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  lastUsedConnectionId: 0,
-  lastUsedChannelId: 0,
   themeName: 'dark',
   addServerModalActive: false,
-  themeProperties: theme.get('light') || backup,
+  themeProperties: theme.get('dark') || backup,
   settingsModalActive: true,
-  addChannelModalActive: false,
   settings: SettingsFactory(),
-  toggleTab: '1'
+  toggleTab: '1',
+  addChannelConnId: undefined
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>

@@ -1,12 +1,12 @@
 import { connect, Dispatch } from 'react-redux'
 import { AddChannelModal } from '../components/addchannelmodal'
 import { ElectricState } from '../store'
-import { toggleAddChannelModal, addChannel } from '../actions'
+import { toggleAddChannelModal, joinChannel } from '../actions'
 import { Guid, ChannelFactory } from '../models'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
-    visible: state.addChannelModalActive
+    connID: state.addChannelConnId
   }
 }
 
@@ -15,15 +15,8 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     onAddChannelToggle: () => {
       dispatch(toggleAddChannelModal())
     },
-    onAddChannelSubmit: (
-      Server: Guid,
-      channelName: string,
-      channel = new ChannelFactory({
-        id: Guid.create(),
-        name: channelName
-      })
-    ) => {
-      dispatch(addChannel(Server, channel))
+    onAddChannelSubmit: (connid: Guid, channel: string) => {
+      dispatch(joinChannel(connid, channel))
     }
   }
 }
