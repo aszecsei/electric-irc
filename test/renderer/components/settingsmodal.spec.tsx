@@ -21,29 +21,26 @@ import { SettingsFactory } from '../../../app/renderer/models/settings'
 use(chaiEnzyme())
 
 describe('settingsModal', function() {
-  let wrapper: ReactWrapper
-  let instance: SettingsModal.SettingsModal
-  let onSettingsToggle: sinon.SinonSpy
-  let onTabToggle: sinon.SinonSpy
-  let changeSetting: sinon.SinonSpy
-  let inputScrollBackCheck: ReactWrapper
-  let changeTheme: sinon.SinonSpy
+  let wrapper: ReactWrapper = null
+  let instance: SettingsModal.SettingsModal = null
+  let onSettingsToggle: sinon.SinonSpy = null
+  let onTabToggle: sinon.SinonSpy = null
+  let changeSetting: sinon.SinonSpy = null
+  let tabChange: any = null
+  let tab: string
+  let inputScrollBackCheck: any = null
   before(function() {
     onSettingsToggle = sinon.spy()
     changeSetting = sinon.spy()
-    onTabToggle = sinon.spy()
-    changeTheme = sinon.spy()
     wrapper = mount(
       <SettingsModal.SettingsModal
+        toggleTab={'1'}
         visible={true}
+        className={'test'}
+        settings={SettingsFactory()}
         onSettingsToggle={onSettingsToggle}
         onTabToggle={onTabToggle}
         changeSetting={changeSetting}
-        toggleTab={'1'}
-        className={'test'}
-        settings={new SettingsFactory()}
-        changeTheme={changeTheme}
-        currentTheme={'dark'}
       />
     )
     instance = wrapper.instance() as SettingsModal.SettingsModal

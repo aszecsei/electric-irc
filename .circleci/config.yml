@@ -45,7 +45,6 @@ jobs:
             - node_modules
           key: v2-dependencies-{{ checksum "yarn.lock" }}
       # run tests
-      - run: yarn lint
       - run: yarn test
       - run: yarn report-coverage
       - run: ~/.yarn/bin/greenkeeper-lockfile-upload

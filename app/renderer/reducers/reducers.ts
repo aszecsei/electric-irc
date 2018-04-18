@@ -2,13 +2,16 @@ import { AnyAction } from 'redux'
 import { ElectricState, ElectricStateFactory } from '../store'
 import {
   ActionTypeKeys,
+  IAddServerAction,
   IAppendLogAction,
   IEditServerAction,
+  IJoinChannelAction,
   IRemoveServerAction,
+  ISendMessageAction,
   IViewChannelAction,
   IAddConnectionAction,
+  //IChangeNickAction,
   IToggleAddServerModalAction,
-  IThemeWholesaleAction,
   IToggleSettingsModalAction,
   IEditSettingsAction,
   IToggleTabAction,
@@ -23,9 +26,7 @@ import addChannel from './add-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
-
-import themeWholesale from './theme-wholesale'
-
+//import changeNick from './change-nick'
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
@@ -52,8 +53,8 @@ export function defaultReducer(
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
-    case ActionTypeKeys.THEME_WHOLESALE:
-      return themeWholesale(state, action as IThemeWholesaleAction)
+    // case ActionTypeKeys.CHANGE_NICK:
+    //   return changeNick(state, action as IChangeNickAction)
     case ActionTypeKeys.MERGE_LOGS:
       return mergeLog(state, action as IMergeLogsAction)
     case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:

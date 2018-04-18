@@ -25,9 +25,7 @@ describe('messaging saga', function() {
       'test123',
       []
     )
-    let gen
-    let res1
-    let res2
+    let gen, res1, res2, res3
     before(function() {
       gen = flow()
       res1 = gen.next().value

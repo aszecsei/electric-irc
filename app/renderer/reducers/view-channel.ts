@@ -10,7 +10,7 @@ export default function sendMessage(
   newState = newState.set('currentChannelId', undefined)
 
   const conn = state.connections.find(connection => {
-    return connection.id === action.serverId
+    return connection.id == action.serverId
   })
 
   // If the specified connection exists
@@ -18,7 +18,7 @@ export default function sendMessage(
     newState = newState.set('currentConnectionId', action.serverId)
 
     const chan = conn.channels.find(channel => {
-      return channel.id === action.channelId
+      return channel.id == action.channelId
     })
 
     // If the specified channel exists
@@ -26,6 +26,6 @@ export default function sendMessage(
       newState = newState.set('currentChannelId', action.channelId)
     }
   }
-  // console.log(newState.currentChannelId)
+  //console.log(newState.currentChannelId)
   return newState
 }

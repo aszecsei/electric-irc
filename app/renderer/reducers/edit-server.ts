@@ -5,7 +5,7 @@ export default function editServer(
   state: ElectricState,
   action: IEditServerAction
 ): ElectricState {
-  const newState = state
+  let newState = state
 
   // TODO: Implement this
 

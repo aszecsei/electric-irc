@@ -8,13 +8,12 @@ import {
   TabPane,
   Row,
   Col,
-  Input,
-  FormGroup,
-  Label
+  Input
 } from 'reactstrap'
 import * as classnames from 'classnames'
 import { ISettings, Settings } from '../models/settings'
-import { theme } from '../stylesheets/thememaps/themes'
+import FormGroup from 'reactstrap/lib/FormGroup'
+import Label from 'reactstrap/lib/Label'
 
 interface ISettingsProps {
   visible: boolean
@@ -24,8 +23,6 @@ interface ISettingsProps {
   toggleTab: string
   className: string
   settings: Settings
-  changeTheme: (theme: string) => void
-  currentTheme: string
 }
 
 export class SettingsModal extends React.Component<ISettingsProps> {
@@ -75,9 +72,6 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   setMaxUrl = (event: any) => {
     this.props.changeSetting('maxurl', event.target.value)
   }
-  changeTheme = (event: any) => {
-    this.props.changeTheme(event.target.value)
-  }
   public render() {
     return (
       <Modal
@@ -89,7 +83,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.props.toggleTab === '1' })}
+              className={classnames({ active: this.props.toggleTab == '1' })}
               onClick={() => {
                 this.toggletab('1')
               }}
@@ -252,24 +246,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
               </Label>
             </FormGroup>
           </TabPane>
-          <TabPane tabId="3">
-            <Input
-              type="select"
-              name="themeselect"
-              id="themeselect"
-              value={this.props.currentTheme}
-              onChange={this.changeTheme}
-            >
-              {theme
-                .keySeq()
-                .toArray()
-                .map((key: string) => (
-                  <option value={key} key={key}>
-                    {key}
-                  </option>
-                ))}
-            </Input>
-          </TabPane>
+          <TabPane tabId="3" />
         </TabContent>
       </Modal>
     )

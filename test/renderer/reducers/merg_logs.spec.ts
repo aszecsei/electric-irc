@@ -22,9 +22,9 @@ use(sinonChai)
 
 describe('add-connection reducer', function() {
   let prevState = defaultStore
-  let nextState: ElectricState
-  const connid = Guid.create()
-  const chanid = Guid.create()
+  let nextState: ElectricState = undefined
+  let connid = Guid.create()
+  let chanid = Guid.create()
   before(function() {
     prevState = prevState.set(
       'connections',

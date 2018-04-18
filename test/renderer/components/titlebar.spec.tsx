@@ -8,4 +8,4 @@ import * as titlebar from '../../../app/renderer/components/titlebar'
 
 use(chaiEnzyme())
 
-describe('titlebar', () => null)
+describe('titlebar', () => {})

@@ -99,7 +99,7 @@ describe('addmodal', function() {
   })
   it('should handle submitting', function() {
     instance.handleSubmit({
-      preventDefault: () => null
+      preventDefault: () => {}
     })
     expect(onSubmit).to.have.been.calledOnce
   })

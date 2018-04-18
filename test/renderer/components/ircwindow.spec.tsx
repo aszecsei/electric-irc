@@ -17,7 +17,7 @@ import { Guid } from '../../../app/renderer/models/guid'
 use(chaiEnzyme())
 
 describe('irc window', function() {
-  const wrapper = mount(
+  let wrapper = mount(
     <ChatWindow
       connection={
         new ConnectionFactory({
@@ -31,14 +31,16 @@ describe('irc window', function() {
       }
       channel={new ChannelFactory({ id: Guid.create(), name: '#channel2' })}
       messages={List([new MessageFactory({})])}
-      onSendMessage={(message: string, conn: Connection, channel: Channel) =>
-        null
-      }
+      onSendMessage={(
+        message: string,
+        conn: Connection,
+        channel: Channel
+      ) => {}}
     />
   )
   it('should exist', function() {
     expect(ChatWindow).to.exist
-    const instance = wrapper.instance() as ChatWindow
+    let instance = wrapper.instance() as ChatWindow
     instance.componentDidUpdate()
     expect(ChatWindow).to.exist
   })

@@ -18,8 +18,8 @@ import * as sinon from 'sinon'
 use(chaiEnzyme())
 
 describe('message entry component', function() {
-  const onSendMessage = sinon.spy()
-  const wrapper = mount(
+  let onSendMessage = sinon.spy()
+  let wrapper = mount(
     <MessageEntry
       connection={
         new ConnectionFactory({
@@ -35,13 +35,13 @@ describe('message entry component', function() {
       onSendMessage={onSendMessage}
     />
   )
-  const instance = wrapper.instance() as MessageEntry
+  let instance = wrapper.instance() as MessageEntry
 
   it('should exist', function() {
     expect(MessageEntry).to.exist
   })
   it('when text is entered update local state', function() {
-    const inputCheck = mount(
+    let inputCheck = mount(
       <input value={'hihi'} onChange={instance.handleChange} />
     )
     inputCheck.simulate('change')

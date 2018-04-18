@@ -9,22 +9,19 @@ import { remote } from 'electron'
 import { defaultReducer, defaultStore } from './reducers/reducers'
 
 import { Titlebar } from './components/titlebar'
-import ThemeContainer from './containers/theme-container'
 import SidebarContainer from './containers/sidebar-container'
 import AddModalContainer from './containers/add-modal-container'
 import ChatWindowContainer from './containers/irc-window-container'
 
+import { ChatWindow } from './components/ircwindow'
 import SettingsModalContainer from './containers/settings-modal-container'
 
 import * as irc from 'irc'
 
-// tslint:disable-next-line:no-submodule-imports
 import 'material-design-icons/iconfont/material-icons.css'
 
-// tslint:disable-next-line:no-submodule-imports
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
-// tslint:disable-next-line:no-submodule-imports
 import 'bootstrap/dist/css/bootstrap.css'
 
 interface IAppState {
@@ -66,26 +63,24 @@ export class App extends React.Component<any, IAppState> {
 
   render() {
     return (
-      <ThemeContainer>
-        <div className="container-fluid">
-          <SettingsModalContainer className="" />
-          <Titlebar
-            draggable={true}
-            handleClose={this.handleClose}
-            handleMinimize={this.handleMinimize}
-            handleMaximize={this.handleMaximize}
-          >
-            Electric IRC
-          </Titlebar>
+      <div className="container-fluid">
+        <SettingsModalContainer className="" />
+        <Titlebar
+          draggable={true}
+          handleClose={this.handleClose}
+          handleMinimize={this.handleMinimize}
+          handleMaximize={this.handleMaximize}
+        >
+          Electric IRC
+        </Titlebar>
 
-          <AddModalContainer />
+        <AddModalContainer />
 
-          <div id="content" className="flex container-fluid">
-            <SidebarContainer />
-            <ChatWindowContainer />
-          </div>
+        <div id="content" className="flex container-fluid">
+          <SidebarContainer />
+          <ChatWindowContainer />
         </div>
-      </ThemeContainer>
+      </div>
     )
   }
 }

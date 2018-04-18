@@ -5,22 +5,13 @@ PATH:
   C:\cmder\bin;C:\cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\cmder\vendor\conemu-maximus5;C:\cmder\vendor\conemu-maximus5\ConEmu;C:\Program Files\Docker\Docker\Resources\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\VulkanSDK\1.0.65.0\Bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files (x86)\PuTTY\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files (x86)\Common Files\Propellerhead Software\ReWire\;C:\Program Files\Common Files\Propellerhead Software\ReWire\;C:\HaxeToolkit\haxe\;C:\HaxeToolkit\neko;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Go\bin;C:\Program Files\Dart\dart-sdk\bin;C:\Program Files\nodejs\;C:\Program Files\Perforce;C:\Program Files (x86)\Yarn\bin\;C:\Users\Alic Szecsei\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\Alic Szecsei\AppData\Local\Programs\Python\Python36-32\;C:\Users\Alic Szecsei\.cargo\bin;C:\Ruby24-x64\bin;C:\Users\Alic Szecsei\AppData\Local\Microsoft\WindowsApps;C:\Users\Alic Szecsei\AppData\Local\atom\bin;C:\Users\Alic Szecsei\AppData\Roaming\itch\bin;C:\Users\Alic Szecsei\AppData\Local\Microsoft\WindowsApps;C:\Users\Alic Szecsei\AppData\Local\.meteor\;C:\Program Files\Java\jdk1.8.0_144\bin;C:\chromedriver_win32;C:\Program Files\Microsoft VS Code\bin;C:\flutter\bin;C:\Users\Alic Szecsei\AppData\Roaming\Pub\Cache\bin;C:\ninja;C:\Users\Alic Szecsei\AppData\Roaming\npm;C:\Users\Alic Szecsei\AppData\Local\Yarn\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\share\vim\vim74;C:\cmder\
 
 Yarn version: 
-  1.6.0
+  1.5.1
 
 Node version: 
   8.9.4
 
 Platform: 
   win32 x64
-
-Trace: 
-  SyntaxError: C:\dev\electric-irc\package.json: Unexpected token } in JSON at position 1697
-      at JSON.parse (<anonymous>)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:1130:59
-      at Generator.next (<anonymous>)
-      at step (C:\Program Files (x86)\Yarn\lib\cli.js:98:30)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:109:13
-      at <anonymous>
 
 npm manifest: 
   {
@@ -44,8 +35,7 @@ npm manifest:
       "release": "yarn compile && electron-builder -mwl --ia32 --x64",
       "report-coverage": "cat ./coverage/lcov.info | coveralls",
       "precommit": "lint-staged",
-      "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
-      "lint": "tslint --project . -t verbose"
+      "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\""
     },
     "lint-staged": {
       "{app,test}/**/*.{ts,tsx,scss}": [
@@ -54,12 +44,6 @@ npm manifest:
       ]
     },
     "nyc": {
-      "include": [
-        "app/renderer/**/*.ts",
-        "app/renderer/**/*.tsx",
-        "app/common/**/*.ts",
-        "app/common/**/*.tsx"
-      ],
       "extension": [
         ".ts",
         ".tsx"
@@ -71,21 +55,16 @@ npm manifest:
         "app/main",
         "coverage"
       ],
-      "require": [
-        "ts-node/register"
-      ],
       "reporter": [
         "lcov",
-        "text",
-        "html"
+        "text"
       ],
       "lines": 20,
       "statements": 20,
       "functions": 0,
       "branches": 0,
       "check-coverage": true,
-      "all": true,
-      "sourceMap": true,
+      "all": true
     },
     "main": "app/main/index.ts",
     "license": "MIT",
@@ -135,11 +114,6 @@ npm manifest:
       "sinon-chai": "^3.0.0",
       "spectron": "^3.7.2",
       "ts-node": "^4.1.0",
-      "tslint": "^5.9.1",
-      "tslint-config-prettier": "^1.10.0",
-      "tslint-eslint-rules": "^5.1.0",
-      "tslint-react": "^3.5.1",
-      "tslint-react-recommended": "^1.0.15",
       "typescript": "^2.6.2",
       "webpack": "^3.10.0"
     },
@@ -1748,7 +1722,7 @@ Lockfile:
       stat-mode "^0.2.2"
       temp-file "^3.1.1"
   
-  builtin-modules@^1.0.0, builtin-modules@^1.1.1:
+  builtin-modules@^1.0.0:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
   
@@ -2136,10 +2110,6 @@ Lockfile:
   commander@2.12.x:
     version "2.12.2"
     resolved "https://registry.yarnpkg.com/commander/-/commander-2.12.2.tgz#0f5946c427ed9ec0d91a46bb9def53e54650e555"
-  
-  commander@^2.12.1:
-    version "2.15.1"
-    resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
   
   commander@^2.14.1:
     version "2.14.1"
@@ -2759,13 +2729,6 @@ Lockfile:
     dependencies:
       buffer-indexof "^1.0.0"
   
-  doctrine@0.7.2:
-    version "0.7.2"
-    resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-0.7.2.tgz#7cb860359ba3be90e040b26b729ce4bfa654c523"
-    dependencies:
-      esutils "^1.1.6"
-      isarray "0.0.1"
-  
   dom-converter@~0.1:
     version "0.1.4"
     resolved "https://registry.yarnpkg.com/dom-converter/-/dom-converter-0.1.4.tgz#a45ef5727b890c9bffe6d7c876e7b19cb0e17f3b"
@@ -3315,10 +3278,6 @@ Lockfile:
   estraverse@^4.1.0, estraverse@^4.1.1, estraverse@^4.2.0:
     version "4.2.0"
     resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-4.2.0.tgz#0dee3fed31fcd469618ce7342099fc1afa0bdb13"
-  
-  esutils@^1.1.6:
-    version "1.1.6"
-    resolved "https://registry.yarnpkg.com/esutils/-/esutils-1.1.6.tgz#c01ccaa9ae4b897c6d0c3e210ae52f3c7a844375"
   
   esutils@^2.0.2:
     version "2.0.2"
@@ -5007,13 +4966,6 @@ Lockfile:
   js-yaml@^3.10.0, js-yaml@^3.6.1, js-yaml@^3.9.0:
     version "3.10.0"
     resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
-    dependencies:
-      argparse "^1.0.7"
-      esprima "^4.0.0"
-  
-  js-yaml@^3.7.0:
-    version "3.11.0"
-    resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.11.0.tgz#597c1a8bd57152f26d622ce4117851a51f5ebaef"
     dependencies:
       argparse "^1.0.7"
       esprima "^4.0.0"
@@ -7444,12 +7396,6 @@ Lockfile:
     version "1.1.7"
     resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
   
-  resolve@^1.3.2:
-    version "1.7.1"
-    resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.7.1.tgz#aadd656374fd298aee895bc026b8297418677fd3"
-    dependencies:
-      path-parse "^1.0.5"
-  
   restore-cursor@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/restore-cursor/-/restore-cursor-1.0.1.tgz#34661f46886327fed2991479152252df92daa541"
@@ -8401,61 +8347,6 @@ Lockfile:
       strip-bom "^3.0.0"
       strip-json-comments "^2.0.0"
   
-  tslib@1.9.0, tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1:
-    version "1.9.0"
-    resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
-  
-  tslint-config-prettier@^1.10.0:
-    version "1.10.0"
-    resolved "https://registry.yarnpkg.com/tslint-config-prettier/-/tslint-config-prettier-1.10.0.tgz#5063c413d43de4f6988c73727f65ecfc239054ec"
-  
-  tslint-eslint-rules@^5.1.0:
-    version "5.1.0"
-    resolved "https://registry.yarnpkg.com/tslint-eslint-rules/-/tslint-eslint-rules-5.1.0.tgz#3232b318da55dbb5a83e3f5d657c1ddbb27b9ff2"
-    dependencies:
-      doctrine "0.7.2"
-      tslib "1.9.0"
-      tsutils "2.8.0"
-  
-  tslint-react-recommended@^1.0.15:
-    version "1.0.15"
-    resolved "https://registry.yarnpkg.com/tslint-react-recommended/-/tslint-react-recommended-1.0.15.tgz#4166dc7d87b57280110673c99315a35ac5a76a7e"
-  
-  tslint-react@^3.5.1:
-    version "3.5.1"
-    resolved "https://registry.yarnpkg.com/tslint-react/-/tslint-react-3.5.1.tgz#a5ca48034bf583fb63b42763bb89fa23062d5390"
-    dependencies:
-      tsutils "^2.13.1"
-  
-  tslint@^5.9.1:
-    version "5.9.1"
-    resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.9.1.tgz#1255f87a3ff57eb0b0e1f0e610a8b4748046c9ae"
-    dependencies:
-      babel-code-frame "^6.22.0"
-      builtin-modules "^1.1.1"
-      chalk "^2.3.0"
-      commander "^2.12.1"
-      diff "^3.2.0"
-      glob "^7.1.1"
-      js-yaml "^3.7.0"
-      minimatch "^3.0.4"
-      resolve "^1.3.2"
-      semver "^5.3.0"
-      tslib "^1.8.0"
-      tsutils "^2.12.1"
-  
-  tsutils@2.8.0:
-    version "2.8.0"
-    resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.8.0.tgz#0160173729b3bf138628dd14a1537e00851d814a"
-    dependencies:
-      tslib "^1.7.1"
-  
-  tsutils@^2.12.1, tsutils@^2.13.1:
-    version "2.26.1"
-    resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.26.1.tgz#9e4a0cb9ff173863f34c22a961969081270d1878"
-    dependencies:
-      tslib "^1.8.1"
-  
   tty-browserify@0.0.0:
     version "0.0.0"
     resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
@@ -9163,3 +9054,19 @@ Lockfile:
       compress-commons "^1.2.0"
       lodash "^4.8.0"
       readable-stream "^2.0.0"
+
+Trace: 
+  Error: Command failed.
+  Exit code: 1
+  Command: C:\WINDOWS\system32\cmd.exe
+  Arguments: /d /s /c cross-env TS_NODE_PROJECT='test/' nyc mocha
+  Directory: C:\dev\electric-irc
+  Output:
+  
+      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
+      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
+      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)

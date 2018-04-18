@@ -8,8 +8,8 @@ import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
 describe('toggle add server modal reducer', function() {
   const prevState = defaultStore
-  let nextState: ElectricState
-  let nextNextState: ElectricState
+  let nextState: ElectricState = undefined
+  let nextNextState: ElectricState = undefined
 
   describe('setting modal to invisible', function() {
     before(function() {
