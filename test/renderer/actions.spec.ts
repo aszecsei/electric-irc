@@ -8,7 +8,7 @@ import { Guid, ChannelFactory } from '../../app/renderer/models'
 describe('actions', function() {
   describe('removeServer', function() {
     let result: Actions.IRemoveServerAction
-    let guid = Guid.create()
+    const guid = Guid.create()
     before(function() {
       result = Actions.removeServer(guid)
     })
@@ -26,7 +26,7 @@ describe('actions', function() {
     let result: Actions.IEditServerAction
     const newName = 'New Name'
     const newURL = 'New URL'
-    let guid = Guid.create()
+    const guid = Guid.create()
     before(function() {
       result = Actions.editServer(guid, newName, newURL)
     })

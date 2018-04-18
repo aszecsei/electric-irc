@@ -20,78 +20,95 @@ interface IMessage {
   type: MessageType
   text: string
   sender: string
+  sent: Date
 }
-
 const emptyGUID = Guid.createEmpty()
 
 export const MessageFactory = Record<IMessage>({
   id: emptyGUID,
   type: MessageType.MESSAGE,
   text: '',
-  sender: ''
+  sender: '',
+  sent: new Date()
 })
-export function parseKillMessage(nick: string, reason?: string) {
-  var str = nick + ' has been KILLED'
-  if (reason && reason != '') {
-    str = str + ' (' + reason + ')'
-  }
-  str = str + '!'
+export function parseKillMessage(
+  nick: string,
+  reason?: string,
+  sent: Date = new Date()
+) {
+  const str =
+    reason && reason !== ''
+      ? `${nick} has been KILLED (${reason})`
+      : `${nick} has been KILLED`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.KILL,
-    text: str
+    text: str,
+    sent
   })
 }
+
 export function parseKickMessage(
   nick: string,
   by: string,
   channel: string,
-  reason?: string
+  reason?: string,
+  sent: Date = new Date()
 ) {
-  var str = by + ' has KICKED ' + nick + ' from ' + channel
-  if (reason && reason != '') {
-    str = str + ' for "' + reason + '"'
-  }
-  str = str + '!'
+  const str =
+    reason && reason !== ''
+      ? `${by} has KICKED ${nick} from ${channel} for "${reason}"`
+      : `${by} has KICKED ${nick} from ${channel}`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.KICK,
-    text: str
+    text: str,
+    sent
   })
 }
 export function parsePartMessage(
   nick: string,
   channel: string,
-  reason?: string
+  reason?: string,
+  sent: Date = new Date()
 ) {
-  var str = nick + ' has PARTED from ' + channel
-  if (reason && reason != '') {
-    str = str + ' (' + reason + ')'
-  }
-  str = str + '!'
+  const str =
+    reason && reason !== ''
+      ? `${nick} has PARTED from ${channel} (${reason})`
+      : `${nick} has PARTED from ${channel}`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.PART,
-    text: str
+    text: str,
+    sent
   })
 }
-export function parseQuitMessage(nick: string, reason?: string) {
-  var str = nick + ' has QUIT'
-  if (reason && reason != '') {
-    str = str + ' (' + reason + ')'
-  }
-  str = str + '!'
+export function parseQuitMessage(
+  nick: string,
+  reason?: string,
+  sent: Date = new Date()
+) {
+  const str =
+    reason && reason !== ''
+      ? `${nick} has QUIT (${reason})`
+      : `${nick} has QUIT`
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.QUIT,
-    text: str
+    text: str,
+    sent
   })
 }
-export function parseJoinMessage(nick: string, channel: string) {
+export function parseJoinMessage(
+  nick: string,
+  channel: string,
+  sent: Date = new Date()
+) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.JOIN,
-    text: nick + ' has JOINED ' + channel + '.'
+    text: `${nick} has JOINED ${channel}`,
+    sent
   })
 }
 
@@ -100,23 +117,23 @@ export function parseNoticeMessage(
   to: string,
   message: IRC.IMessage
 ) {
-  const sender = '(' + from + ') NOTICE to ' + to
+  const sender = `(${from}) NOTICE to ${to}`
   const str = message.args[1]
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.NOTICE,
     text: str,
-    sender: sender
+    sender
   })
 }
 export function parseNumericMessage(server: string, message: IRC.IMessage) {
-  var str = message.command + '(' + message.rawCommand + ')'
+  let str = `${message.command}(${message.rawCommand})`
   if (message.args.length >= 1) {
-    //has args beyond us
-    str = str + ': [' //turn list into string
-    var i = 0
+    // has args beyond us
+    str = str + ': [' // turn list into string
+    let i = 0
     while (i < message.args.length) {
-      str = str + message.args[i] + ', '
+      str = `${str}${message.args[i]}, `
       i += 1
     }
     str = str.substring(0, str.length - 2) + ']'
@@ -132,13 +149,15 @@ export function parseMessage(
   nick: string,
   to: string,
   text: string,
-  message?: IRC.IMessage
+  message?: IRC.IMessage,
+  sent: Date = new Date()
 ) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.MESSAGE,
-    text: text,
-    sender: nick
+    text,
+    sender: nick,
+    sent
   })
 }
 export function parseNickChange(

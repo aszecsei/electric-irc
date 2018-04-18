@@ -16,7 +16,7 @@ use(sinonChai)
 
 describe('messaging saga', function() {
   describe('create IRC Client', function() {
-    let sandbox = sinon.createSandbox()
+    const sandbox = sinon.createSandbox()
     const fakeClient = { title: 'Hello!' }
     let res
     let mockIRC
@@ -46,7 +46,7 @@ describe('messaging saga', function() {
       'guest123',
       ['#electric']
     )
-    let sandbox = sinon.createSandbox()
+    const sandbox = sinon.createSandbox()
     const fakeClient = { title: 'Hello!' }
     let result
     let mockIRC
@@ -66,6 +66,10 @@ describe('messaging saga', function() {
 
     it('should create a new connection with the appropriate name', function() {
       expect(result.connection.name).to.eq(serverName)
+    })
+
+    after(function() {
+      sandbox.restore()
     })
   })
 })

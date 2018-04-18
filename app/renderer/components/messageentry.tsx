@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
-import { Message, MessageFactory } from '../models/message'
 
 interface IChatBoxProps {
   connection?: Connection

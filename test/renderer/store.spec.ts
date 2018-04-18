@@ -13,9 +13,9 @@ import {
 } from '../../app/renderer/store'
 import { Guid } from '../../app/renderer/models/guid'
 describe('getCurrentConnection', function() {
-  let chanID1 = Guid.create()
-  let chanID2 = Guid.create()
-  let connID = Guid.create()
+  const chanID1 = Guid.create()
+  const chanID2 = Guid.create()
+  const connID = Guid.create()
   const originalState = defaultStore.set(
     'connections',
     List([

@@ -3,7 +3,8 @@ import { ElectricState } from '../store'
 import {
   toggleSettingsModal,
   toggleSettingsTab,
-  editSettings
+  editSettings,
+  themeWholesale
 } from '../actions'
 import SettingsModal from '../components/settingsmodal'
 import { ISettings } from '../models/settings'
@@ -12,7 +13,8 @@ const mapStateToProps = (state: ElectricState) => {
   return {
     visible: state.settingsModalActive,
     toggleTab: state.toggleTab,
-    settings: state.settings
+    settings: state.settings,
+    currentTheme: state.themeName
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
@@ -26,6 +28,9 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     changeSetting: (event: keyof ISettings, value: any) => {
       dispatch(editSettings(event, value))
+    },
+    changeTheme: (theme: string) => {
+      dispatch(themeWholesale(theme))
     }
   }
 }
