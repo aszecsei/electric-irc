@@ -152,8 +152,7 @@ export function subscribe(
       (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
         if (nick === client.nick && channel.name === '#') {
           emit(actions.joinChannel(connection.id, ichannel.toString()))
-        }
-        if (ichannel.toString() === channel.name) {
+        } else if (ichannel.toString() === channel.name) {
           emit(
             actions.appendLog(
               connection.id,
@@ -316,6 +315,13 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
     yield put(actions.addChannel(serverId, newChannel))
     const conn: Connection = yield select(getConnection, serverId)
     yield fork(handleChannel, client, conn, newChannel)
+    yield put(
+      actions.appendLog(
+        serverId,
+        newChannel.id,
+        parseJoinMessage(client.nick, newChannel.name)
+      )
+    )
     yield fork(requestServer, conn, newChannel)
     // TODO: Handle this as an event emitter
     // client.join(payload.channelName, () => {
@@ -327,14 +333,18 @@ export function* requestServer(connection: Connection, channel: Channel) {
   const xhttp2 = new XMLHttpRequest()
   xhttp2.open(
     'GET',
-    'https://electric-centric.herokuapp.com/server/join?server=${connection.url}&channel=%23${channel.name.slice(1)}',
+    `https://electric-centric.herokuapp.com/server/join?server=${
+      connection.url
+    }&channel=%23${channel.name.slice(1)}`,
     true
   )
   xhttp2.send()
   const xhttp = new XMLHttpRequest()
   xhttp.open(
     'GET',
-    'https://electric-centric.herokuapp.com/message?servers=${connection.url}&channels=%23${channel.name.slice(1)}',
+    `https://electric-centric.herokuapp.com/message?servers=${
+      connection.url
+    }&channels=%23${channel.name.slice(1)}`,
     false
   )
   xhttp.send()
