@@ -7,8 +7,12 @@ export default function themeWholesale(
   action: IThemeWholesaleAction
 ): ElectricState {
   let newState = state
-  newState = newState.set('themeName', action.themename)
-  newState = newState.set('themeProperties', theme.get(action.themename)!)
+  const newTheme = theme.get(action.themename)
+
+  if (newTheme) {
+    newState = newState.set('themeName', action.themename)
+    newState = newState.set('themeProperties', newTheme)
+  }
 
   return newState
 }

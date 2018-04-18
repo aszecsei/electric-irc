@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { color, lighten, darken } from '../utils/colors'
 import * as polished from 'polished'
+import { get } from '../../utilities/get-default'
 
 export let map: Immutable.Map<
   string,
@@ -9,51 +10,51 @@ export let map: Immutable.Map<
   'dark',
   Immutable.Map.of(
     '--bg',
-    polished.lighten(lighten, color.get('black')!),
+    polished.lighten(lighten, get(color, 'black', 'black')),
     '--primary-text',
-    color.get('white')!,
+    get(color, 'white', 'white'),
     '--secondary-text',
-    polished.rgba(color.get('white')!, 0.7),
+    polished.rgba(get(color, 'white', 'white'), 0.7),
     '--disabled-text',
-    polished.rgba(color.get('white')!, 0.5),
+    polished.rgba(get(color, 'white', 'white'), 0.5),
     '--dividers',
-    polished.rgba(color.get('white')!, 0.12),
+    polished.rgba(get(color, 'white', 'white'), 0.12),
     '--primary',
     color.get('blue'),
     '--primary-light',
-    polished.lighten(lighten, color.get('blue')!),
+    polished.lighten(lighten, get(color, 'blue', 'blue')),
     '--primary-dark',
-    polished.darken(darken, color.get('blue')!),
+    polished.darken(darken, get(color, 'blue', 'blue')),
     '--secondary',
-    color.get('yellow')!,
+    get(color, 'yellow', '#00ffff'),
     '--secondary-light',
-    polished.lighten(lighten, color.get('yellow')!),
+    polished.lighten(lighten, get(color, 'yellow', 'yellow')),
     '--secondary-dark',
-    polished.darken(darken, color.get('yellow')!)
+    polished.darken(darken, get(color, 'yellow', 'yellow'))
   ),
   'light',
   Immutable.Map.of(
     '--bg',
-    polished.lighten(darken, color.get('white')!),
+    polished.lighten(darken, get(color, 'white', 'white')),
     '--primary-text',
-    color.get('black')!,
+    get(color, 'black', 'black'),
     '--secondary-text',
-    polished.rgba(color.get('black')!, 0.7),
+    polished.rgba(get(color, 'black', 'black'), 0.7),
     '--disabled-text',
-    polished.rgba(color.get('black')!, 0.5),
+    polished.rgba(get(color, 'black', 'black'), 0.5),
     '--dividers',
-    polished.rgba(color.get('black')!, 0.12),
+    polished.rgba(get(color, 'black', 'black'), 0.12),
     '--primary',
     color.get('orange'),
     '--primary-light',
-    polished.lighten(lighten, color.get('orange')!),
+    polished.lighten(lighten, get(color, 'orange', 'orange')),
     '--primary-dark',
-    polished.darken(darken, color.get('orange')!),
+    polished.darken(darken, get(color, 'orange', 'orange')),
     '--secondary',
-    color.get('blue')!,
+    get(color, 'black', 'black'),
     '--secondary-light',
-    polished.lighten(lighten, color.get('blue')!),
+    polished.lighten(lighten, get(color, 'blue', 'blue')),
     '--secondary-dark',
-    polished.darken(darken, color.get('blue')!)
+    polished.darken(darken, get(color, 'blue', 'blue'))
   )
 )

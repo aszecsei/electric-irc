@@ -20,7 +20,7 @@
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "precommit": "lint-staged",
     "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
-    "lint": "tslint --project . -t verbose"
+    "lint": "tslint -c tslint.json -t verbose './{app,test}/**/*.{ts,tsx}'"
   },
   "lint-staged": {
     "{app,test}/**/*.{ts,tsx,scss}": [

@@ -13,7 +13,7 @@ import * as IRC from 'irc'
 
 describe('view-channel reducer', function() {
   let prevState = defaultStore
-  let nextState: ElectricState = undefined
+  let nextState: ElectricState
 
   const chan1 = new ChannelFactory({ id: Guid.create(), name: '#channel1' })
   const chan2 = new ChannelFactory({ id: Guid.create(), name: '#channel2' })
