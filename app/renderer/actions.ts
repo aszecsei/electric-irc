@@ -10,18 +10,14 @@ export enum ActionTypeKeys {
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
-  //CHANGE_NICK = 'CHANGE_NICK',
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
   UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
   EDIT_SETTINGS = 'EDIT_SETTINGS',
   TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
+  THEME_WHOLESALE = 'THEME_WHOLESALE',
+  MERGE_LOGS = 'MERGE_LOGS',
   UI_TOGGLE_ADD_CHANNEL_MODAL = 'UI : TOGGLE_ADD_CHANEL_MODAL'
 }
-// export interface IChangeNickAction {
-//   readonly type: ActionTypeKeys.CHANGE_NICK
-//   readonly id: Guid
-//   readonly nickname: string
-// }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
   readonly name: string
@@ -59,6 +55,12 @@ export interface IAddChannelAction {
   readonly channel: Channel
 }
 
+export interface IMergeLogsAction {
+  readonly type: ActionTypeKeys.MERGE_LOGS
+  readonly serverId: Guid
+  readonly channelId: Guid
+  readonly json: any[] // message property of the parsed json for list of messages from server
+}
 export interface IAppendLogAction {
   readonly type: ActionTypeKeys.APPEND_LOG
   readonly serverId: Guid
@@ -84,7 +86,7 @@ export interface IToggleAddServerModalAction {
 }
 export interface IToggleAddChannelModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL
-  readonly visible?: boolean
+  readonly connid: Guid | undefined
 }
 export interface IToggleSettingsModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
@@ -99,6 +101,11 @@ export interface IEditSettingsAction {
   readonly prop: string
   readonly value: any
 }
+export interface IThemeWholesaleAction {
+  readonly type: ActionTypeKeys.THEME_WHOLESALE
+  readonly themename: string
+}
+
 export type ActionTypes =
   | IAddServerAction
   | IAddConnectionAction
@@ -113,8 +120,9 @@ export type ActionTypes =
   | IToggleSettingsModalAction
   | IEditSettingsAction
   | IToggleTabAction
+  | IThemeWholesaleAction
+  | IMergeLogsAction
   | IToggleAddChannelModalAction
-// | IChangeNickAction
 
 export function addServer(
   name: string,
@@ -185,6 +193,18 @@ export function addChannel(
     channel
   }
 }
+export function mergeLog(
+  serverId: Guid,
+  channelId: Guid,
+  json: any[]
+): IMergeLogsAction {
+  return {
+    type: ActionTypeKeys.MERGE_LOGS,
+    serverId,
+    channelId,
+    json
+  }
+}
 
 export function appendLog(
   serverId: Guid,
@@ -231,12 +251,18 @@ export function toggleAddServerModal(
     visible
   }
 }
+export function themeWholesale(themename: string): IThemeWholesaleAction {
+  return {
+    type: ActionTypeKeys.THEME_WHOLESALE,
+    themename
+  }
+}
 export function toggleAddChannelModal(
-  visible?: boolean
+  connid?: Guid | undefined
 ): IToggleAddChannelModalAction {
   return {
     type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL,
-    visible
+    connid
   }
 }
 export function toggleSettingsModal(
