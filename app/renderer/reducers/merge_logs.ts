@@ -111,19 +111,19 @@ function merge(log: List<Message>, servlog: List<Message>) {
 
   let newLog = List<Message>()
   while (!(log.isEmpty() && servlog.isEmpty())) {
-    const servLogFirst = servlog.first()!
-    const logFirst = log.first()!
+    const servLogFirst = servlog.first()
+    const logFirst = log.first()
     if (log.isEmpty()) {
-      newLog = newLog.push(servlog.first()!)
+      newLog = newLog.push(servlog.first())
       servlog = servlog.slice(1)
     } else if (servlog.isEmpty()) {
-      newLog = newLog.push(log.first()!)
+      newLog = newLog.push(log.first())
       log = log.slice(1)
-    } else if (log.first()!.sent <= servlog.first()!.sent) {
-      newLog = newLog.push(log.first()!)
+    } else if (log.first().sent <= servlog.first().sent) {
+      newLog = newLog.push(log.first())
       log = log.slice(1)
     } else {
-      newLog = newLog.push(servlog.first()!)
+      newLog = newLog.push(servlog.first())
       servlog = servlog.slice(1)
     }
   }
