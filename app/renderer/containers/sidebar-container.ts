@@ -1,9 +1,14 @@
 import { connect, Dispatch } from 'react-redux'
 import { Sidebar } from '../components/sidebar'
 import { ElectricState } from '../store'
-import { viewChannel, toggleAddServerModal } from '../actions'
+import {
+  viewChannel,
+  toggleAddServerModal,
+  toggleAddChannelModal
+} from '../actions'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
+import { Guid } from '../models'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
@@ -19,6 +24,9 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     onAddServerClick: () => {
       dispatch(toggleAddServerModal(true))
+    },
+    onAddChannelClick: (connid?: Guid) => {
+      dispatch(toggleAddChannelModal(connid))
     }
   }
 }

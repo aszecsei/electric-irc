@@ -6,7 +6,8 @@ import { Guid, ChannelFactory } from '../models'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
-    connID: state.addChannelConnId
+    connID: state.addChannelConnId,
+    connections: state.connections
   }
 }
 

@@ -9,6 +9,7 @@ interface ISidebarProps {
   connections: List<Connection>
   curChanID: Guid | undefined
   onChannelClick: (conn: Connection, channel: Channel) => void
+  onAddChannelClick: () => void
   onAddServerClick: () => void
 }
 
@@ -34,6 +35,7 @@ export const Sidebar: React.SFC<ISidebarProps> = props => {
             connection={connection}
             onChannelClick={props.onChannelClick}
             curChanID={props.curChanID}
+            onAddChannelClick={props.onAddChannelClick}
           />
         ))}
         <li>

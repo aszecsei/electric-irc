@@ -13,12 +13,14 @@ import {
   InputGroupAddon
 } from 'reactstrap'
 import { List } from 'immutable'
+import { Connection } from '../models/connections'
 import { Guid } from '../models/guid'
 
 interface IAddChannelModalProps {
-  connid: Guid | undefined
+  connID: Guid | undefined
   onAddChannelToggle: () => void
   onAddChannelSubmit: (connid: Guid, channel: string) => void
+  connections: List<Connection>
 }
 
 interface IAddChannelModalState {
@@ -38,74 +40,80 @@ export class AddChannelModal extends React.Component<
     this.state = { ...defaultState }
   }
 
-  // // handleAddChannel = (event: any) => {
-  // //   this.setState({
-  // //     channels: this.state.channels.push('')
-  // //   })
-  // // }
+  generateHandleChangeChannel = () => {
+    return (event: any) => {
+      this.setState({
+        channel: event.target.value
+      })
+      if (/^#[^\s]+/.exec(this.state.channel)) {
+        event.target.classList.add('is-valid')
+        event.target.classList.remove('is-invalid')
+      } else {
+        event.target.classList.remove('is-valid')
+        event.target.classList.add('is-invalid')
+      }
+    }
+  }
 
-  // generateHandleChangeChannel = () => {
-  //   return (event: any) => {
-  //     this.setState({
-  //       channel: event.target.value
-  //     })
-  //   }
-  // }
-  // // generateHandleDeleteChannel = (index: number) => {
-  // //   return (event: any) => {
-  // //     this.setState({
-  // //       channels: this.state.channels.remove(index)
-  // //     })
-  // //   }
-  // // }
-
-  // handleSubmit = (event: any) => {
-  //   this.props.onAddChannelSubmit()
-  //   this.setState({ ...defaultState })
-  //   event.preventDefault()
-  //   this.props.onAddChannelToggle()
-  // }
-  // public render() {
-  //   return (
-  //     <Modal
-  //       isOpen={this.props.connid !== undefined}
-  //       toggle={this.props.onAddChannelToggle}
-  //       id="addchannelmodal"
-  //     >
-  //       <Form onSubmit={this.handleSubmit}>
-  //         <ModalHeader toggle={this.props.onAddChannelToggle}>
-  //           Add new server
-  //         </ModalHeader>
-  //         <ModalBody>
-  //           <FormGroup>
-  //             <InputGroup>
-  //               <Input
-  //                 className={'Channel'}
-  //                 type="text"
-  //                 value={this.state.channel}
-  //                 onChange={this.generateHandleChangeChannel()}
-  //                 name={`channel`}
-  //                 id={`channel`}
-  //                 placeholder={'#'}
-  //               />
-  //             </InputGroup>
-  //           </FormGroup>
-  //         </ModalBody>
-  //         <ModalFooter>
-  //           <Button color="primary" type="submit">
-  //             Add
-  //           </Button>{' '}
-  //           <Button
-  //             color="secondary"
-  //             type="button"
-  //             onClick={this.props.onAddChannelToggle}
-  //           >
-  //             Cancel
-  //           </Button>
-  //         </ModalFooter>
-  //       </Form>
-  //     </Modal>
-  //   )
-  // }
+  handleSubmit = (event: any) => {
+    event.preventDefault()
+    if (this.props.connID && /^#[^\s]+/.exec(this.state.channel)) {
+      const conn = this.props.connections.find(v => {
+        return v.id === this.props.connID
+      })
+      if (conn) {
+        const chan = conn.channels.find(v => {
+          return v.name === this.state.channel
+        })
+        if (!chan) {
+          this.props.onAddChannelSubmit(this.props.connID, this.state.channel)
+          this.setState({ ...defaultState })
+          this.props.onAddChannelToggle()
+        }
+      }
+    }
+  }
+  public render() {
+    return (
+      <Modal
+        isOpen={this.props.connID !== undefined}
+        toggle={this.props.onAddChannelToggle}
+        id="addchannelmodal"
+      >
+        <Form onSubmit={this.handleSubmit}>
+          <ModalHeader toggle={this.props.onAddChannelToggle}>
+            Add new server
+          </ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <InputGroup>
+                <Input
+                  className={'Channel'}
+                  type="text"
+                  value={this.state.channel}
+                  onChange={this.generateHandleChangeChannel()}
+                  name={`channel`}
+                  id={`channel`}
+                  placeholder={'#'}
+                />
+              </InputGroup>
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" type="submit">
+              Add
+            </Button>{' '}
+            <Button
+              color="secondary"
+              type="button"
+              onClick={this.props.onAddChannelToggle}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
+    )
+  }
 }
 export default AddChannelModal
