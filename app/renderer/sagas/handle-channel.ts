@@ -150,6 +150,9 @@ export function subscribe(
     client.addListener(
       'join',
       (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
+        if (nick === client.nick && channel.name === '#') {
+          emit(actions.joinChannel(connection.id, ichannel.toString()))
+        }
         if (ichannel.toString() === channel.name) {
           emit(
             actions.appendLog(
@@ -158,32 +161,6 @@ export function subscribe(
               parseJoinMessage(nick, channel.name)
             )
           )
-          const xhttp2 = new XMLHttpRequest()
-          xhttp2.open(
-            'GET',
-            `https://electric-centric.herokuapp.com/server/join?server=${
-              connection.url
-            }&channel=%23${channel.name.slice(1)}`,
-            true
-          )
-          xhttp2.send()
-          const xhttp = new XMLHttpRequest()
-          xhttp.open(
-            'GET',
-            `https://electric-centric.herokuapp.com/message?servers=${
-              connection.url
-            }&channels=%23${channel.name.slice(1)}`,
-            true
-          )
-          xhttp.onreadystatechange = function() {
-            const messages = JSON.parse(this.responseText)
-            if (messages.status === 203) {
-              emit(
-                actions.mergeLog(connection.id, channel.id, messages.message)
-              )
-            }
-          }
-          xhttp.send()
         }
       }
     )
@@ -287,7 +264,8 @@ export function* insideWrite(
       client.send('nick', newNickName)
     } else if (joinResults) {
       const newChanName = joinResults[1]
-      yield put(actions.joinChannel(connection.id, newChanName))
+      client.join(newChanName)
+      // yield put(actions.joinChannel(connection.id, newChanName))
     } else if (cmdResults) {
       const args = payload.message.split(' ')
       client.send(args[0].slice(1), ...args.slice(1))
@@ -338,10 +316,30 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
     yield put(actions.addChannel(serverId, newChannel))
     const conn: Connection = yield select(getConnection, serverId)
     yield fork(handleChannel, client, conn, newChannel)
-
+    yield fork(requestServer, conn, newChannel)
     // TODO: Handle this as an event emitter
-    client.join(payload.channelName, () => {
-      // TODO: Action to mark channel as 'connected'
-    })
+    // client.join(payload.channelName, () => {
+    //   // TODO: Action to mark channel as 'connected'
+    // })
+  }
+}
+export function* requestServer(connection: Connection, channel: Channel) {
+  const xhttp2 = new XMLHttpRequest()
+  xhttp2.open(
+    'GET',
+    'https://electric-centric.herokuapp.com/server/join?server=${connection.url}&channel=%23${channel.name.slice(1)}',
+    true
+  )
+  xhttp2.send()
+  const xhttp = new XMLHttpRequest()
+  xhttp.open(
+    'GET',
+    'https://electric-centric.herokuapp.com/message?servers=${connection.url}&channels=%23${channel.name.slice(1)}',
+    false
+  )
+  xhttp.send()
+  const messages = JSON.parse(xhttp.responseText)
+  if (messages.status === 203) {
+    yield put(actions.mergeLog(connection.id, channel.id, messages.message))
   }
 }
