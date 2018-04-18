@@ -265,7 +265,7 @@ export function* insideWrite(
     } else if (joinResults) {
       const newChanName = joinResults[1]
       client.join(newChanName)
-      // yield put(actions.joinChannel(connection.id, newChanName))
+      //yield put(actions.joinChannel(connection.id, newChanName))
     } else if (cmdResults) {
       const args = payload.message.split(' ')
       client.send(args[0].slice(1), ...args.slice(1))
@@ -324,22 +324,28 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
   }
 }
 export function* requestServer(connection: Connection, channel: Channel) {
-  const xhttp2 = new XMLHttpRequest()
+  var xhttp2 = new XMLHttpRequest()
   xhttp2.open(
     'GET',
-    'https://electric-centric.herokuapp.com/server/join?server=${connection.url}&channel=%23${channel.name.slice(1)}',
+    'https://electric-centric.herokuapp.com/server/join?server=' +
+      connection.url +
+      '&channel=%23' +
+      channel.name.slice(1),
     true
   )
   xhttp2.send()
-  const xhttp = new XMLHttpRequest()
+  var xhttp = new XMLHttpRequest()
   xhttp.open(
     'GET',
-    'https://electric-centric.herokuapp.com/message?servers=${connection.url}&channels=%23${channel.name.slice(1)}',
+    'https://electric-centric.herokuapp.com/message?servers=' +
+      connection.url +
+      '&channels=%23' +
+      channel.name.slice(1),
     false
   )
   xhttp.send()
   const messages = JSON.parse(xhttp.responseText)
-  if (messages.status === 203) {
-    yield put(actions.mergeLog(connection.id, channel.id, messages.message))
+  if (messages['status'] == 203) {
+    yield put(actions.mergeLog(connection.id, channel.id, messages['message']))
   }
 }
