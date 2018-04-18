@@ -14,15 +14,17 @@ import SidebarContainer from './containers/sidebar-container'
 import AddModalContainer from './containers/add-modal-container'
 import ChatWindowContainer from './containers/irc-window-container'
 
-import { ChatWindow } from './components/ircwindow'
 import SettingsModalContainer from './containers/settings-modal-container'
 
 import * as irc from 'irc'
 
+// tslint:disable-next-line:no-submodule-imports
 import 'material-design-icons/iconfont/material-icons.css'
 
+// tslint:disable-next-line:no-submodule-imports
 import 'typeface-roboto/index.css'
 import './stylesheets/main.scss'
+// tslint:disable-next-line:no-submodule-imports
 import 'bootstrap/dist/css/bootstrap.css'
 
 interface IAppState {
