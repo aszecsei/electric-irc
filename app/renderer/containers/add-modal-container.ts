@@ -5,7 +5,8 @@ import { toggleAddServerModal, addServer } from '../actions'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
-    visible: state.addServerModalActive
+    visible: state.addServerModalActive,
+    connections: state.connections
   }
 }
 

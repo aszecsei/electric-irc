@@ -6,10 +6,9 @@ import nature from './nature'
 import objects from './objects'
 import places from './places'
 import symbols from './symbols'
-import { hash } from 'immutable'
 function combine() {
-  var h: { [key: string]: string } = {}
-  var i = 0
+  const h: { [key: string]: string } = {}
+  let i = 0
   while (i < people.length) {
     h[people[i].alias] = people[i].emoji
     i += 1

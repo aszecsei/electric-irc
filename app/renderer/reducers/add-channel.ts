@@ -1,18 +1,21 @@
 import { ElectricState } from '../store'
 import { IAddChannelAction } from '../actions'
 
+import { replace } from '../utilities/replace'
+
 export default function addChannel(
   state: ElectricState,
   action: IAddChannelAction
 ): ElectricState {
-  const index = state.connections.findIndex(value => {
-    return value.id === action.serverId
-  })
-  const conn = state.connections.get(index)
+  const conn = state.connections.find(value => value.id === action.serverId)
   if (conn) {
     const chans = conn.channels.push(action.channel)
     const newConn = conn.set('channels', chans)
-    return state.set('connections', state.connections.set(index, newConn))
+    const newState = state.set(
+      'connections',
+      replace(state.connections, conn, newConn)
+    )
+    return newState
   }
   return state
 }

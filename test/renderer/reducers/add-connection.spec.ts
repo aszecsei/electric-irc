@@ -19,7 +19,7 @@ describe('add-connection reducer', function() {
   let sandbox: sinon.SinonSandbox
 
   let prevState = defaultStore
-  let nextState: ElectricState = undefined
+  let nextState: ElectricState
 
   before(function() {
     sandbox = sinon.createSandbox()

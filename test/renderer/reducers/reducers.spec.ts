@@ -3,8 +3,10 @@ import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { List } from 'immutable'
 
-import { defaultStore } from '../../../app/renderer/reducers/reducers'
-import { defaultReducer } from '../../../app/renderer/reducers/reducers'
+import {
+  defaultReducer,
+  defaultStore
+} from '../../../app/renderer/reducers/reducers'
 import { ElectricState } from '../../../app/renderer/store'
 
 import * as Actions from '../../../app/renderer/actions'

@@ -13,9 +13,11 @@ import {
   InputGroupAddon
 } from 'reactstrap'
 import { List } from 'immutable'
+import { Connection } from '../models/connections'
 
 interface IAddModalProps {
   visible: boolean
+  connections: List<Connection>
   onAddServerToggle: () => void
   onAddServerSubmit: (
     serverName: string,
@@ -64,9 +66,23 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
     }
   }
   handleChangeIRC = (event: any) => {
-    this.setState({
-      url: event.target.value
-    })
+    if (
+      !this.props.connections.find(v => {
+        return event.target.value === v.url
+      })
+    ) {
+      this.setState({
+        url: event.target.value
+      })
+      event.target.classList.add('is-valid')
+      event.target.classList.remove('is-invalid')
+    } else {
+      this.setState({
+        url: event.target.value
+      })
+      event.target.classList.add('is-invalid')
+      event.target.classList.remove('is-valid')
+    }
   }
   handleChangeIRCName = (event: any) => {
     this.setState({
@@ -95,15 +111,22 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
   }
 
   handleSubmit = (event: any) => {
-    this.props.onAddServerSubmit(
-      this.state.name,
-      this.state.url,
-      this.state.nickname,
-      this.state.channels.toArray()
-    )
-    this.setState({ ...defaultState })
     event.preventDefault()
-    this.props.onAddServerToggle()
+    console.log(this.props.connections)
+    if (
+      !this.props.connections.find(v => {
+        return this.state.url === v.url
+      })
+    ) {
+      this.props.onAddServerSubmit(
+        this.state.name,
+        this.state.url,
+        this.state.nickname,
+        this.state.channels.toArray()
+      )
+      this.setState({ ...defaultState })
+      this.props.onAddServerToggle()
+    }
   }
   public render() {
     return (
