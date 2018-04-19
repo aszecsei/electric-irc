@@ -12,4 +12,4 @@ import './stylesheets/main.scss'
 // tslint:disable-next-line:no-submodule-imports
 import 'bootstrap/dist/css/bootstrap.css'
 
-ReactDOM.render(<AppLoader />, document.getElementById('app'))
+export default ReactDOM.render(<AppLoader />, document.getElementById('app'))
