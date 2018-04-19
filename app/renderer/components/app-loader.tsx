@@ -3,12 +3,20 @@ import * as React from 'react'
 import { createStore, applyMiddleware, compose, Store } from 'redux'
 import { Provider } from 'react-redux'
 
+import { List } from 'immutable'
+import { IAddServerAction } from '../actions'
+
 import createSagaMiddleware from 'redux-saga'
 import messageSaga from '../sagas/messaging-saga'
 
 import { defaultReducer, defaultStore } from '../reducers/reducers'
 
-import { loadSettings } from '../utilities/load-settings'
+import {
+  loadSettings,
+  writeSettings,
+  loadConnections,
+  writeConnections
+} from '../utilities/file-storage'
 import { ElectricState } from '../store'
 import { remote } from 'electron'
 
@@ -64,9 +72,22 @@ export class AppLoader extends React.Component<any, IAppLoaderState> {
       )
       // TODO: Start the message listening saga
       sagaMiddleware.run(messageSaga)
+
       // TODO: Re-join channels as needed
+      loadConnections().then((value: any) => {
+        const actions = value as List<IAddServerAction>
+        actions.forEach(action => {
+          store.dispatch(action)
+        })
+      })
 
       this.setState({ store })
+
+      store.subscribe(() => {
+        const newState = store.getState()
+        writeSettings(newState)
+        writeConnections(newState)
+      })
     })
   }
 
