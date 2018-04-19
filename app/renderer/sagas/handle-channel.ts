@@ -308,25 +308,30 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
     const payload: actions.IJoinChannelAction = yield take(
       actions.ActionTypeKeys.JOIN_CHANNEL
     )
-    const newChannel = ChannelFactory({
-      id: Guid.create(),
-      name: payload.channelName
-    })
-    yield put(actions.addChannel(serverId, newChannel))
-    const conn: Connection = yield select(getConnection, serverId)
-    yield fork(handleChannel, client, conn, newChannel)
-    yield put(
-      actions.appendLog(
-        serverId,
-        newChannel.id,
-        parseJoinMessage(client.nick, newChannel.name)
-      )
-    )
-    yield fork(requestServer, conn, newChannel)
-    // TODO: Handle this as an event emitter
-    // client.join(payload.channelName, () => {
-    //   // TODO: Action to mark channel as 'connected'
-    // })
+    if (payload.serverId === serverId) {
+      // so all clients don't join in the fun of a specific one
+      if (client.chans[payload.channelName]) {
+        // if client joined (ie action called in join listener)
+        const newChannel = ChannelFactory({
+          id: Guid.create(),
+          name: payload.channelName
+        })
+        yield put(actions.addChannel(serverId, newChannel))
+        const conn: Connection = yield select(getConnection, serverId)
+        yield fork(handleChannel, client, conn, newChannel)
+        yield put(
+          actions.appendLog(
+            serverId,
+            newChannel.id,
+            parseJoinMessage(client.nick, newChannel.name)
+          )
+        )
+        yield fork(requestServer, conn, newChannel)
+      } else {
+        // else client not in channel yet call join and will be back when listener emmits action
+        client.join(payload.channelName)
+      }
+    }
   }
 }
 export function* requestServer(connection: Connection, channel: Channel) {
