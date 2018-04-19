@@ -11,8 +11,7 @@ import {
   SAVE_FILE,
   SAVE_FILE_COMPLETE,
   READ_FILE,
-  READ_FILE_COMPLETE,
-  READ_FILE_ERROR
+  READ_FILE_COMPLETE
 } from '../common/file-storage'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -102,12 +101,25 @@ ipcMain.addListener(
   SAVE_FILE,
   (event: IpcMessageEvent, filename: string, data: any) => {
     const filePath = getFilePath(filename)
+    if (!fs.existsSync(getAppFolder())) {
+      fs.mkdirSync(getAppFolder())
+    }
     fs.writeFile(
       filePath,
       JSON.stringify(data),
       'utf8',
       (err: NodeJS.ErrnoException) => {
-        event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`)
+        if (err) {
+          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`, {
+            err,
+            data: null
+          })
+        } else {
+          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`, {
+            err: null,
+            data: null
+          })
+        }
       }
     )
   }
@@ -117,9 +129,15 @@ ipcMain.addListener(READ_FILE, (event: IpcMessageEvent, filename: string) => {
   const filePath = getFilePath(filename)
   fs.readFile(filePath, 'utf8', (err: NodeJS.ErrnoException, data: string) => {
     if (err) {
-      event.sender.send(`${READ_FILE_ERROR}:${filename}`, err)
+      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, {
+        err,
+        data: null
+      })
     } else {
-      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, JSON.parse(data))
+      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, {
+        err: null,
+        data: JSON.parse(data)
+      })
     }
   })
 })
