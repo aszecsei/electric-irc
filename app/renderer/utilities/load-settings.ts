@@ -1,5 +1,5 @@
 import { ElectricState, getSettings } from '../store'
-import { Settings } from '../models'
+import { Settings, SettingsFactory } from '../models'
 import * as fileStorage from './file-storage'
 
 export function loadSettings(
@@ -21,14 +21,18 @@ export function loadSettings(
 
 export function readSettings(initialState: ElectricState, data: any) {
   let state = initialState
-  const settings = data.settings as Settings
+  console.log(data.settings)
+  const settings = new SettingsFactory(data.settings)
   state = state.set('settings', settings)
   const activeTheme = data.theme as string
   state = state.set('themeName', activeTheme)
+  console.log('Loaded state:')
+  console.log(state.toJS())
   return state
 }
 
 export function writeSettings(state: ElectricState) {
-  const settings = getSettings(state)
-  return fileStorage.saveFile('settings.ei', settings)
+  const settings = getSettings(state).settings.toJS()
+  const theme = getSettings(state).theme
+  return fileStorage.saveFile('settings.ei', { settings, theme })
 }
