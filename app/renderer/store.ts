@@ -26,7 +26,7 @@ export const ElectricStateFactory = Record<IElectricState>({
   lastUsedChannelId: 0,
   themeName: 'dark',
   addServerModalActive: false,
-  themeProperties: theme.get('light') || backup,
+  themeProperties: theme.get('dark') || backup,
   settingsModalActive: true,
   settings: SettingsFactory(),
   toggleTab: '1'
