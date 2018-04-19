@@ -44,6 +44,11 @@ export function readFile(filename: string) {
   })
 }
 
+interface IStoredSettings {
+  settings: any
+  theme: string
+}
+
 export function loadSettings(
   initialState: ElectricState,
   callback: (state: ElectricState) => void
@@ -60,7 +65,10 @@ export function loadSettings(
     })
 }
 
-export function readSettings(initialState: ElectricState, data: any) {
+export function readSettings(
+  initialState: ElectricState,
+  data: IStoredSettings
+) {
   let state = initialState
   console.log(data.settings)
   const settings = new SettingsFactory(data.settings)
@@ -75,12 +83,12 @@ export function readSettings(initialState: ElectricState, data: any) {
 export function writeSettings(state: ElectricState) {
   const settings = getSettings(state).settings.toJS()
   const theme = getSettings(state).theme
-  return saveFile('settings.ei', { settings, theme })
+  const settingsToSave: IStoredSettings = {
+    settings,
+    theme
+  }
+  return saveFile('settings.ei', settingsToSave)
 }
-
-// TODO: Load custom themes
-
-// TODO: Load connections
 
 interface IStoredConnection {
   name: string
@@ -124,5 +132,7 @@ export function writeConnections(state: ElectricState) {
   })
   return saveFile('savedconnections.ei', connections)
 }
+
+// TODO: Load custom themes
 
 // TODO: Load logs
