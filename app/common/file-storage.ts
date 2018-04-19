@@ -1,0 +1,5 @@
+export const SAVE_FILE = 'SAVE_FILE'
+export const SAVE_FILE_COMPLETE = 'SAVE_FILE_COMPLETE'
+export const READ_FILE = 'READ_FILE'
+export const READ_FILE_COMPLETE = 'READ_FILE_COMPLETE'
+export const READ_FILE_ERROR = 'READ_FILE_ERROR'
