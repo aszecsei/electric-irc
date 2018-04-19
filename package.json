@@ -98,6 +98,7 @@
     "polished": "^1.9.2",
     "popper.js": "^1.12.9",
     "react": "16.3.2",
+    "react-color": "^2.14.1",
     "react-dom": "16.3.2",
     "react-redux": "^5.0.7",
     "reactstrap": "^5.0.0-beta",

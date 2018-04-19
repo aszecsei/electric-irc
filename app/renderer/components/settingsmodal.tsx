@@ -14,7 +14,7 @@ import {
 } from 'reactstrap'
 import * as classnames from 'classnames'
 import { ISettings, Settings } from '../models/settings'
-import { theme } from '../stylesheets/thememaps/themes'
+import { Map } from 'immutable'
 
 interface ISettingsProps {
   visible: boolean
@@ -26,6 +26,7 @@ interface ISettingsProps {
   settings: Settings
   changeTheme: (theme: string) => void
   currentTheme: string
+  themes: Map<string, Map<string, string>>
 }
 
 export class SettingsModal extends React.Component<ISettingsProps> {
@@ -260,14 +261,11 @@ export class SettingsModal extends React.Component<ISettingsProps> {
               value={this.props.currentTheme}
               onChange={this.changeTheme}
             >
-              {theme
-                .keySeq()
-                .toArray()
-                .map((key: string) => (
-                  <option value={key} key={key}>
-                    {key}
-                  </option>
-                ))}
+              {this.props.themes.keySeq().map((key: string) => (
+                <option value={key} key={key}>
+                  {key}
+                </option>
+              ))}
             </Input>
           </TabPane>
         </TabContent>

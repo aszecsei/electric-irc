@@ -16,20 +16,20 @@ interface IElectricState {
   themeProperties: Map<string, string>
   settings: Settings
   toggleTab: string
+  themes: Map<string, Map<string, string>>
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  lastUsedConnectionId: 0,
-  lastUsedChannelId: 0,
   themeName: 'light',
   addServerModalActive: false,
   themeProperties: theme.get('light') || backup,
   settingsModalActive: true,
   settings: SettingsFactory(),
-  toggleTab: '1'
+  toggleTab: '1',
+  themes: theme
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>

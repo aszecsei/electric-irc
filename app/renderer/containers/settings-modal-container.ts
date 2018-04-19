@@ -14,7 +14,8 @@ const mapStateToProps = (state: ElectricState) => {
     visible: state.settingsModalActive,
     toggleTab: state.toggleTab,
     settings: state.settings,
-    currentTheme: state.themeName
+    currentTheme: state.themeName,
+    themes: state.themes
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
