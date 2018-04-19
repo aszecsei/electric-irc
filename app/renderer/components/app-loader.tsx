@@ -10,6 +10,9 @@ import { defaultReducer, defaultStore } from '../reducers/reducers'
 
 import { loadSettings } from '../utilities/load-settings'
 import { ElectricState } from '../store'
+import { remote } from 'electron'
+
+import { Titlebar } from './titlebar'
 
 import { App } from './app'
 
@@ -24,6 +27,25 @@ export class AppLoader extends React.Component<any, IAppLoaderState> {
     super(props)
     this.state = {
       store: undefined
+    }
+  }
+
+  handleClose = (e: any) => {
+    const window = remote.getCurrentWindow()
+    window.close()
+  }
+
+  handleMinimize = (e: any) => {
+    const window = remote.getCurrentWindow()
+    window.minimize()
+  }
+
+  handleMaximize = (e: any) => {
+    const window = remote.getCurrentWindow()
+    if (!window.isMaximized()) {
+      window.maximize()
+    } else {
+      window.unmaximize()
     }
   }
 
@@ -49,12 +71,24 @@ export class AppLoader extends React.Component<any, IAppLoaderState> {
   }
 
   render() {
-    return this.state.store ? (
-      <Provider store={this.state.store}>
-        <App />
-      </Provider>
-    ) : (
-      <p>Loading...</p>
+    return (
+      <div className="container-fluid app-loader">
+        <Titlebar
+          draggable={true}
+          handleClose={this.handleClose}
+          handleMinimize={this.handleMinimize}
+          handleMaximize={this.handleMaximize}
+        >
+          Electric IRC
+        </Titlebar>
+        {this.state.store ? (
+          <Provider store={this.state.store}>
+            <App />
+          </Provider>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
     )
   }
 }
