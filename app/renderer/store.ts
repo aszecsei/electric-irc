@@ -22,9 +22,9 @@ export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  themeName: 'light',
+  themeName: 'dark',
   addServerModalActive: false,
-  themeProperties: theme.get('light') || backup,
+  themeProperties: theme.get('dark') || backup,
   settingsModalActive: true,
   settings: SettingsFactory(),
   toggleTab: '1'
