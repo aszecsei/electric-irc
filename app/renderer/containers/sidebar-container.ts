@@ -11,6 +11,7 @@ import { Channel } from '../models/channel'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
+    curChanID: state.currentChannelId,
     connections: state.connections
   }
 }

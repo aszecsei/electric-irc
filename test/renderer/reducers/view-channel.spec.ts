@@ -8,23 +8,24 @@ import { viewChannel } from '../../../app/renderer/actions'
 import { ElectricState } from '../../../app/renderer/store'
 import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
+import { Guid } from '../../../app/renderer/models/guid'
 import * as IRC from 'irc'
 
 describe('view-channel reducer', function() {
   let prevState = defaultStore
-  let nextState: ElectricState = undefined
+  let nextState: ElectricState
 
-  const chan1 = new ChannelFactory({ id: 1, name: '#channel1' })
-  const chan2 = new ChannelFactory({ id: 2, name: '#channel2' })
-  const chan3 = new ChannelFactory({ id: 3, name: '#channel3' })
+  const chan1 = new ChannelFactory({ id: Guid.create(), name: '#channel1' })
+  const chan2 = new ChannelFactory({ id: Guid.create(), name: '#channel2' })
+  const chan3 = new ChannelFactory({ id: Guid.create(), name: '#channel3' })
 
   const conn1 = new ConnectionFactory({
-    id: 1,
+    id: Guid.create(),
     name: 'Connection 1',
     channels: List([chan1, chan2])
   })
   const conn2 = new ConnectionFactory({
-    id: 2,
+    id: Guid.create(),
     name: 'Connection 2',
     channels: List([chan3])
   })

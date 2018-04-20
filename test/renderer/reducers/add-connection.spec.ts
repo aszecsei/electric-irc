@@ -12,13 +12,14 @@ import { defaultStore } from '../../../app/renderer/reducers/reducers'
 
 import * as IRC from 'irc'
 
+import { Guid } from '../../../app/renderer/models/guid'
 use(sinonChai)
 
 describe('add-connection reducer', function() {
   let sandbox: sinon.SinonSandbox
 
   let prevState = defaultStore
-  let nextState: ElectricState = undefined
+  let nextState: ElectricState
 
   before(function() {
     sandbox = sinon.createSandbox()
@@ -27,11 +28,11 @@ describe('add-connection reducer', function() {
       'connections',
       List([
         new ConnectionFactory({
-          id: 0,
+          id: Guid.create(),
           name: 'Connection 1',
           channels: List([
-            new ChannelFactory({ id: 1, name: '#channel1' }),
-            new ChannelFactory({ id: 2, name: '#channel2' })
+            new ChannelFactory({ id: Guid.create(), name: '#channel1' }),
+            new ChannelFactory({ id: Guid.create(), name: '#channel2' })
           ])
         })
       ])
@@ -44,11 +45,11 @@ describe('add-connection reducer', function() {
         prevState,
         addConnection(
           new ConnectionFactory({
-            id: 0,
+            id: Guid.create(),
             name: 'Connection 2',
             channels: List([
-              new ChannelFactory({ id: 1, name: '#channel1' }),
-              new ChannelFactory({ id: 2, name: '#channel2' })
+              new ChannelFactory({ id: Guid.create(), name: '#channel1' }),
+              new ChannelFactory({ id: Guid.create(), name: '#channel2' })
             ])
           })
         )

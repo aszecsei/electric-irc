@@ -2,11 +2,13 @@ import * as React from 'react'
 import { Collapse } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
+import { Guid } from '../models/guid'
 import * as irc from 'irc'
 
 interface IServerProps {
   onChannelClick: (conn: Connection, channel: Channel) => void
   connection: Connection
+  curChanID: Guid | undefined
 }
 
 interface IServerState {
@@ -39,6 +41,34 @@ export class Server extends React.Component<IServerProps, IServerState> {
       this.props.onChannelClick(client, channel)
     }
   }
+  // this next function checks to see if the channel that this 'a' link refers to is the one selected
+  // and adds a special format to the selected one so user can see that is the one selected
+  // can be deleted after somthing better
+  bold_if_selected(
+    connection: Connection,
+    channel: Channel,
+    curChanID: Guid | undefined
+  ) {
+    if (channel.id === curChanID) {
+      return (
+        <a
+          href="#"
+          onClick={this.onClickGenerator(this.props.connection, channel)}
+        >
+          <b>{channel.name}</b>
+        </a>
+      )
+    } else {
+      return (
+        <a
+          href="#"
+          onClick={this.onClickGenerator(this.props.connection, channel)}
+        >
+          {channel.name}
+        </a>
+      )
+    }
+  }
 
   render() {
     const server = this.props.connection
@@ -57,15 +87,11 @@ export class Server extends React.Component<IServerProps, IServerState> {
           <ul className="list-unstyled" id={server.name}>
             {this.props.connection.channels.map((channel, i) => (
               <li key={i}>
-                <a
-                  href="#"
-                  onClick={this.onClickGenerator(
-                    this.props.connection,
-                    channel
-                  )}
-                >
-                  {channel.name}
-                </a>
+                {this.bold_if_selected(
+                  this.props.connection,
+                  channel,
+                  this.props.curChanID
+                )}
               </li>
             ))}
           </ul>

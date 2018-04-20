@@ -3,8 +3,10 @@ import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { List } from 'immutable'
 
-import { defaultStore } from '../../../app/renderer/reducers/reducers'
-import { defaultReducer } from '../../../app/renderer/reducers/reducers'
+import {
+  defaultReducer,
+  defaultStore
+} from '../../../app/renderer/reducers/reducers'
 import { ElectricState } from '../../../app/renderer/store'
 
 import * as Actions from '../../../app/renderer/actions'
@@ -12,7 +14,7 @@ import * as Actions from '../../../app/renderer/actions'
 import * as addConnectionReducer from '../../../app/renderer/reducers/add-connection'
 import * as appendLogReducer from '../../../app/renderer/reducers/append-log'
 import * as editServerReducer from '../../../app/renderer/reducers/edit-server'
-import * as joinChannelReducer from '../../../app/renderer/reducers/join-channel'
+import * as addChannelReducer from '../../../app/renderer/reducers/add-channel'
 import * as removeServerReducer from '../../../app/renderer/reducers/remove-server'
 import * as viewChannelReducer from '../../../app/renderer/reducers/view-channel'
 import * as toggleAddReducer from '../../../app/renderer/reducers/toggle-add-server-modal'
@@ -22,6 +24,7 @@ import * as toggleTabReducer from '../../../app/renderer/reducers/toggle-tab'
 import { MessageFactory } from '../../../app/renderer/models/message'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
+import { Guid } from '../../../app/renderer/models'
 
 use(sinonChai)
 
@@ -37,14 +40,6 @@ describe('default store', function() {
   it('should have no current connection', function() {
     expect(defaultStore.currentConnectionId).to.be.undefined
   })
-
-  it('should have no last used channel ID', function() {
-    expect(defaultStore.lastUsedChannelId).to.eq(0)
-  })
-
-  it('should have no last used connection ID', function() {
-    expect(defaultStore.lastUsedConnectionId).to.eq(0)
-  })
 })
 
 describe('default reducer', function() {
@@ -55,14 +50,11 @@ describe('default reducer', function() {
   let result: ElectricState
 
   before(function() {
-    alteredState.lastUsedChannelId = 100
-    alteredState.lastUsedConnectionId = 2
-
     sandbox = sinon.createSandbox()
     sandbox.stub(addConnectionReducer, 'default').returns(alteredState)
     sandbox.stub(appendLogReducer, 'default').returns(alteredState)
     sandbox.stub(editServerReducer, 'default').returns(alteredState)
-    sandbox.stub(joinChannelReducer, 'default').returns(alteredState)
+    sandbox.stub(addChannelReducer, 'default').returns(alteredState)
     sandbox.stub(removeServerReducer, 'default').returns(alteredState)
     sandbox.stub(viewChannelReducer, 'default').returns(alteredState)
     sandbox.stub(toggleAddReducer, 'default').returns(alteredState)
@@ -112,7 +104,11 @@ describe('default reducer', function() {
       result = undefined
       result = defaultReducer(
         initialState,
-        Actions.appendLog(1, 2, new MessageFactory({ text: 'Text' }))
+        Actions.appendLog(
+          Guid.create(),
+          Guid.create(),
+          new MessageFactory({ text: 'Text' })
+        )
       )
     })
 
@@ -130,7 +126,7 @@ describe('default reducer', function() {
       result = undefined
       result = defaultReducer(
         initialState,
-        Actions.editServer(0, 'New Name', 'New URL')
+        Actions.editServer(Guid.create(), 'New Name', 'New URL')
       )
     })
 
@@ -143,14 +139,22 @@ describe('default reducer', function() {
     })
   })
 
-  describe('join channel', function() {
+  describe('add channel', function() {
     before(function() {
       result = undefined
-      result = defaultReducer(initialState, Actions.joinChannel(10, '#hello'))
+      result = defaultReducer(
+        initialState,
+        Actions.addChannel(
+          Guid.create(),
+          new ChannelFactory({
+            name: 'Hello!'
+          })
+        )
+      )
     })
 
     it('should call the join channel reducer', function() {
-      expect(joinChannelReducer.default).to.be.calledOnce
+      expect(addChannelReducer.default).to.be.calledOnce
     })
 
     it('should alter the state', function() {
@@ -161,7 +165,7 @@ describe('default reducer', function() {
   describe('remove server', function() {
     before(function() {
       result = undefined
-      result = defaultReducer(initialState, Actions.removeServer(2))
+      result = defaultReducer(initialState, Actions.removeServer(Guid.create()))
     })
 
     it('should call the remove server reducer', function() {
@@ -176,7 +180,10 @@ describe('default reducer', function() {
   describe('view channel', function() {
     before(function() {
       result = undefined
-      result = defaultReducer(initialState, Actions.viewChannel(2, 5))
+      result = defaultReducer(
+        initialState,
+        Actions.viewChannel(Guid.create(), Guid.create())
+      )
     })
 
     it('should call the view channel reducer', function() {

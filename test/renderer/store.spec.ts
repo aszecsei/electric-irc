@@ -11,17 +11,20 @@ import {
   getCurrentConnection,
   getCurrentChannel
 } from '../../app/renderer/store'
-
+import { Guid } from '../../app/renderer/models/guid'
 describe('getCurrentConnection', function() {
+  const chanID1 = Guid.create()
+  const chanID2 = Guid.create()
+  const connID = Guid.create()
   const originalState = defaultStore.set(
     'connections',
     List([
       new ConnectionFactory({
-        id: 1,
+        id: connID,
         name: 'Connection 1',
         channels: List([
-          new ChannelFactory({ id: 1, name: 'Channel 1' }),
-          new ChannelFactory({ id: 2, name: 'Channel 2' })
+          new ChannelFactory({ id: chanID1, name: 'Channel 1' }),
+          new ChannelFactory({ id: chanID2, name: 'Channel 2' })
         ])
       })
     ])
@@ -45,7 +48,7 @@ describe('getCurrentConnection', function() {
   })
 
   describe('with unset current connection but set channel', function() {
-    const altState = originalState.set('currentChannelId', 1)
+    const altState = originalState.set('currentChannelId', chanID1)
     before(function() {
       resultConn = getCurrentConnection(altState)
       resultChan = getCurrentChannel(altState)
@@ -61,7 +64,7 @@ describe('getCurrentConnection', function() {
   })
 
   describe('with set current connection but unset channel', function() {
-    const altState = originalState.set('currentConnectionId', 1)
+    const altState = originalState.set('currentConnectionId', connID)
     before(function() {
       resultConn = getCurrentConnection(altState)
       resultChan = getCurrentChannel(altState)
@@ -82,8 +85,8 @@ describe('getCurrentConnection', function() {
 
   describe('with set current connection and set channel', function() {
     const altState = originalState
-      .set('currentConnectionId', 1)
-      .set('currentChannelId', 2)
+      .set('currentConnectionId', connID)
+      .set('currentChannelId', chanID2)
     before(function() {
       resultConn = getCurrentConnection(altState)
       resultChan = getCurrentChannel(altState)

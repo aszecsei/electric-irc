@@ -15,3 +15,22 @@
   margin-left: 5px;
   word-break: break-word;
 }
+
+.imgPrev {
+  margin: 5px;
+  max-width: 90%;
+  max-height: auto;
+}
+.mmessage a:link {
+  color: var(--secondary-light);
+  text-decoration: underline;
+}
+.mmessage a {
+  color: var(--secondary-dark);
+  text-decoration: underline;
+}
+
+.time {
+  font-size: 50%;
+  color: --disabled-text;
+}

@@ -1,14 +1,16 @@
 import { List, Record } from 'immutable'
-import { Message } from './message'
+import { Message, Guid } from './'
 
 interface IChannel {
-  id: number
+  id: Guid
   name: string
   log: List<Message>
 }
 
+const emptyGUID = Guid.createEmpty()
+
 export const ChannelFactory = Record<IChannel>({
-  id: -1,
+  id: emptyGUID,
   name: '',
   log: List<Message>([])
 })

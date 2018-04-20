@@ -1,7 +1,4 @@
-import { Message } from './models/message'
-import { Connection } from './models/connections'
-import { Channel } from './models/channel'
-import { ISettings } from './models/settings'
+import { Guid, Channel, Connection, Settings, Message } from './models'
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
@@ -9,19 +6,16 @@ export enum ActionTypeKeys {
   REMOVE_SERVER = 'REMOVE_SERVER',
   EDIT_SERVER = 'EDIT_SERVER',
   JOIN_CHANNEL = 'JOIN_CHANNEL',
+  ADD_CHANNEL = 'ADD_CHANNEL',
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
-  CHANGE_NICK = 'CHANGE_NICK',
   UI_TOGGLE_ADD_SERVER_MODAL = 'UI : TOGGLE_ADD_SERVER_MODAL',
   UI_TOGGLE_SETTINGS_MODAL = 'UI : TOGGLE_SETTINGS_MODAL',
   EDIT_SETTINGS = 'EDIT_SETTINGS',
-  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS'
-}
-export interface IChangeNickAction {
-  readonly type: ActionTypeKeys.CHANGE_NICK
-  readonly id: number
-  readonly nickname: string
+  TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
+  THEME_WHOLESALE = 'THEME_WHOLESALE',
+  MERGE_LOGS = 'MERGE_LOGS'
 }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
@@ -38,40 +32,52 @@ export interface IAddConnectionAction {
 
 export interface IRemoveServerAction {
   readonly type: ActionTypeKeys.REMOVE_SERVER
-  readonly id: number
+  readonly id: Guid
 }
 
 export interface IEditServerAction {
   readonly type: ActionTypeKeys.EDIT_SERVER
-  readonly id: number
+  readonly id: Guid
   readonly name: string
   readonly url: string
 }
 
 export interface IJoinChannelAction {
   readonly type: ActionTypeKeys.JOIN_CHANNEL
-  readonly serverId: number
+  readonly serverId: Guid
+  readonly channelName: string
+}
+
+export interface IAddChannelAction {
+  readonly type: ActionTypeKeys.ADD_CHANNEL
+  readonly serverId: Guid
   readonly channel: Channel
 }
 
+export interface IMergeLogsAction {
+  readonly type: ActionTypeKeys.MERGE_LOGS
+  readonly serverId: Guid
+  readonly channelId: Guid
+  readonly json: any[] // message property of the parsed json for list of messages from server
+}
 export interface IAppendLogAction {
   readonly type: ActionTypeKeys.APPEND_LOG
-  readonly serverId: number
-  readonly channelId: number
+  readonly serverId: Guid
+  readonly channelId: Guid
   readonly message: Message
 }
 
 export interface ISendMessageAction {
   readonly type: ActionTypeKeys.SEND_MESSAGE
-  readonly serverId: number
-  readonly channelId: number
-  readonly message: Message
+  readonly serverId: Guid
+  readonly channelId: Guid
+  readonly message: string
 }
 
 export interface IViewChannelAction {
   readonly type: ActionTypeKeys.VIEW_CHANNEL
-  readonly serverId: number
-  readonly channelId: number
+  readonly serverId: Guid
+  readonly channelId: Guid
 }
 export interface IToggleAddServerModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
@@ -90,12 +96,18 @@ export interface IEditSettingsAction {
   readonly prop: string
   readonly value: any
 }
+export interface IThemeWholesaleAction {
+  readonly type: ActionTypeKeys.THEME_WHOLESALE
+  readonly themename: string
+}
+
 export type ActionTypes =
   | IAddServerAction
   | IAddConnectionAction
   | IRemoveServerAction
   | IEditServerAction
   | IJoinChannelAction
+  | IAddChannelAction
   | IAppendLogAction
   | ISendMessageAction
   | IViewChannelAction
@@ -103,7 +115,8 @@ export type ActionTypes =
   | IToggleSettingsModalAction
   | IEditSettingsAction
   | IToggleTabAction
-  | IChangeNickAction
+  | IThemeWholesaleAction
+  | IMergeLogsAction
 
 export function addServer(
   name: string,
@@ -119,13 +132,13 @@ export function addServer(
     channels
   }
 }
-export function changeNick(id: number, nickname: string): IChangeNickAction {
-  return {
-    type: ActionTypeKeys.CHANGE_NICK,
-    id,
-    nickname
-  }
-}
+// export function changeNick(id: Guid, nickname: string): IChangeNickAction {
+//   return {
+//     type: ActionTypeKeys.CHANGE_NICK,
+//     id,
+//     nickname
+//   }
+// }
 export function addConnection(connection: Connection): IAddConnectionAction {
   return {
     type: ActionTypeKeys.ADD_CONNECTION,
@@ -133,7 +146,7 @@ export function addConnection(connection: Connection): IAddConnectionAction {
   }
 }
 
-export function removeServer(id: number): IRemoveServerAction {
+export function removeServer(id: Guid): IRemoveServerAction {
   return {
     type: ActionTypeKeys.REMOVE_SERVER,
     id
@@ -141,7 +154,7 @@ export function removeServer(id: number): IRemoveServerAction {
 }
 
 export function editServer(
-  id: number,
+  id: Guid,
   name: string,
   url: string
 ): IEditServerAction {
@@ -154,19 +167,42 @@ export function editServer(
 }
 
 export function joinChannel(
-  serverId: number,
-  channel: Channel
+  serverId: Guid,
+  channelName: string
 ): IJoinChannelAction {
   return {
     type: ActionTypeKeys.JOIN_CHANNEL,
     serverId,
+    channelName
+  }
+}
+
+export function addChannel(
+  serverId: Guid,
+  channel: Channel
+): IAddChannelAction {
+  return {
+    type: ActionTypeKeys.ADD_CHANNEL,
+    serverId,
     channel
+  }
+}
+export function mergeLog(
+  serverId: Guid,
+  channelId: Guid,
+  json: any[]
+): IMergeLogsAction {
+  return {
+    type: ActionTypeKeys.MERGE_LOGS,
+    serverId,
+    channelId,
+    json
   }
 }
 
 export function appendLog(
-  serverId: number,
-  channelId: number,
+  serverId: Guid,
+  channelId: Guid,
   message: Message
 ): IAppendLogAction {
   return {
@@ -178,9 +214,9 @@ export function appendLog(
 }
 
 export function sendMessage(
-  serverId: number,
-  channelId: number,
-  message: Message
+  serverId: Guid,
+  channelId: Guid,
+  message: string
 ): ISendMessageAction {
   return {
     type: ActionTypeKeys.SEND_MESSAGE,
@@ -191,8 +227,8 @@ export function sendMessage(
 }
 
 export function viewChannel(
-  serverId: number,
-  channelId: number
+  serverId: Guid,
+  channelId: Guid
 ): IViewChannelAction {
   return {
     type: ActionTypeKeys.VIEW_CHANNEL,
@@ -209,6 +245,12 @@ export function toggleAddServerModal(
     visible
   }
 }
+export function themeWholesale(themename: string): IThemeWholesaleAction {
+  return {
+    type: ActionTypeKeys.THEME_WHOLESALE,
+    themename
+  }
+}
 export function toggleSettingsModal(
   visible?: boolean
 ): IToggleSettingsModalAction {
@@ -223,9 +265,9 @@ export function toggleSettingsTab(tab: string): IToggleTabAction {
     tab
   }
 }
-export function editSettings<K extends keyof ISettings>(
+export function editSettings<K extends keyof Settings>(
   prop: K,
-  value: ISettings[K]
+  value: Settings[K]
 ): IEditSettingsAction {
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,

@@ -2,32 +2,34 @@ import { AnyAction } from 'redux'
 import { ElectricState, ElectricStateFactory } from '../store'
 import {
   ActionTypeKeys,
-  IAddServerAction,
   IAppendLogAction,
   IEditServerAction,
-  IJoinChannelAction,
   IRemoveServerAction,
-  ISendMessageAction,
   IViewChannelAction,
   IAddConnectionAction,
-  IChangeNickAction,
   IToggleAddServerModalAction,
+  IThemeWholesaleAction,
   IToggleSettingsModalAction,
   IEditSettingsAction,
-  IToggleTabAction
+  IToggleTabAction,
+  IAddChannelAction,
+  IMergeLogsAction
 } from '../actions'
 
 import addConnection from './add-connection'
 import appendLog from './append-log'
 import editServer from './edit-server'
-import joinChannel from './join-channel'
+import addChannel from './add-channel'
 import removeServer from './remove-server'
 import viewChannel from './view-channel'
 import toggleAddServerModal from './toggle-add-server-modal'
-import changeNick from './change-nick'
+
+import themeWholesale from './theme-wholesale'
+
 import toggleSettingsModal from './toggle-settings-modal'
 import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
+import mergeLog from './merge_logs'
 export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
@@ -42,16 +44,18 @@ export function defaultReducer(
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:
       return editServer(state, action as IEditServerAction)
-    case ActionTypeKeys.JOIN_CHANNEL:
-      return joinChannel(state, action as IJoinChannelAction)
+    case ActionTypeKeys.ADD_CHANNEL:
+      return addChannel(state, action as IAddChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
     case ActionTypeKeys.VIEW_CHANNEL:
       return viewChannel(state, action as IViewChannelAction)
     case ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL:
       return toggleAddServerModal(state, action as IToggleAddServerModalAction)
-    case ActionTypeKeys.CHANGE_NICK:
-      return changeNick(state, action as IChangeNickAction)
+    case ActionTypeKeys.THEME_WHOLESALE:
+      return themeWholesale(state, action as IThemeWholesaleAction)
+    case ActionTypeKeys.MERGE_LOGS:
+      return mergeLog(state, action as IMergeLogsAction)
     case ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL:
       return toggleSettingsModal(state, action as IToggleSettingsModalAction)
     case ActionTypeKeys.EDIT_SETTINGS:

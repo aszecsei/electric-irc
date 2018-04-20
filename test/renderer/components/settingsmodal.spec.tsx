@@ -16,31 +16,34 @@ import { mount, render, shallow, ReactWrapper } from 'enzyme'
 
 import * as SettingsModal from '../../../app/renderer/components/settingsmodal'
 import * as sinon from 'sinon'
-import { SettingFactory } from '../../../app/renderer/models/settings'
+import { SettingsFactory } from '../../../app/renderer/models/settings'
 
 use(chaiEnzyme())
 
 describe('settingsModal', function() {
-  let wrapper: ReactWrapper = null
-  let instance: SettingsModal.SettingsModal = null
-  let onSettingsToggle: sinon.SinonSpy = null
-  let onTabToggle: sinon.SinonSpy = null
-  let changeSetting: sinon.SinonSpy = null
-  let tabChange: any = null
-  let tab: string
-  let inputScrollBackCheck: any = null
+  let wrapper: ReactWrapper
+  let instance: SettingsModal.SettingsModal
+  let onSettingsToggle: sinon.SinonSpy
+  let onTabToggle: sinon.SinonSpy
+  let changeSetting: sinon.SinonSpy
+  let inputScrollBackCheck: ReactWrapper
+  let changeTheme: sinon.SinonSpy
   before(function() {
     onSettingsToggle = sinon.spy()
     changeSetting = sinon.spy()
+    onTabToggle = sinon.spy()
+    changeTheme = sinon.spy()
     wrapper = mount(
       <SettingsModal.SettingsModal
-        toggleTab={'1'}
         visible={true}
-        className={'test'}
-        settings={SettingFactory()}
         onSettingsToggle={onSettingsToggle}
         onTabToggle={onTabToggle}
         changeSetting={changeSetting}
+        toggleTab={'1'}
+        className={'test'}
+        settings={new SettingsFactory()}
+        changeTheme={changeTheme}
+        currentTheme={'dark'}
       />
     )
     instance = wrapper.instance() as SettingsModal.SettingsModal

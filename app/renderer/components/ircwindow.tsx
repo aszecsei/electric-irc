@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as irc from 'irc'
 
 import { List } from 'immutable'
 
@@ -14,25 +13,31 @@ interface IChatWindowProps {
   connection: Connection | undefined
   channel: Channel | undefined
   messages: List<Message> | undefined
-  onSendMessage: (message: Message, conn: Connection, channel: Channel) => void
+  onSendMessage: (message: string, conn: Connection, channel: Channel) => void
 }
 export class ChatWindow extends React.Component<IChatWindowProps> {
+  private logWindow?: HTMLDivElement
+
   constructor(props: IChatWindowProps) {
     super(props)
   }
   componentDidUpdate() {
-    var el = this.refs.logWindow as HTMLDivElement
-    el.scrollTop = el.scrollHeight
+    if (this.logWindow) {
+      this.logWindow.scrollTop = this.logWindow.scrollHeight
+    }
   }
   render() {
     return (
       <div className="chatwindow">
-        <div className="logWindow" ref="logWindow">
+        <div
+          className="logWindow"
+          ref={ref => (this.logWindow = ref ? ref : undefined)}
+        >
           {this.props.messages
             ? this.props.messages.map((message, i) => (
-                <p key={i} className="outermessage">
+                <div key={i} className="outermessage">
                   <MessageDisp message={message} />
-                </p>
+                </div>
               ))
             : []}
         </div>

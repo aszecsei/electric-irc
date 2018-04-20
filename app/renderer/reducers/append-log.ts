@@ -1,15 +1,6 @@
-import { List } from 'immutable'
 import { ElectricState } from '../store'
 import { IAppendLogAction } from '../actions'
-
-function replace<K>(list: List<K>, oldElement: K, newElement: K) {
-  const oldIndex = list.indexOf(oldElement)
-  if (oldIndex !== -1) {
-    return list.set(oldIndex, newElement)
-  } else {
-    return list
-  }
-}
+import { replace } from '../utilities/replace'
 
 export default function appendLog(
   state: ElectricState,
