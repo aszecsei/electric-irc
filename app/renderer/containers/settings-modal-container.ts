@@ -8,6 +8,7 @@ import {
 } from '../actions'
 import SettingsModal from '../components/settingsmodal'
 import { ISettings } from '../models/settings'
+import { map } from '../stylesheets/thememaps/defaults'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
@@ -15,7 +16,7 @@ const mapStateToProps = (state: ElectricState) => {
     toggleTab: state.toggleTab,
     settings: state.settings,
     currentTheme: state.themeName,
-    themes: state.themes
+    themes: state.themes.merge(map)
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {

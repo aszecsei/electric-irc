@@ -5,6 +5,7 @@ import { Channel } from './models/channel'
 import { theme, backup } from './stylesheets/thememaps/themes'
 import { SettingsFactory, Settings } from './models/settings'
 import { Guid } from './models'
+import { map } from './stylesheets/thememaps/defaults'
 
 interface IElectricState {
   connections: List<Connection>
@@ -23,9 +24,9 @@ export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  themeName: 'light',
+  themeName: 'dark',
   addServerModalActive: false,
-  themeProperties: theme.get('light') || backup,
+  themeProperties: map.get('dark') || backup,
   settingsModalActive: true,
   settings: SettingsFactory(),
   toggleTab: '1',
