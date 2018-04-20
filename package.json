@@ -33,6 +33,7 @@
   "private": true,
   "devDependencies": {
     "@types/chai": "^4.1.1",
+    "@types/chai-as-promised": "^7.1.0",
     "@types/chai-enzyme": "^0.6.3",
     "@types/classnames": "^2.2.3",
     "@types/electron-devtools-installer": "^2.0.2",
@@ -51,6 +52,7 @@
     "@types/webdriverio": "^4.8.7",
     "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "chai-enzyme": "^1.0.0-beta.0",
     "cheerio": "^1.0.0-rc.2",
     "coveralls": "^3.0.0",
