@@ -36,7 +36,7 @@ describe('app loader', function() {
       const wrapper = shallow(<AppLoader />)
       const inst = wrapper.instance() as AppLoader
       expect(inst)
-        .have.property('handleClose')
+        .to.have.property('handleClose')
         .that.is.a('function')
     })
 
@@ -44,7 +44,7 @@ describe('app loader', function() {
       const wrapper = shallow(<AppLoader />)
       const inst = wrapper.instance() as AppLoader
       expect(inst)
-        .have.property('handleMaximize')
+        .to.have.property('handleMaximize')
         .that.is.a('function')
     })
 
@@ -52,7 +52,7 @@ describe('app loader', function() {
       const wrapper = shallow(<AppLoader />)
       const inst = wrapper.instance() as AppLoader
       expect(inst)
-        .have.property('handleMinimize')
+        .to.have.property('handleMinimize')
         .that.is.a('function')
     })
   })
