@@ -22,8 +22,6 @@ export const ElectricStateFactory = Record<IElectricState>({
   connections: List<Connection>([]),
   currentConnectionId: undefined,
   currentChannelId: undefined,
-  lastUsedConnectionId: 0,
-  lastUsedChannelId: 0,
   themeName: 'dark',
   addServerModalActive: false,
   themeProperties: theme.get('dark') || backup,
@@ -50,4 +48,11 @@ export function getCurrentChannel(state: ElectricState): Channel | undefined {
     })
   }
   return undefined
+}
+
+export function getSettings(state: ElectricState) {
+  return {
+    settings: state.settings,
+    theme: state.themeName
+  }
 }

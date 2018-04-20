@@ -2,7 +2,7 @@ import { expect, use } from 'chai'
 import * as chaiEnzyme from 'chai-enzyme'
 
 import * as React from 'react'
-import { mount, render, shallow, ReactWrapper } from 'enzyme'
+import { mount, render, shallow, ShallowWrapper } from 'enzyme'
 
 import * as AddModal from '../../../app/renderer/components/addmodal'
 import {
@@ -17,8 +17,20 @@ import Input from 'reactstrap/lib/Input'
 
 use(chaiEnzyme())
 
+const createFakeEvent = (value: string) => {
+  return {
+    target: {
+      value,
+      classList: {
+        add: val => undefined,
+        remove: val => undefined
+      }
+    }
+  }
+}
+
 describe('addmodal', function() {
-  let wrapper: ReactWrapper = null
+  let wrapper: ShallowWrapper = null
   let instance: AddModal.AddModal = null
   let onClick: sinon.SinonSpy = null
   let onSubmit: sinon.SinonSpy = null
@@ -28,7 +40,7 @@ describe('addmodal', function() {
   before(function() {
     onClick = sinon.spy()
     onSubmit = sinon.spy()
-    wrapper = mount(
+    wrapper = shallow(
       <AddModal.AddModal
         visible={false}
         connections={List<Connection>([
@@ -54,46 +66,42 @@ describe('addmodal', function() {
   describe('handlename', function() {
     it('should change state of name if valid', function() {
       value = 'test'
-      inputName = mount(
+      inputName = shallow(
         <Input value={value} onChange={instance.handleChangeName} />
       )
-      inputName.instance().value = 'test'
-      inputName.simulate('change')
+      inputName.simulate('change', createFakeEvent('test'))
       expect(instance.state.nickname).to.eq('test')
     })
     it('should change state if not valid', function() {
       value = '5st'
-      inputName = mount(
+      inputName = shallow(
         <Input value={value} onChange={instance.handleChangeName} />
       )
-      inputName.instance().value = '5st'
-      inputName.simulate('change')
+      inputName.simulate('change', createFakeEvent('5st'))
       expect(instance.state.nickname).to.eq('5st')
     })
   })
   describe('handleirc', function() {
     it('should change state of name if valid', function() {
       value = 'test'
-      inputName = mount(
+      inputName = shallow(
         <Input value={value} onChange={instance.handleChangeIRC} />
       )
-      inputName.instance().value = 'test'
-      inputName.simulate('change')
+      inputName.simulate('change', createFakeEvent('test'))
       expect(instance.state.url).to.eq('test')
     })
     it('should change state if not valid', function() {
       value = 'xxx'
-      inputName = mount(
+      inputName = shallow(
         <Input value={value} onChange={instance.handleChangeIRC} />
       )
-      inputName.instance().value = 'xxx'
-      inputName.simulate('change')
+      inputName.simulate('change', createFakeEvent('xxx'))
       expect(instance.state.url).to.eq('xxx')
     })
   })
   describe('handle server name', function() {
     it('should change state of server name', function() {
-      instance.handleChangeIRCName({ target: { value: 'beepboop' } })
+      instance.handleChangeIRCName(createFakeEvent('beepboop'))
       expect(instance.state.name).to.eq('beepboop')
     })
   })
