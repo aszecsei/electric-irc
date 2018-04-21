@@ -8,10 +8,10 @@ export default function themeWholesale(
   action: IThemeWholesaleAction
 ): ElectricState {
   let newState = state
-  let themename = action.themename
+  const themename = action.themename
   let newTheme
   if (themename !== 'light' && themename !== 'dark') {
-    newTheme = theme.get(action.themename)
+    newTheme = state.themes.get(themename)
   } else {
     newTheme = map.get(themename)
   }

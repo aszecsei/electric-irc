@@ -14,7 +14,8 @@ import {
   IToggleTabAction,
   IAddChannelAction,
   IMergeLogsAction,
-  IAddThemeAction
+  IAddThemeAction,
+  IPlayWithThemeAction
 } from '../actions'
 
 import addConnection from './add-connection'
@@ -32,6 +33,7 @@ import editSettings from './change-settings'
 import toggleTab from './toggle-tab'
 import mergeLog from './merge_logs'
 import addTheme from './add-theme'
+import playWithTheme from './play-with-theme'
 export const defaultStore = new ElectricStateFactory({})
 
 export function defaultReducer(
@@ -66,6 +68,8 @@ export function defaultReducer(
       return toggleTab(state, action as IToggleTabAction)
     case ActionTypeKeys.ADD_THEME:
       return addTheme(state, action as IAddThemeAction)
+    case ActionTypeKeys.PLAY_WITH_THEME:
+      return playWithTheme(state, action as IPlayWithThemeAction)
     default:
       return state
   }

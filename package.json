@@ -86,6 +86,7 @@
   },
   "dependencies": {
     "@types/opn": "^5.1.0",
+    "@types/react-color": "^2.13.4",
     "@types/reactstrap": "^5.0.17",
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",

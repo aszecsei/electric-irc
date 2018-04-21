@@ -15,23 +15,34 @@ import {
 import * as classnames from 'classnames'
 import { ISettings, Settings } from '../models/settings'
 import { Map } from 'immutable'
+import Button from 'reactstrap/lib/Button'
+import { CompactPicker } from 'react-color'
 
 interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
   onTabToggle: (arg: string) => void
   changeSetting: (event: keyof ISettings, value: any) => void
+  addTheme: (name: string, theme: Map<string, string>) => void
   toggleTab: string
   className: string
   settings: Settings
   changeTheme: (theme: string) => void
   currentTheme: string
   themes: Map<string, Map<string, string>>
+  thistheme: Map<string, string>
+  playWithTheme: (property: string, color: string) => void
 }
 
-export class SettingsModal extends React.Component<ISettingsProps> {
+export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
+    this.state = {
+      propertyvalue: ''
+    }
+  }
+  savetheme = () => {
+    this.props.addTheme('custom', this.props.thistheme)
   }
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)
@@ -79,6 +90,10 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   changeTheme = (event: any) => {
     this.props.changeTheme(event.target.value)
   }
+  handleChange = (e: any) => {
+    this.setState({ propertyvalue: e.target.value })
+  }
+
   public render() {
     return (
       <Modal
@@ -267,6 +282,25 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                 </option>
               ))}
             </Input>
+            <p>Custom Theme</p>
+            <Input
+              type={'select'}
+              value={this.state.propertyvalue}
+              name="themechange"
+              id="themechange"
+              onChange={this.handleChange}
+            >
+              <option value="background">Background</option>
+              <option value="primary">Primary</option>
+              <option value="secondary">Secondary</option>
+              <option value="text">Text</option>
+            </Input>
+            <CompactPicker
+              onChangeComplete={color =>
+                this.props.playWithTheme(this.state.propertyvalue, color.hex)
+              }
+            />
+            <Button onClick={() => this.savetheme()}> Save Theme</Button>
           </TabPane>
         </TabContent>
       </Modal>

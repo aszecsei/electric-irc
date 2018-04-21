@@ -17,7 +17,8 @@ export enum ActionTypeKeys {
   TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
   THEME_WHOLESALE = 'THEME_WHOLESALE',
   MERGE_LOGS = 'MERGE_LOGS',
-  ADD_THEME = 'ADD_THEME'
+  ADD_THEME = 'ADD_THEME',
+  PLAY_WITH_THEME = 'PLAY_WITH_THEME'
 }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
@@ -107,6 +108,11 @@ export interface IAddThemeAction {
   readonly name: string
   readonly theme: Map<string, string>
 }
+export interface IPlayWithThemeAction {
+  readonly type: ActionTypeKeys.PLAY_WITH_THEME
+  readonly property: string
+  readonly value: string
+}
 
 export type ActionTypes =
   | IAddServerAction
@@ -125,6 +131,7 @@ export type ActionTypes =
   | IThemeWholesaleAction
   | IMergeLogsAction
   | IAddThemeAction
+  | IPlayWithThemeAction
 
 export function addServer(
   name: string,
@@ -291,5 +298,15 @@ export function addTheme(
     type: ActionTypeKeys.ADD_THEME,
     name,
     theme
+  }
+}
+export function playWithTheme(
+  property: string,
+  value: string
+): IPlayWithThemeAction {
+  return {
+    type: ActionTypeKeys.PLAY_WITH_THEME,
+    property,
+    value
   }
 }
