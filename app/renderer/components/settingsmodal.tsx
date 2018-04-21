@@ -38,11 +38,12 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
     this.state = {
-      propertyvalue: ''
+      propertyvalue: '',
+      themename: 'Custom'
     }
   }
   savetheme = () => {
-    this.props.addTheme('custom', this.props.thistheme)
+    this.props.addTheme(this.state.themename, this.props.thistheme)
   }
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)
@@ -90,8 +91,11 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
   changeTheme = (event: any) => {
     this.props.changeTheme(event.target.value)
   }
-  handleChange = (e: any) => {
+  handleChangeProperty = (e: any) => {
     this.setState({ propertyvalue: e.target.value })
+  }
+  handleChangeTheme = (e: any) => {
+    this.setState({ themename: e.target.value })
   }
 
   public render() {
@@ -283,12 +287,18 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
               ))}
             </Input>
             <p>Custom Theme</p>
+            Theme Name:
+            <Input
+              type={'text'}
+              value={this.state.themename}
+              onChange={this.handleChangeTheme}
+            />
             <Input
               type={'select'}
               value={this.state.propertyvalue}
               name="themechange"
               id="themechange"
-              onChange={this.handleChange}
+              onChange={this.handleChangeProperty}
             >
               <option value="background">Background</option>
               <option value="primary">Primary</option>

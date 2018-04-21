@@ -5,5 +5,7 @@ export default function addTheme(
   state: ElectricState,
   action: IAddThemeAction
 ): ElectricState {
-  return state.set('themes', state.themes.set(action.name, action.theme))
+  let Newstate = state.set('themeName', action.name)
+  Newstate = Newstate.set('themes', state.themes.set(action.name, action.theme))
+  return Newstate
 }
