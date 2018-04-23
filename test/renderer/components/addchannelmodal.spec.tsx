@@ -65,11 +65,23 @@ describe('addchannelmodal', function() {
       inputChannel.simulate('change')
       expect(instance.state.channel).to.eq('#testing')
     })
-    it('should handle submitting', function() {
-      instance.handleSubmit({
-        preventDefault: () => null
-      })
-      expect(onSubmit).to.have.been.calledOnce
+    it('should change state if invalid', function() {
+      value = 'testing'
+      inputChannel = mount(
+        <Input
+          value={value}
+          onChange={instance.generateHandleChangeChannel()}
+        />
+      )
+      inputChannel.instance().value = 'testing'
+      inputChannel.simulate('change')
+      expect(instance.state.channel).to.eq('testing')
     })
+    // it('should handle submitting', function() {
+    //   instance.handleSubmit({
+    //     preventDefault: () => null
+    //   })
+    //   expect(onSubmit).to.have.been.calledOnce
+    // })
   })
 })

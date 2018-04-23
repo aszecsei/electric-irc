@@ -45,7 +45,7 @@ export class AddChannelModal extends React.Component<
       this.setState({
         channel: event.target.value
       })
-      if (/^#[^\s]+/.exec(this.state.channel)) {
+      if (/^#[^\s]+/.exec(event.target.value)) {
         event.target.classList.add('is-valid')
         event.target.classList.remove('is-invalid')
       } else {
@@ -82,7 +82,7 @@ export class AddChannelModal extends React.Component<
       >
         <Form onSubmit={this.handleSubmit}>
           <ModalHeader toggle={this.props.onAddChannelToggle}>
-            Add new server
+            Add Channel
           </ModalHeader>
           <ModalBody>
             <FormGroup>
