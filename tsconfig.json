@@ -6,7 +6,8 @@
       "@types",
       "./@types"
     ],
-    "jsx": "react"
+    "jsx": "react",
+    "noUnusedLocals": false
   },
   "exclude": [
     "node_modules",

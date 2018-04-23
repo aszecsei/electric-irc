@@ -4,10 +4,12 @@ import { ElectricState } from '../store'
 import {
   viewChannel,
   toggleAddServerModal,
+  toggleAddChannelModal,
   toggleSettingsModal
 } from '../actions'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
+import { Guid } from '../models'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
@@ -23,6 +25,9 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     onAddServerClick: () => {
       dispatch(toggleAddServerModal(true))
+    },
+    onAddChannelClick: (connid?: Guid) => {
+      dispatch(toggleAddChannelModal(connid))
     },
     onSettingsClick: () => {
       dispatch(toggleSettingsModal(true))

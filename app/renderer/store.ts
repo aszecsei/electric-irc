@@ -16,6 +16,7 @@ interface IElectricState {
   themeProperties: Map<string, string>
   settings: Settings
   toggleTab: string
+  addChannelConnId?: Guid // if add channel modal should be not visable this need to be undefined
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
@@ -27,7 +28,8 @@ export const ElectricStateFactory = Record<IElectricState>({
   themeProperties: theme.get('dark') || backup,
   settingsModalActive: false,
   settings: SettingsFactory(),
-  toggleTab: '1'
+  toggleTab: '1',
+  addChannelConnId: undefined
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>

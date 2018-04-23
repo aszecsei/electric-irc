@@ -4,6 +4,7 @@ import SidebarContainer from '../containers/sidebar-container'
 import AddModalContainer from '../containers/add-modal-container'
 import ChatWindowContainer from '../containers/irc-window-container'
 import SettingsModalContainer from '../containers/settings-modal-container'
+import AddChannelModalContainer from '../containers/add-channel-modal-container'
 
 export const App: React.SFC = props => {
   return (
@@ -11,6 +12,7 @@ export const App: React.SFC = props => {
       <div className="container-fluid flex">
         <SettingsModalContainer className="" />
         <AddModalContainer />
+        <AddChannelModalContainer />
 
         <div id="content" className="flex container-fluid">
           <SidebarContainer />
