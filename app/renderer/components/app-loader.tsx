@@ -16,7 +16,7 @@ import {
   writeSettings,
   loadConnections,
   writeConnections
-} from '../utilities/file-storage'
+} from '../utilities/persistent-storage'
 import { ElectricState } from '../store'
 import { remote } from 'electron'
 

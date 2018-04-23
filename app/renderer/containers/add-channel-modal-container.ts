@@ -2,7 +2,7 @@ import { connect, Dispatch } from 'react-redux'
 import { AddChannelModal } from '../components/addchannelmodal'
 import { ElectricState } from '../store'
 import { toggleAddChannelModal, joinChannel } from '../actions'
-import { Guid, ChannelFactory } from '../models'
+import { Guid } from '../models'
 
 const mapStateToProps = (state: ElectricState) => {
   return {

@@ -7,10 +7,8 @@ import {
   ModalFooter,
   Form,
   FormGroup,
-  Label,
   Input,
-  InputGroup,
-  InputGroupAddon
+  InputGroup
 } from 'reactstrap'
 import { List } from 'immutable'
 import { Connection } from '../models/connections'
@@ -56,20 +54,16 @@ export class AddChannelModal extends React.Component<
   }
 
   handleSubmit = (event: any) => {
-    console.log('1')
     event.preventDefault()
     if (this.props.connID && /^#[^\s]+/.exec(this.state.channel)) {
-      console.log('2')
       const conn = this.props.connections.find(v => {
         return v.id === this.props.connID
       })
       if (conn) {
-        console.log('3')
         const chan = conn.channels.find(v => {
           return v.name === this.state.channel
         })
         if (!chan) {
-          console.log('4')
           this.props.onAddChannelSubmit(this.props.connID, this.state.channel)
           this.setState({ ...defaultState })
           this.props.onAddChannelToggle()

@@ -13,7 +13,6 @@ import {
   parseQuitMessage,
   MessageType
 } from '../models'
-import { print } from 'util'
 
 import { replace } from '../utilities/replace'
 
@@ -110,20 +109,26 @@ function merge(log: List<Message>, servlog: List<Message>) {
   })
 
   let newLog = List<Message>()
-  while (!(log.isEmpty() && servlog.isEmpty())) {
-    if (log.isEmpty()) {
-      newLog = newLog.push(servlog.first())
+  let logFirst = log.first()
+  let servlogFirst = servlog.first()
+  while (logFirst || servlogFirst) {
+    if (!logFirst && servlogFirst) {
+      newLog = newLog.push(servlogFirst)
       servlog = servlog.slice(1)
-    } else if (servlog.isEmpty()) {
-      newLog = newLog.push(log.first())
+    } else if (logFirst && !servlogFirst) {
+      newLog = newLog.push(logFirst)
       log = log.slice(1)
-    } else if (log.first().sent <= servlog.first().sent) {
-      newLog = newLog.push(log.first())
-      log = log.slice(1)
-    } else {
-      newLog = newLog.push(servlog.first())
-      servlog = servlog.slice(1)
+    } else if (logFirst && servlogFirst) {
+      if (logFirst.sent <= servlogFirst.sent) {
+        newLog = newLog.push(logFirst)
+        log = log.slice(1)
+      } else {
+        newLog = newLog.push(servlogFirst)
+        servlog = servlog.slice(1)
+      }
     }
+    logFirst = log.first()
+    servlogFirst = servlog.first()
   }
   return newLog
 }

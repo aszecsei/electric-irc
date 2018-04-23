@@ -3,7 +3,6 @@ import { Collapse } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { Guid } from '../models/guid'
-import * as irc from 'irc'
 
 interface IServerProps {
   onChannelClick: (conn: Connection, channel: Channel) => void
