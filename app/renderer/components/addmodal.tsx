@@ -112,7 +112,6 @@ export class AddModal extends React.Component<IAddModalProps, IAddModalState> {
 
   handleSubmit = (event: any) => {
     event.preventDefault()
-    console.log(this.props.connections)
     if (
       !this.props.connections.find(v => {
         return this.state.url === v.url

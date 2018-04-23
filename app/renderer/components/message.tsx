@@ -24,7 +24,7 @@ function link_process(str: string) {
   while (reres) {
     if (reres.index > 0) {
       x.push(
-        <text key={ii}>{emoji_process(tempstr.substring(0, reres.index))}</text>
+        <span key={ii}>{emoji_process(tempstr.substring(0, reres.index))}</span>
       )
       ii++
     }
@@ -43,7 +43,7 @@ function link_process(str: string) {
     reres = urlre.exec(tempstr)
   }
   if (tempstr.length !== 0) {
-    x.push(<text key={ii}>{emoji_process(tempstr)}</text>)
+    x.push(<span key={ii}>{emoji_process(tempstr)}</span>)
   }
   return x
 }
@@ -73,8 +73,8 @@ function has_sender(message: Message) {
   return (
     <p className="mmessage">
       {link_process(message.sender)}
-      <text>{': '}</text>
-      <text className="time">{message.sent.toLocaleString()}</text>
+      <span>: </span>
+      <span className="time">{message.sent.toLocaleString()}</span>
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
@@ -86,7 +86,7 @@ function has_sender(message: Message) {
 function no_sender(message: Message) {
   return (
     <p className="mmessage">
-      <text className="time">{message.sent.toLocaleString()}</text>
+      <span className="time">{message.sent.toLocaleString()}</span>
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />

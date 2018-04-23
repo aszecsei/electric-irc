@@ -51,3 +51,10 @@ export function getCurrentChannel(state: ElectricState): Channel | undefined {
   }
   return undefined
 }
+
+export function getSettings(state: ElectricState) {
+  return {
+    settings: state.settings,
+    theme: state.themeName
+  }
+}

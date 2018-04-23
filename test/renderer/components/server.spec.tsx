@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 
 import * as React from 'react'
-import { mount, render, shallow, ReactWrapper } from 'enzyme'
+import { render, shallow, ShallowWrapper } from 'enzyme'
 
 import { List } from 'immutable'
 
@@ -17,14 +17,14 @@ use(chaiEnzyme())
 use(sinonChai)
 
 describe('server panel', function() {
-  let wrapper: ReactWrapper = null
+  let wrapper: ShallowWrapper = null
   let instance: server.Server = null
   let onClick: sinon.SinonSpy = null
 
   before(function() {
     const id = Guid.create()
     onClick = sinon.spy()
-    wrapper = mount(
+    wrapper = shallow(
       <server.Server
         onChannelClick={onClick}
         curChanID={id}

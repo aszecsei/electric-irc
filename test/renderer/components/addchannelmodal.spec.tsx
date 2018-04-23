@@ -2,7 +2,7 @@ import { expect, use } from 'chai'
 import * as chaiEnzyme from 'chai-enzyme'
 
 import * as React from 'react'
-import { mount, render, shallow, ReactWrapper } from 'enzyme'
+import { render, shallow, ShallowWrapper } from 'enzyme'
 
 import * as AddChannelModal from '../../../app/renderer/components/addchannelmodal'
 import {
@@ -17,8 +17,21 @@ import Input from 'reactstrap/lib/Input'
 
 use(chaiEnzyme())
 
+const createFakeEvent = (value: string) => {
+  return {
+    target: {
+      value,
+      classList: {
+        add: val => undefined,
+        remove: val => undefined
+      }
+    },
+    preventDefault: () => undefined
+  }
+}
+
 describe('addchannelmodal', function() {
-  let wrapper: ReactWrapper = null
+  let wrapper: ShallowWrapper = null
   let instance: AddChannelModal.AddChannelModal = null
   let onClick: sinon.SinonSpy = null
   let onSubmit: sinon.SinonSpy = null
@@ -29,12 +42,12 @@ describe('addchannelmodal', function() {
     onClick = sinon.spy()
     onSubmit = sinon.spy()
     conn = Guid.create()
-    wrapper = mount(
+    wrapper = shallow(
       <AddChannelModal.AddChannelModal
         connID={conn}
         connections={List<Connection>([
           new ConnectionFactory({
-            id: Guid.create(),
+            id: conn,
             name: 'Connection 1',
             url: 'xxx',
             channels: List([
@@ -55,33 +68,40 @@ describe('addchannelmodal', function() {
   describe('handlechange', function() {
     it('should change state if valid', function() {
       value = '#testing'
-      inputChannel = mount(
+      inputChannel = shallow(
         <Input
           value={value}
           onChange={instance.generateHandleChangeChannel()}
         />
       )
-      inputChannel.instance().value = '#testing'
-      inputChannel.simulate('change')
+      inputChannel.simulate('change', createFakeEvent('#testing'))
       expect(instance.state.channel).to.eq('#testing')
     })
     it('should change state if invalid', function() {
       value = 'testing'
-      inputChannel = mount(
+      inputChannel = shallow(
         <Input
           value={value}
           onChange={instance.generateHandleChangeChannel()}
         />
       )
-      inputChannel.instance().value = 'testing'
-      inputChannel.simulate('change')
+      inputChannel.simulate('change', createFakeEvent('testing'))
       expect(instance.state.channel).to.eq('testing')
     })
-    // it('should handle submitting', function() {
-    //   instance.handleSubmit({
-    //     preventDefault: () => null
-    //   })
-    //   expect(onSubmit).to.have.been.calledOnce
-    // })
+    it('should handle submitting', function() {
+      value = '#testing'
+      inputChannel = shallow(
+        <Input
+          value={value}
+          onChange={instance.generateHandleChangeChannel()}
+          onSubmit={instance.handleSubmit}
+        />
+      )
+      inputChannel.simulate('change', createFakeEvent('#myotherchannel'))
+      inputChannel.simulate('submit', {
+        preventDefault: () => null
+      })
+      expect(onSubmit).to.have.been.calledOnce
+    })
   })
 })
