@@ -10,11 +10,7 @@ export default function themeWholesale(
   let newState = state
   const themename = action.themename
   let newTheme
-  if (themename !== 'light' && themename !== 'dark') {
-    newTheme = state.themes.get(themename)
-  } else {
-    newTheme = map.get(themename)
-  }
+    newTheme = themename !== 'light' && themename !== 'dark' ? state.themes.get(themename) : map.get(themename)
   if (newTheme) {
     newState = newState.set('themeName', action.themename)
     newState = newState.set('themeProperties', newTheme)

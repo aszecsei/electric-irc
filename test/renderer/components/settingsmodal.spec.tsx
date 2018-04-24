@@ -50,6 +50,8 @@ describe('settingsModal', function() {
     changeSetting = sinon.spy()
     onTabToggle = sinon.spy()
     changeTheme = sinon.spy()
+    addTheme = sinon.spy()
+    playWithTheme =sinon.spy()
     wrapper = shallow(
       <SettingsModal.SettingsModal
         visible={true}
