@@ -15,7 +15,7 @@ import {
   IAddChannelAction,
   IMergeLogsAction,
   IAddThemeAction,
-  IPlayWithThemeAction
+  IPlayWithThemeAction,
   IToggleAddChannelModalAction
 } from '../actions'
 

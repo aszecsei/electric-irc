@@ -12,6 +12,7 @@ import { SettingsFactory } from '../../../app/renderer/models/settings'
 import { Map } from 'immutable'
 import * as themes from '../../../app/renderer/stylesheets/thememaps/themes'
 import * as AddModal from '../../../app/renderer/components/addmodal'
+import {backup} from "../../../app/renderer/stylesheets/thememaps/themes";
 
 use(chaiEnzyme())
 use(sinonChai)
@@ -33,7 +34,7 @@ describe('theme component', function() {
       sandbox = sinon.createSandbox()
 
       wrapper = shallow(
-        <Theme properties={darkTheme}>
+        <Theme properties={backup}>
           <div />
         </Theme>
       )
@@ -57,7 +58,7 @@ describe('theme component', function() {
       sandbox = sinon.createSandbox()
 
       wrapper = shallow(
-        <Theme properties={darkTheme}>
+        <Theme properties={backup}>
           <div />
         </Theme>
       )
@@ -67,7 +68,7 @@ describe('theme component', function() {
     })
 
     it('should not properties', function() {
-      wrapper.setProps({ properties: darkTheme })
+      wrapper.setProps({ properties: backup })
       expect(instance.handleNewProperties).to.not.be.called
     })
 
