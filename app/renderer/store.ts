@@ -18,6 +18,7 @@ interface IElectricState {
   settings: Settings
   toggleTab: string
   themes: Map<string, Map<string, string>>
+  addChannelConnId?: Guid // if add channel modal should be not visable this need to be undefined
 }
 
 export const ElectricStateFactory = Record<IElectricState>({
@@ -27,10 +28,11 @@ export const ElectricStateFactory = Record<IElectricState>({
   themeName: 'dark',
   addServerModalActive: false,
   themeProperties: map.get('dark') || backup,
-  settingsModalActive: true,
+  settingsModalActive: false,
   settings: SettingsFactory(),
   toggleTab: '1',
-  themes: theme
+  themes: theme,
+  addChannelConnId: undefined
 })
 
 export type ElectricState = Record<IElectricState> & Readonly<IElectricState>
@@ -51,4 +53,11 @@ export function getCurrentChannel(state: ElectricState): Channel | undefined {
     })
   }
   return undefined
+}
+
+export function getSettings(state: ElectricState) {
+  return {
+    settings: state.settings,
+    theme: state.themeName
+  }
 }

@@ -18,7 +18,7 @@ export enum ActionTypeKeys {
   THEME_WHOLESALE = 'THEME_WHOLESALE',
   MERGE_LOGS = 'MERGE_LOGS',
   ADD_THEME = 'ADD_THEME',
-  PLAY_WITH_THEME = 'PLAY_WITH_THEME'
+  UI_TOGGLE_ADD_CHANNEL_MODAL = 'UI : TOGGLE_ADD_CHANEL_MODAL'
 }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
@@ -86,6 +86,10 @@ export interface IToggleAddServerModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_ADD_SERVER_MODAL
   readonly visible?: boolean
 }
+export interface IToggleAddChannelModalAction {
+  readonly type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL
+  readonly connid: Guid | undefined
+}
 export interface IToggleSettingsModalAction {
   readonly type: ActionTypeKeys.UI_TOGGLE_SETTINGS_MODAL
   readonly visible?: boolean
@@ -130,6 +134,7 @@ export type ActionTypes =
   | IToggleTabAction
   | IThemeWholesaleAction
   | IMergeLogsAction
+  | IToggleAddChannelModalAction
   | IAddThemeAction
   | IPlayWithThemeAction
 
@@ -264,6 +269,14 @@ export function themeWholesale(themename: string): IThemeWholesaleAction {
   return {
     type: ActionTypeKeys.THEME_WHOLESALE,
     themename
+  }
+}
+export function toggleAddChannelModal(
+  connid?: Guid | undefined
+): IToggleAddChannelModalAction {
+  return {
+    type: ActionTypeKeys.UI_TOGGLE_ADD_CHANNEL_MODAL,
+    connid
   }
 }
 export function toggleSettingsModal(

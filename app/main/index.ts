@@ -1,8 +1,18 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron'
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS
 } from 'electron-devtools-installer'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as os from 'os'
+
+import {
+  SAVE_FILE,
+  SAVE_FILE_COMPLETE,
+  READ_FILE,
+  READ_FILE_COMPLETE
+} from '../common/file-storage'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -76,4 +86,58 @@ ipcMain.addListener('should-close', () => {
   if (mainWindow) {
     mainWindow.close()
   }
+})
+
+export function getAppFolder() {
+  const home = os.homedir()
+  return path.join(home, '/.electric-irc/')
+}
+
+export function getFilePath(filename: string) {
+  return path.join(getAppFolder(), filename)
+}
+
+ipcMain.addListener(
+  SAVE_FILE,
+  (event: IpcMessageEvent, filename: string, data: any) => {
+    const filePath = getFilePath(filename)
+    if (!fs.existsSync(getAppFolder())) {
+      fs.mkdirSync(getAppFolder())
+    }
+    fs.writeFile(
+      filePath,
+      JSON.stringify(data),
+      'utf8',
+      (err: NodeJS.ErrnoException) => {
+        if (err) {
+          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`, {
+            err,
+            data: null
+          })
+        } else {
+          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`, {
+            err: null,
+            data: null
+          })
+        }
+      }
+    )
+  }
+)
+
+ipcMain.addListener(READ_FILE, (event: IpcMessageEvent, filename: string) => {
+  const filePath = getFilePath(filename)
+  fs.readFile(filePath, 'utf8', (err: NodeJS.ErrnoException, data: string) => {
+    if (err) {
+      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, {
+        err,
+        data: null
+      })
+    } else {
+      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, {
+        err: null,
+        data: JSON.parse(data)
+      })
+    }
+  })
 })

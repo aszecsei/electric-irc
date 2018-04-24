@@ -20,7 +20,7 @@ describe('message component', function() {
   describe('has sender', function() {
     describe('normal message', function() {
       const now = new Date()
-      const wrapper1 = mount(
+      const wrapper1 = shallow(
         <MessageDisp
           message={
             new MessageFactory({
@@ -42,7 +42,7 @@ describe('message component', function() {
     })
     describe('emoji message', function() {
       const now = new Date()
-      const wrapper1 = mount(
+      const wrapper1 = shallow(
         <MessageDisp
           message={
             new MessageFactory({
@@ -68,7 +68,7 @@ describe('message component', function() {
     })
     describe('image message', function() {
       const now = new Date()
-      const wrapper1 = mount(
+      const wrapper1 = shallow(
         <MessageDisp
           message={
             new MessageFactory({
@@ -97,7 +97,7 @@ describe('message component', function() {
   describe('has no sender', function() {
     describe('normal message', function() {
       const now = new Date()
-      const wrapper1 = mount(
+      const wrapper1 = shallow(
         <MessageDisp
           message={
             new MessageFactory({
@@ -118,7 +118,7 @@ describe('message component', function() {
     })
     describe('emoji message', function() {
       const now = new Date()
-      const wrapper1 = mount(
+      const wrapper1 = shallow(
         <MessageDisp
           message={
             new MessageFactory({
@@ -143,7 +143,7 @@ describe('message component', function() {
     })
     describe('image message', function() {
       const now = new Date()
-      const wrapper1 = mount(
+      const wrapper1 = shallow(
         <MessageDisp
           message={
             new MessageFactory({

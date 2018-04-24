@@ -17,9 +17,22 @@ import * as sinon from 'sinon'
 
 use(chaiEnzyme())
 
+const createFakeEvent = (value: string) => {
+  return {
+    target: {
+      value,
+      classList: {
+        add: val => undefined,
+        remove: val => undefined
+      }
+    },
+    preventDefault: () => undefined
+  }
+}
+
 describe('message entry component', function() {
   const onSendMessage = sinon.spy()
-  const wrapper = mount(
+  const wrapper = shallow(
     <MessageEntry
       connection={
         new ConnectionFactory({
@@ -41,21 +54,22 @@ describe('message entry component', function() {
     expect(MessageEntry).to.exist
   })
   it('when text is entered update local state', function() {
-    const inputCheck = mount(
+    const inputCheck = shallow(
       <input value={'hihi'} onChange={instance.handleChange} />
     )
-    inputCheck.simulate('change')
-    expect(instance.state.value).to.be.equal('hihi')
+    inputCheck.simulate('change', createFakeEvent('hihihi'))
+    expect(instance.state.value).to.be.equal('hihihi')
   })
   it('when text is submited call onSendMessage and update local state', function() {
-    let inputCheck = mount(
-      <input value={'hihi'} onChange={instance.handleChange} />
+    const inputCheck = shallow(
+      <input
+        value={'hihi'}
+        onChange={instance.handleChange}
+        onSubmit={instance.handleSubmit}
+      />
     )
-    inputCheck.simulate('change')
-    inputCheck = mount(
-      <input value={'hihi'} onChange={instance.handleSubmit} />
-    )
-    inputCheck.simulate('change')
+    inputCheck.simulate('change', createFakeEvent('hihihi'))
+    inputCheck.simulate('submit', createFakeEvent(''))
     expect(instance.props.onSendMessage).to.have.been.called
     expect(instance.state.value).to.be.equal('')
   })

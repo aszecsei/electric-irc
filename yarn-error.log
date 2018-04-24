@@ -1,26 +1,17 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js test
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js lint
 
 PATH: 
-  C:\cmder\bin;C:\cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\cmder\vendor\conemu-maximus5;C:\cmder\vendor\conemu-maximus5\ConEmu;C:\Program Files\Docker\Docker\Resources\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\VulkanSDK\1.0.65.0\Bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files (x86)\PuTTY\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files (x86)\Common Files\Propellerhead Software\ReWire\;C:\Program Files\Common Files\Propellerhead Software\ReWire\;C:\HaxeToolkit\haxe\;C:\HaxeToolkit\neko;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Go\bin;C:\Program Files\Dart\dart-sdk\bin;C:\Program Files\nodejs\;C:\Program Files\Perforce;C:\Program Files (x86)\Yarn\bin\;C:\Users\Alic Szecsei\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\Alic Szecsei\AppData\Local\Programs\Python\Python36-32\;C:\Users\Alic Szecsei\.cargo\bin;C:\Ruby24-x64\bin;C:\Users\Alic Szecsei\AppData\Local\Microsoft\WindowsApps;C:\Users\Alic Szecsei\AppData\Local\atom\bin;C:\Users\Alic Szecsei\AppData\Roaming\itch\bin;C:\Users\Alic Szecsei\AppData\Local\Microsoft\WindowsApps;C:\Users\Alic Szecsei\AppData\Local\.meteor\;C:\Program Files\Java\jdk1.8.0_144\bin;C:\chromedriver_win32;C:\Program Files\Microsoft VS Code\bin;C:\flutter\bin;C:\Users\Alic Szecsei\AppData\Roaming\Pub\Cache\bin;C:\ninja;C:\Users\Alic Szecsei\AppData\Roaming\npm;C:\Users\Alic Szecsei\AppData\Local\Yarn\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\share\vim\vim74;C:\cmder\
+  C:\OCaml\bin;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Haskell\bin;C:\Program Files\Haskell Platform\8.0.1\lib\extralibs\bin;C:\Program Files\Haskell Platform\8.0.1\bin\;C:\Program Files\Haskell Platform\8.0.1\mingw\bin;D:\cygwin\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\MATLAB\R2017a\runtime\win64;C:\Program Files\MATLAB\R2017a\bin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\Yarn\bin\;C:\Users\Vincent Lopez\Anaconda3;C:\Users\Vincent Lopez\Anaconda3\Library\mingw-w64\bin;C:\Users\Vincent Lopez\Anaconda3\Library\usr\bin;C:\Users\Vincent Lopez\Anaconda3\Library\bin;C:\Users\Vincent Lopez\Anaconda3\Scripts;C:\Ruby24-x64\bin;C:\Users\Vincent Lopez\AppData\Local\Microsoft\WindowsApps;C:\Users\Vincent Lopez\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Heroku\bin;C:\Users\Vincent Lopez\AppData\Local\Yarn\bin
 
 Yarn version: 
-  1.6.0
+  1.5.1
 
 Node version: 
-  8.9.4
+  8.7.0
 
 Platform: 
   win32 x64
-
-Trace: 
-  SyntaxError: C:\dev\electric-irc\package.json: Unexpected token } in JSON at position 1697
-      at JSON.parse (<anonymous>)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:1130:59
-      at Generator.next (<anonymous>)
-      at step (C:\Program Files (x86)\Yarn\lib\cli.js:98:30)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:109:13
-      at <anonymous>
 
 npm manifest: 
   {
@@ -45,47 +36,13 @@ npm manifest:
       "report-coverage": "cat ./coverage/lcov.info | coveralls",
       "precommit": "lint-staged",
       "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
-      "lint": "tslint --project . -t verbose"
+      "lint": "tslint -c tslint.json -t verbose './{app,test}/**/*.{ts,tsx}'"
     },
     "lint-staged": {
       "{app,test}/**/*.{ts,tsx,scss}": [
         "prettier --write --no-semi --single-quote",
         "git add"
       ]
-    },
-    "nyc": {
-      "include": [
-        "app/renderer/**/*.ts",
-        "app/renderer/**/*.tsx",
-        "app/common/**/*.ts",
-        "app/common/**/*.tsx"
-      ],
-      "extension": [
-        ".ts",
-        ".tsx"
-      ],
-      "exclude": [
-        "**/*.d.ts",
-        "test",
-        "dist",
-        "app/main",
-        "coverage"
-      ],
-      "require": [
-        "ts-node/register"
-      ],
-      "reporter": [
-        "lcov",
-        "text",
-        "html"
-      ],
-      "lines": 20,
-      "statements": 20,
-      "functions": 0,
-      "branches": 0,
-      "check-coverage": true,
-      "all": true,
-      "sourceMap": true,
     },
     "main": "app/main/index.ts",
     "license": "MIT",
@@ -144,6 +101,7 @@ npm manifest:
       "webpack": "^3.10.0"
     },
     "dependencies": {
+      "@types/opn": "^5.1.0",
       "@types/reactstrap": "^5.0.17",
       "bootstrap": "^4.0.0",
       "classnames": "^2.2.5",
@@ -152,9 +110,11 @@ npm manifest:
       "irc": "^0.5.2",
       "jquery": "^3.3.1",
       "material-design-icons": "^3.0.1",
+      "opn": "^5.3.0",
+      "polished": "^1.9.2",
       "popper.js": "^1.12.9",
-      "react": "16.0.0",
-      "react-dom": "16.0.0",
+      "react": "16.3.2",
+      "react-dom": "16.3.2",
       "react-redux": "^5.0.7",
       "reactstrap": "^5.0.0-beta",
       "redux": "^3.7.2",
@@ -262,6 +222,12 @@ Lockfile:
   "@types/node@^7.0.18":
     version "7.0.52"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.52.tgz#8990d3350375542b0c21a83cd0331e6a8fc86716"
+  
+  "@types/opn@^5.1.0":
+    version "5.1.0"
+    resolved "https://registry.yarnpkg.com/@types/opn/-/opn-5.1.0.tgz#bff7bc371677f4bdbb37884400e03fd81f743927"
+    dependencies:
+      "@types/node" "*"
   
   "@types/react-dom@^16.0.3":
     version "16.0.3"
@@ -6230,6 +6196,12 @@ Lockfile:
     dependencies:
       is-wsl "^1.1.0"
   
+  opn@^5.3.0:
+    version "5.3.0"
+    resolved "https://registry.yarnpkg.com/opn/-/opn-5.3.0.tgz#64871565c863875f052cfdf53d3e3cb5adb53b1c"
+    dependencies:
+      is-wsl "^1.1.0"
+  
   optimist@^0.6.1, optimist@~0.6.1:
     version "0.6.1"
     resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
@@ -6530,6 +6502,10 @@ Lockfile:
   pn@^1.0.0:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
+  
+  polished@^1.9.2:
+    version "1.9.2"
+    resolved "https://registry.yarnpkg.com/polished/-/polished-1.9.2.tgz#d705cac66f3a3ed1bd38aad863e2c1e269baf6b6"
   
   popper.js@^1.12.5, popper.js@^1.12.9:
     version "1.12.9"
@@ -6998,9 +6974,9 @@ Lockfile:
       minimist "^1.2.0"
       strip-json-comments "~2.0.1"
   
-  react-dom@16.0.0:
-    version "16.0.0"
-    resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.0.tgz#9cc3079c3dcd70d4c6e01b84aab2a7e34c303f58"
+  react-dom@16.3.2:
+    version "16.3.2"
+    resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.2.tgz#cb90f107e09536d683d84ed5d4888e9640e0e4df"
     dependencies:
       fbjs "^0.8.16"
       loose-envify "^1.1.0"
@@ -7053,9 +7029,9 @@ Lockfile:
       prop-types "^15.5.8"
       warning "^3.0.0"
   
-  react@16.0.0:
-    version "16.0.0"
-    resolved "https://registry.yarnpkg.com/react/-/react-16.0.0.tgz#ce7df8f1941b036f02b2cca9dbd0cb1f0e855e2d"
+  react@16.3.2:
+    version "16.3.2"
+    resolved "https://registry.yarnpkg.com/react/-/react-16.3.2.tgz#fdc8420398533a1e58872f59091b272ce2f91ea9"
     dependencies:
       fbjs "^0.8.16"
       loose-envify "^1.1.0"
@@ -9163,3 +9139,19 @@ Lockfile:
       compress-commons "^1.2.0"
       lodash "^4.8.0"
       readable-stream "^2.0.0"
+
+Trace: 
+  Error: Command failed.
+  Exit code: 2
+  Command: C:\WINDOWS\system32\cmd.exe
+  Arguments: /d /s /c tslint -c tslint.json -t verbose './{app,test}/**/*.{ts,tsx}'
+  Directory: C:\Users\Vincent Lopez\electric-irc
+  Output:
+  
+      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
+      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
+      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
+      at emitTwo (events.js:125:13)
+      at ChildProcess.emit (events.js:213:7)
+      at maybeClose (internal/child_process.js:927:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)

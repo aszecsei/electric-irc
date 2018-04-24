@@ -26,7 +26,6 @@ export function createIRCClient(
 
 export function connect(action: actions.IAddServerAction) {
   let channels = ['#']
-  channels = channels.concat(action.channels)
   const connection = new ConnectionFactory({
     id: Guid.create(),
     nickname: action.nickname,
@@ -41,6 +40,7 @@ export function connect(action: actions.IAddServerAction) {
       })
     )
   })
+  channels = channels.concat(action.channels)
   const client = createIRCClient(action.url, action.nickname, action.channels)
   return {
     client,

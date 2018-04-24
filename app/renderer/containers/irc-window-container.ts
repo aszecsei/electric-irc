@@ -4,9 +4,8 @@ import { ElectricState } from '../store'
 import { sendMessage } from '../actions'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
-import { Message } from '../models/message'
 
-const mapStateToProps = (state: ElectricState) => {
+export const mapStateToProps = (state: ElectricState) => {
   let conn: Connection | undefined
   let chan: Channel | undefined
   conn = state.connections.find(connection => {
@@ -24,7 +23,7 @@ const mapStateToProps = (state: ElectricState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
+export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
   return {
     onSendMessage: (message: string, conn: Connection, channel: Channel) => {
       dispatch(sendMessage(conn.id, channel.id, message))
