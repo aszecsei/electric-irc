@@ -71,6 +71,16 @@
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/electron-devtools-installer/-/electron-devtools-installer-2.0.2.tgz#6979d47dee7cf9cce16589c25f25e361e047221d"
 
+"@types/emoji-mart@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@types/emoji-mart/-/emoji-mart-2.2.1.tgz#542650a490278c3bbec3f78b5737714ea122c8fe"
+  dependencies:
+    "@types/react" "*"
+
+"@types/emojione@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@types/emojione/-/emojione-2.2.2.tgz#0ff6fd4c9078b0725db77f5f165b0d8e5f410542"
+
 "@types/enzyme@*":
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-3.1.6.tgz#5b6fd8c5d23d2e1d06eca528b54df81c3ee4cbbf"
@@ -2944,6 +2954,14 @@ elliptic@^6.0.0:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
+
+emoji-mart@2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-2.5.1.tgz#34fb63a342a4de9f8c570f142dcb24cf9bbd9b54"
+
+emojione@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/emojione/-/emojione-3.1.2.tgz#991e30c80db4b1cf15eacb257620a7edce9c6ef4"
 
 emojis-list@^2.0.0:
   version "2.1.0"
