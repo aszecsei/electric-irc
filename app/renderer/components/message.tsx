@@ -61,7 +61,6 @@ export function emoji_process(str: string): string {
   let tmpstr = str // tmpstr for loop control
   let newstr = ''
   while (reres !== null) {
-    console.log(reres[0], Emojis[reres[0]])
     if (Emojis[reres[0]]) {
       newstr = newstr + tmpstr.slice(0, reres.index) + Emojis[reres[0]]
       tmpstr = tmpstr.substring(+reres.index + reres[0].length)

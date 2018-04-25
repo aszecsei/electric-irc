@@ -14,6 +14,7 @@ import { Message, MessageFactory } from '../../../app/renderer/models/message'
 import { MessageEntry } from '../../../app/renderer/components/messageentry'
 import { Guid } from '../../../app/renderer/models/guid'
 import * as sinon from 'sinon'
+import { Picker, EmojiData, emojiIndex } from 'emoji-mart'
 
 use(chaiEnzyme())
 
@@ -72,5 +73,50 @@ describe('message entry component', function() {
     inputCheck.simulate('submit', createFakeEvent(''))
     expect(instance.props.onSendMessage).to.have.been.called
     expect(instance.state.value).to.be.equal('')
+  })
+  it('when emoji picker toggle pressed it should flip bool emoji_vis', function() {
+    instance.setState({ value: 'hihi', emoji_vis: false })
+    const inputCheck = shallow(
+      <a type={'button'} onClick={instance.toggle_emoji} />
+    )
+    inputCheck.simulate('click', createFakeEvent(''))
+    expect(instance.state.emoji_vis).to.be.equal(true)
+    expect(instance.state.value).to.be.equal('hihi')
+    inputCheck.simulate('click', createFakeEvent(''))
+    expect(instance.state.emoji_vis).to.be.equal(false)
+    expect(instance.state.value).to.be.equal('hihi')
+  })
+  it('when emoji is picked it should add to value state', function() {
+    // had trouble getting the simulat click to work on Picker, I think it's not actually a real click event so simulate click wont work
+    // so I just called the function directly
+    instance.setState({ value: 'hihi', emoji_vis: true })
+    // const inputCheck = shallow(
+    //   <Picker
+    //     onClick={instance.pick_emoji}
+    //     custom={[]}
+    //   />
+    // )
+    const thumbUp = emojiIndex.emojis['+1']
+    // inputCheck.simulate('click', thumbUp)
+    instance.pick_emoji(thumbUp)
+    expect(instance.state.emoji_vis).to.be.equal(true)
+    expect(instance.state.value).to.be.equal('hihi' + thumbUp.native)
+  })
+  it('when textbox is clicked closes emoji picker if open', function() {
+    instance.setState({ value: 'hihi', emoji_vis: true })
+    const inputCheck = shallow(
+      <input value={'hihi'} onClick={instance.close_emoji} />
+    )
+    inputCheck.simulate('click', createFakeEvent(''))
+    expect(instance.state.emoji_vis).to.be.equal(false)
+    expect(instance.state.value).to.be.equal('hihi')
+  })
+  it('when not viewing channel textbox and submit button is disabled', function() {
+    const wrapper2 = shallow(<MessageEntry onSendMessage={onSendMessage} />)
+    const instance2 = wrapper2.instance() as MessageEntry
+    const box = instance2.disabledBox()
+    const sub = instance2.disabledSubmit()
+    expect(box.props.disabled).to.be.equal(true)
+    expect(sub.props.disabled).to.be.equal(true)
   })
 })

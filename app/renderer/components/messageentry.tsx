@@ -4,10 +4,7 @@ import { Picker, EmojiData, emojiIndex } from 'emoji-mart'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { emoji_process } from './message'
-declare module 'emojione' {
-  export function shortnameToUnicode(str: string): string
-}
-import * as emojione from 'emojione'
+import { connect } from 'tls'
 
 interface IChatBoxProps {
   connection?: Connection
@@ -49,22 +46,25 @@ export class MessageEntry extends React.Component<
   }
   toggle_emoji = (event: any) => {
     event.preventDefault()
-    this.setState({ value: this.state.value, emoji_vis: !this.state.emoji_vis })
+    this.setState({
+      value: this.state.value,
+      emoji_vis: !this.state.emoji_vis && this.props.channel !== undefined
+    }) // only true if togling when viewing a channel
     return false
   }
   pick_emoji = (emoji: EmojiData) => {
-    for (const i of Object.keys(emoticons)) {
-      console.log(emoticons[+i], Emojis[emoticons[+i]])
-    }
     this.setState({
       value: this.state.value + emoji.native,
       emoji_vis: this.state.emoji_vis
     })
   }
+  close_emoji = (event: any) => {
+    this.setState({ value: this.state.value, emoji_vis: false })
+  }
   show() {
     if (this.state.emoji_vis) {
       // custum can be used to add custom emojis, if you wnat to has picker use emoji set other then the native
-      // check out 'set' option
+      // check out 'set' option, but native set will still only be what's seen outside of picker
       return (
         <Picker
           custom={[]}
@@ -77,6 +77,30 @@ export class MessageEntry extends React.Component<
     }
     return
   }
+  disabledBox() {
+    // so user cant type when not in a place that could send message, eliminates confusion
+    if (this.props.channel) {
+      return (
+        <input
+          id={'messagebox'}
+          type="text"
+          value={this.state.value}
+          onChange={this.handleChange}
+          onClick={this.close_emoji}
+        />
+      )
+    } else {
+      return <input id={'messagebox'} type="text" value={''} disabled />
+    }
+  }
+  disabledSubmit() {
+    // so user cant submit when not in a place that could send message, eliminates confusion
+    if (this.props.channel) {
+      return <input type="submit" value="Submit" />
+    } else {
+      return <input type="submit" value="Submit" disabled />
+    }
+  }
   render() {
     return (
       <div className={'widthhund'}>
@@ -86,16 +110,8 @@ export class MessageEntry extends React.Component<
             ⚡
           </a>
           <label>Send Message:</label>
-          <input
-            id={'messagebox'}
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-            onClick={event => {
-              this.setState({ value: this.state.value, emoji_vis: false })
-            }}
-          />
-          <input type="submit" value="Submit" />
+          {this.disabledBox()}
+          {this.disabledSubmit()}
         </form>
       </div>
     )

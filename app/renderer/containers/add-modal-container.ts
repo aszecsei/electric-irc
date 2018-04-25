@@ -3,14 +3,14 @@ import { AddModal } from '../components/addmodal'
 import { ElectricState } from '../store'
 import { toggleAddServerModal, addServer } from '../actions'
 
-const mapStateToProps = (state: ElectricState) => {
+export const mapStateToProps = (state: ElectricState) => {
   return {
     visible: state.addServerModalActive,
     connections: state.connections
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
+export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
   return {
     onAddServerToggle: () => {
       dispatch(toggleAddServerModal())
