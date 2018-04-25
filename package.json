@@ -18,7 +18,6 @@
     "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha",
     "release": "yarn compile && electron-builder -mwl --ia32 --x64",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
-    "precommit": "lint-staged",
     "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
     "lint": "tslint -c tslint.json -t verbose './{app,test}/**/*.{ts,tsx}'"
   },
@@ -90,6 +89,7 @@
   },
   "dependencies": {
     "@types/opn": "^5.1.0",
+    "@types/react-color": "^2.13.4",
     "@types/reactstrap": "^5.0.17",
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",
@@ -102,6 +102,7 @@
     "polished": "^1.9.2",
     "popper.js": "^1.12.9",
     "react": "16.3.2",
+    "react-color": "^2.14.1",
     "react-dom": "16.3.2",
     "react-redux": "^5.0.7",
     "reactstrap": "^5.0.0-beta",

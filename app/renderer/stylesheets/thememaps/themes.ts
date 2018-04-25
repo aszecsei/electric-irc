@@ -2,10 +2,8 @@ import * as defaults from './defaults'
 import * as customs from './custom'
 import Immutable from 'immutable'
 
-export let theme: Immutable.Map<
-  string,
-  Immutable.Map<string, string>
-> = defaults.map.merge(customs.map)
+export let theme: Immutable.Map<string, Immutable.Map<string, string>> =
+  customs.map
 
 export let backup: Immutable.Map<string, string> = Immutable.Map.of(
   '--bg',

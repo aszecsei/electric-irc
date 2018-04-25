@@ -4,17 +4,23 @@ import {
   toggleSettingsModal,
   toggleSettingsTab,
   editSettings,
-  themeWholesale
+  themeWholesale,
+  addTheme,
+  playWithTheme
 } from '../actions'
 import SettingsModal from '../components/settingsmodal'
 import { ISettings } from '../models/settings'
+import { map } from '../stylesheets/thememaps/defaults'
+import { Map } from 'immutable'
 
 const mapStateToProps = (state: ElectricState) => {
   return {
     visible: state.settingsModalActive,
     toggleTab: state.toggleTab,
     settings: state.settings,
-    currentTheme: state.themeName
+    currentTheme: state.themeName,
+    themes: state.themes.merge(map),
+    thistheme: state.themeProperties
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
@@ -31,6 +37,12 @@ const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     changeTheme: (theme: string) => {
       dispatch(themeWholesale(theme))
+    },
+    addTheme: (name: string, theme: Map<string, string>) => {
+      dispatch(addTheme(name, theme))
+    },
+    playWithTheme: (property: string, color: string) => {
+      dispatch(playWithTheme(property, color))
     }
   }
 }
