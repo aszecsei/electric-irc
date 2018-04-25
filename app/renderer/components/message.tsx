@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Emojis } from '../emojis'
+import { Emojis, emoticons } from '../emojis'
 // import opn from 'opn'
 import { Message } from '../models'
 const opn = require('opn')
@@ -55,19 +55,28 @@ function image_process(str: string) {
   }
   return null
 }
-function emoji_process(str: string): string {
-  const emojire = /:[a-z_]+:/i
+export function emoji_process(str: string): string {
+  const emojire = /:[^\s:]+:/i
   let reres = emojire.exec(str)
   let tmpstr = str // tmpstr for loop control
+  let newstr = ''
   while (reres !== null) {
-    if (Emojis.hasOwnProperty(reres[0])) {
-      const rere = new RegExp(reres[0], 'gi')
-      str = str.replace(rere, Emojis[reres[0]])
+    if (Emojis[reres[0]]) {
+      newstr = newstr + tmpstr.slice(0, reres.index) + Emojis[reres[0]]
+      tmpstr = tmpstr.substring(+reres.index + reres[0].length)
+    } else {
+      newstr = newstr + tmpstr.slice(0, reres.index + reres[0].length - 1)
+      tmpstr = tmpstr.substring(+reres.index + reres[0].length - 1)
     }
-    tmpstr = tmpstr.substring(+reres.index + reres[0].length - 1)
     reres = emojire.exec(tmpstr)
   }
-  return str
+  newstr = newstr + tmpstr
+  for (const i of Object.keys(emoticons)) {
+    // replaces shortcuts too like :D
+    // could manually make a regex to include eac one but that sounds like a pain
+    newstr = newstr.replace(emoticons[+i], Emojis[emoticons[+i]])
+  }
+  return newstr
 }
 function has_sender(message: Message) {
   return (

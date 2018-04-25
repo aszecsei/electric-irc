@@ -13,7 +13,7 @@ import { ISettings } from '../models/settings'
 import { map } from '../stylesheets/thememaps/defaults'
 import { Map } from 'immutable'
 
-const mapStateToProps = (state: ElectricState) => {
+export const mapStateToProps = (state: ElectricState) => {
   return {
     visible: state.settingsModalActive,
     toggleTab: state.toggleTab,
@@ -23,14 +23,14 @@ const mapStateToProps = (state: ElectricState) => {
     thistheme: state.themeProperties
   }
 }
-const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
+export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
   return {
     onSettingsToggle: () => {
       dispatch(toggleSettingsModal())
     },
     onTabToggle: (arg: string) => {
       dispatch(toggleSettingsTab(arg))
-      console.log(arg)
+      // console.log(arg)
     },
     changeSetting: (event: keyof ISettings, value: any) => {
       dispatch(editSettings(event, value))

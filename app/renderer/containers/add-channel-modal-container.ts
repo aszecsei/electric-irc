@@ -4,14 +4,14 @@ import { ElectricState } from '../store'
 import { toggleAddChannelModal, joinChannel } from '../actions'
 import { Guid } from '../models'
 
-const mapStateToProps = (state: ElectricState) => {
+export const mapStateToProps = (state: ElectricState) => {
   return {
     connID: state.addChannelConnId,
     connections: state.connections
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
+export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
   return {
     onAddChannelToggle: () => {
       dispatch(toggleAddChannelModal())
