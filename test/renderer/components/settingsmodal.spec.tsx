@@ -178,4 +178,14 @@ describe('settingsModal', function() {
       expect(instance.props.changeSetting).to.have.been.called
     })
   })
+    describe('Color Chooser', ()=>{
+        it('should change color if color is changed', ()=>{
+            instance.playWithTheme("yellow")
+            expect(instance.props.playWithTheme).to.have.been.called
+        })
+        it('should save the theme', ()=>{
+            instance.savetheme()
+            expect(instance.props.addTheme).to.have.been.called
+        })
+    })
 })

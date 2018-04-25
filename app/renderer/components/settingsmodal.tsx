@@ -38,7 +38,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
     this.state = {
-      propertyvalue: '',
+      propertyvalue: 'background',
       themename: 'Custom'
     }
   }
@@ -81,6 +81,9 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
       'hidenicknamechange',
       !this.props.settings.hidenicknamechange
     )
+  }
+  playWithTheme= (color:any)=>{
+      this.props.playWithTheme(this.state.propertyvalue, color.hex)
   }
   toggleUrlGrabber = (event: any) => {
     this.props.changeSetting('urlgrabber', !this.props.settings.urlgrabber)
@@ -306,8 +309,8 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
               <option value="text">Text</option>
             </Input>
             <CompactPicker
-              onChangeComplete={color =>
-                this.props.playWithTheme(this.state.propertyvalue, color.hex)
+                onChangeComplete ={color =>
+                this.playWithTheme(color)
               }
             />
             <Button onClick={() => this.savetheme()}> Save Theme</Button>
