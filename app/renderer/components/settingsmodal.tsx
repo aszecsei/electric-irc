@@ -14,23 +14,36 @@ import {
 } from 'reactstrap'
 import * as classnames from 'classnames'
 import { ISettings, Settings } from '../models/settings'
-import { theme } from '../stylesheets/thememaps/themes'
+import { Map } from 'immutable'
+import Button from 'reactstrap/lib/Button'
+import { CompactPicker } from 'react-color'
 
 interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
   onTabToggle: (arg: string) => void
   changeSetting: (event: keyof ISettings, value: any) => void
+  addTheme: (name: string, theme: Map<string, string>) => void
   toggleTab: string
   className: string
   settings: Settings
   changeTheme: (theme: string) => void
   currentTheme: string
+  themes: Map<string, Map<string, string>>
+  thistheme: Map<string, string>
+  playWithTheme: (property: string, color: string) => void
 }
 
-export class SettingsModal extends React.Component<ISettingsProps> {
+export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
+    this.state = {
+      propertyvalue: 'background',
+      themename: 'Custom'
+    }
+  }
+  savetheme = () => {
+    this.props.addTheme(this.state.themename, this.props.thistheme)
   }
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)
@@ -69,6 +82,9 @@ export class SettingsModal extends React.Component<ISettingsProps> {
       !this.props.settings.hidenicknamechange
     )
   }
+  playWithTheme= (color:any)=>{
+      this.props.playWithTheme(this.state.propertyvalue, color.hex)
+  }
   toggleUrlGrabber = (event: any) => {
     this.props.changeSetting('urlgrabber', !this.props.settings.urlgrabber)
   }
@@ -78,6 +94,13 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   changeTheme = (event: any) => {
     this.props.changeTheme(event.target.value)
   }
+  handleChangeProperty = (e: any) => {
+    this.setState({ propertyvalue: e.target.value })
+  }
+  handleChangeTheme = (e: any) => {
+    this.setState({ themename: e.target.value })
+  }
+
   public render() {
     return (
       <Modal
@@ -260,15 +283,37 @@ export class SettingsModal extends React.Component<ISettingsProps> {
               value={this.props.currentTheme}
               onChange={this.changeTheme}
             >
-              {theme
-                .keySeq()
-                .toArray()
-                .map((key: string) => (
-                  <option value={key} key={key}>
-                    {key}
-                  </option>
-                ))}
+              {this.props.themes.keySeq().map((key: string) => (
+                <option value={key} key={key}>
+                  {key}
+                </option>
+              ))}
             </Input>
+            <p>Custom Theme</p>
+            Theme Name:
+            <Input
+              type={'text'}
+              value={this.state.themename}
+              onChange={this.handleChangeTheme}
+            />
+            <Input
+              type={'select'}
+              value={this.state.propertyvalue}
+              name="themechange"
+              id="themechange"
+              onChange={this.handleChangeProperty}
+            >
+              <option value="background">Background</option>
+              <option value="primary">Primary</option>
+              <option value="secondary">Secondary</option>
+              <option value="text">Text</option>
+            </Input>
+            <CompactPicker
+                onChangeComplete ={color =>
+                this.playWithTheme(color)
+              }
+            />
+            <Button onClick={() => this.savetheme()}> Save Theme</Button>
           </TabPane>
         </TabContent>
       </Modal>
