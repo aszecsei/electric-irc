@@ -22,6 +22,7 @@ import * as toggleSettingReducer from '../../../app/renderer/reducers/toggle-set
 import * as changeSettingsReducer from '../../../app/renderer/reducers/change-settings'
 import * as toggleTabReducer from '../../../app/renderer/reducers/toggle-tab'
 import * as toggleAddChannelReducer from '../../../app/renderer/reducers/toggle-add-channel-modal'
+import * as themeWholesaleReducer from '../../../app/renderer/reducers/theme-wholesale'
 import { MessageFactory } from '../../../app/renderer/models/message'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
@@ -207,6 +208,7 @@ describe('default reducer', function() {
       expect(result).to.eq(initialState)
     })
   })
+
   describe('toggle channel', function() {
     before(function() {
       result = undefined
@@ -224,4 +226,55 @@ describe('default reducer', function() {
       expect(result).to.eq(alteredState)
     })
   })
+    describe('toggle add sever modal', function() {
+        before(function () {
+            result = undefined
+            result = defaultReducer(
+                initialState,
+                Actions.toggleAddServerModal(true)
+            )
+        })
+
+        it('should call the view channel reducer', function () {
+            expect(toggleAddReducer.default).to.be.calledOnce
+        })
+
+        it('should alter the state', function () {
+            expect(result).to.eq(alteredState)
+        })
+    })
+    describe('toggle settings modal', function() {
+        before(function () {
+            result = undefined
+            result = defaultReducer(
+                initialState,
+                Actions.toggleSettingsModal(true)
+            )
+        })
+
+        it('should call the view channel reducer', function () {
+            expect(toggleSettingReducer.default).to.be.calledOnce
+        })
+
+        it('should alter the state', function () {
+            expect(result).to.eq(alteredState)
+        })
+    })
+    describe('toggle tab in settings modal', function() {
+        before(function () {
+            result = undefined
+            result = defaultReducer(
+                initialState,
+                Actions.toggleSettingsTab("1")
+            )
+        })
+
+        it('should call the view channel reducer', function () {
+            expect(toggleTabReducer.default).to.be.calledOnce
+        })
+
+        it('should alter the state', function () {
+            expect(result).to.eq(alteredState)
+        })
+    })
 })
