@@ -1,10 +1,13 @@
 import * as React from 'react'
 import { Emojis, emoticons } from '../emojis'
 // import opn from 'opn'
-import { Message } from '../models'
+// see https://www.npmjs.com/package/dateformat for details
+import * as dateFormat from 'dateformat'
+import { Message,Settings } from '../models'
 const opn = require('opn')
 interface IMessageProps {
   message: Message
+  settings:Settings
 }
 function test(event: any) {
   event.preventDefault()
@@ -78,12 +81,24 @@ export function emoji_process(str: string): string {
   }
   return newstr
 }
-function has_sender(message: Message) {
+function showTime(message:Message,settings:Settings){
+  if(settings.timestamps){
+    const now=new Date()
+    if(message.sent.getFullYear()===now.getFullYear() 
+    && message.sent.getMonth()===now.getMonth()
+    && message.sent.getDate()===now.getDate()){
+      return <span className="time">{"(today)"+dateFormat(message.sent,settings.timeformat)}</span>
+    }else{
+      return <span className="time">{dateFormat(message.sent,settings.timeformat)}</span>
+    }
+  }
+}
+function has_sender(message: Message,settings:Settings) {
   return (
     <p className="mmessage">
       {link_process(message.sender)}
       <span>: </span>
-      <span className="time">{message.sent.toLocaleString()}</span>
+      {showTime(message,settings)}
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
@@ -92,10 +107,10 @@ function has_sender(message: Message) {
   )
 }
 
-function no_sender(message: Message) {
+function no_sender(message: Message,settings:Settings) {
   return (
     <p className="mmessage">
-      <span className="time">{message.sent.toLocaleString()}</span>
+      {showTime(message,settings)}
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
@@ -105,8 +120,8 @@ function no_sender(message: Message) {
 }
 export const MessageDisp: React.SFC<IMessageProps> = props => {
   if (!props.message.sender || props.message.sender === '') {
-    return no_sender(props.message)
+    return no_sender(props.message,props.settings)
   } else {
-    return has_sender(props.message)
+    return has_sender(props.message,props.settings)
   }
 }

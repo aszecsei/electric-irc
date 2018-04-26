@@ -88,10 +88,12 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "@types/dateformat":"1.0.1",
     "@types/emoji-mart":"2.2.1",
     "@types/opn": "^5.1.0",
     "@types/react-color": "^2.13.4",
     "@types/reactstrap": "^5.0.17",
+    "dateformat":"3.0.3",
     "emoji-mart":"2.5.1",
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",

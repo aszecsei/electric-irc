@@ -7,10 +7,9 @@ import {
   Connection,
   ConnectionFactory
 } from '../../../app/renderer/models/connections'
-import { Channel, ChannelFactory } from '../../../app/renderer/models/channel'
+import { Channel, ChannelFactory,Message, MessageFactory,SettingsFactory } from '../../../app/renderer/models'
 
 import { List } from 'immutable'
-import { Message, MessageFactory } from '../../../app/renderer/models/message'
 import { ChatWindow } from '../../../app/renderer/components/ircwindow'
 import { Guid } from '../../../app/renderer/models/guid'
 
@@ -34,6 +33,7 @@ describe('irc window', function() {
       onSendMessage={(message: string, conn: Connection, channel: Channel) =>
         null
       }
+      settings={SettingsFactory()}
     />
   )
   it('should exist', function() {
