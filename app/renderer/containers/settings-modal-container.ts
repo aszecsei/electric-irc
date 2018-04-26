@@ -32,7 +32,7 @@ export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
       dispatch(toggleSettingsTab(arg))
       // console.log(arg)
     },
-    changeSetting: (event: keyof ISettings, value: any) => {
+    changeSetting: (event: keyof ISettings|undefined, value: any) => {
       dispatch(editSettings(event, value))
     },
     changeTheme: (theme: string) => {
