@@ -4,4 +4,6 @@
 --require test/setup.js
 --require test/async-dump.js
 --recursive
+--full-trace
+--bail
 **/*.spec.ts **/*.spec.tsx

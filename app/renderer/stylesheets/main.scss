@@ -1,6 +1,5 @@
 @import 'utils/all';
 @import 'base/all';
-@import 'themes/all';
 
 body {
   margin: 0;
@@ -20,6 +19,7 @@ body {
 }
 #app {
   @import 'components/all';
+
   flex: 1;
   display: flex;
 }
