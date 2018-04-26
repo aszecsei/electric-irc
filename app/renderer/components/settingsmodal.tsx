@@ -50,7 +50,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
   }
   toggleScrollback = (event: any) => {
     this.props.changeSetting('scrollback', !this.props.settings.scrollback)
-    console.log(this.props.settings.scrollback)
+    // console.log(this.props.settings.scrollback)
   }
   setScrollback = (event: any) => {
     this.props.changeSetting('scrollbackLines', event.target.value)
@@ -152,6 +152,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="checkbox"
                       checked={this.props.settings.scrollback}
                       onChange={this.toggleScrollback}
+                      disabled
                     />
                     Enable Scrollback
                   </Label>
@@ -160,9 +161,10 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                   <Label>
                     <Input
                       type="number"
-                      disabled={!this.props.settings.scrollback}
+                      // disabled={!this.props.settings.scrollback}
                       value={this.props.settings.scrollbackLines}
                       onChange={this.setScrollback}
+                      disabled
                     />
                     Scrollback lines
                   </Label>
@@ -194,6 +196,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="checkbox"
                       checked={this.props.settings.autoaway}
                       onChange={this.toggleMarkAway}
+                      disabled
                     />
                     Automatically mark away
                   </Label>
@@ -204,6 +207,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="text"
                       value={this.props.settings.defquit}
                       onChange={this.setQuitMessage}
+                      disabled
                     />
                     Default Quit Message
                   </Label>
@@ -214,6 +218,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="text"
                       value={this.props.settings.defleave}
                       onChange={this.setLeaveMessage}
+                      disabled
                     />
                     Default Leave Message
                   </Label>
@@ -224,6 +229,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="text"
                       value={this.props.settings.defaway}
                       onChange={this.setAwayMessage}
+                      disabled
                     />
                     Default Away Message
                   </Label>
@@ -259,6 +265,7 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                   type="checkbox"
                   checked={this.props.settings.urlgrabber}
                   onChange={this.toggleUrlGrabber}
+                  disabled
                 />
                 Enable URL Grabber
               </Label>
@@ -267,9 +274,10 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
               <Label>
                 <Input
                   type="number"
-                  disabled={!this.props.settings.urlgrabber}
+                  // disabled={!this.props.settings.urlgrabber}
                   value={this.props.settings.maxurl}
                   onChange={this.setMaxUrl}
+                  disabled
                 />
                 Maximum URL size
               </Label>

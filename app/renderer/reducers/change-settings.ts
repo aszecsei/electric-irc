@@ -11,7 +11,7 @@ export default function editSettings(
   let newState = state
 
   let before = newState.settings
-  console.log(before)
+  // console.log(before)
 
   before = before.set(action.prop as PropTypes, action.value)
   newState = newState.set('settings', before)

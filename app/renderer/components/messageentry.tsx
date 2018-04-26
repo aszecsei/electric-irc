@@ -5,6 +5,9 @@ import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { emoji_process } from './message'
 import { connect } from 'tls'
+import {
+  Input
+} from 'reactstrap'
 
 interface IChatBoxProps {
   connection?: Connection
@@ -77,30 +80,30 @@ export class MessageEntry extends React.Component<
     }
     return
   }
-  disabledBox() {
-    // so user cant type when not in a place that could send message, eliminates confusion
-    if (this.props.channel) {
-      return (
-        <input
-          id={'messagebox'}
-          type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-          onClick={this.close_emoji}
-        />
-      )
-    } else {
-      return <input id={'messagebox'} type="text" value={''} disabled />
-    }
-  }
-  disabledSubmit() {
-    // so user cant submit when not in a place that could send message, eliminates confusion
-    if (this.props.channel) {
-      return <input type="submit" value="Submit" />
-    } else {
-      return <input type="submit" value="Submit" disabled />
-    }
-  }
+  // disabledBox() {
+  //   // so user cant type when not in a place that could send message, eliminates confusion
+  //   if (this.props.channel) {
+  //     return (
+  //       <input
+  //         id={'messagebox'}
+  //         type="text"
+  //         value={this.state.value}
+  //         onChange={this.handleChange}
+  //         onClick={this.close_emoji}
+  //       />
+  //     )
+  //   } else {
+  //     return <input id={'messagebox'} type="text" value={''} disabled />
+  //   }
+  // }
+  // disabledSubmit() {
+  //   // so user cant submit when not in a place that could send message, eliminates confusion
+  //   if (this.props.channel) {
+  //     return <input type="submit" value="Submit" />
+  //   } else {
+  //     return <input type="submit" value="Submit" disabled />
+  //   }
+  // }
   render() {
     return (
       <div className={'widthhund'}>
@@ -110,8 +113,15 @@ export class MessageEntry extends React.Component<
             ⚡
           </a>
           <label>Send Message:</label>
-          {this.disabledBox()}
-          {this.disabledSubmit()}
+          <Input 
+            id={'messagebox'}
+            type="text"
+            value={this.state.value}
+            onChange={this.handleChange}
+            onClick={this.close_emoji}
+            disabled={this.props.channel===undefined}
+          />
+          <input type="submit" value="Submit" disabled={this.props.channel===undefined} />
         </form>
       </div>
     )
