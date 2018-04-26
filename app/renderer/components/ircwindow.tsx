@@ -43,7 +43,7 @@ export class ChatWindow extends React.Component<IChatWindowProps> {
                     (m.type===MessageType.JOIN && this.props.settings.hidejoin)
                     ||(m.type===MessageType.NICKCHANGE && this.props.settings.hidenicknamechange)
                   )
-                  // or matches search
+                  // and matches search===true
                 )
               ).map((message, i) => (
                 <div key={i} className="outermessage">
