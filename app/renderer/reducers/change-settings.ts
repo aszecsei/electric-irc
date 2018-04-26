@@ -8,13 +8,9 @@ export default function editSettings(
   state: ElectricState,
   action: IEditSettingsAction
 ): ElectricState {
-  let newState = state
-
-  let before = newState.settings
-  // console.log(before)
-
-  before = before.set(action.prop as PropTypes, action.value)
-  newState = newState.set('settings', before)
-
-  return newState
+    let newState = state
+    let before = newState.settings
+    before =action.prop? before.set(action.prop as PropTypes, action.value):action.value
+    newState = newState.set('settings', before)
+    return newState
 }

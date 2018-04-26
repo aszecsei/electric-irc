@@ -13,7 +13,7 @@ import {
   Label
 } from 'reactstrap'
 import * as classnames from 'classnames'
-import { ISettings, Settings } from '../models/settings'
+import { ISettings, Settings, SettingsFactory } from '../models/settings'
 import { Map } from 'immutable'
 import Button from 'reactstrap/lib/Button'
 import { CompactPicker } from 'react-color'
@@ -22,7 +22,7 @@ interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
   onTabToggle: (arg: string) => void
-  changeSetting: (event: keyof ISettings, value: any) => void
+  changeSetting: (event: keyof ISettings|undefined, value: any) => void
   addTheme: (name: string, theme: Map<string, string>) => void
   toggleTab: string
   className: string
@@ -72,6 +72,9 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
   }
   setAwayMessage = (event: any) => {
     this.props.changeSetting('defaway', event.target.value)
+  }
+  toggleReset = (event: any) => {
+    this.props.changeSetting(undefined, SettingsFactory())
   }
   toggleHideJoinMessage = (event: any) => {
     this.props.changeSetting('hidejoin', !this.props.settings.hidejoin)
@@ -253,6 +256,14 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                     />
                     Hide Nickname Change Messages
                   </Label>
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                      type="button"
+                      id="chatSettingsReset"
+                      value={"Reset"}
+                      onClick={this.toggleReset}
+                    />
                 </FormGroup>
               </Col>
             </Row>
