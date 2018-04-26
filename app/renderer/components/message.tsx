@@ -92,6 +92,7 @@ function showTime(message:Message,settings:Settings){
       return <span className="time">{dateFormat(message.sent,settings.timeformat)}</span>
     }
   }
+  return null
 }
 function has_sender(message: Message,settings:Settings) {
   return (

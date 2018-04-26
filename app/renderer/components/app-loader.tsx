@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { List } from 'immutable'
 import { IAddServerAction } from '../actions'
 
-import createSagaMiddleware from 'redux-saga'
+import createSagaMiddleware, { channel } from 'redux-saga'
 import messageSaga from '../sagas/messaging-saga'
 
 import { defaultReducer, defaultStore } from '../reducers/reducers'
@@ -28,6 +28,43 @@ export interface IAppLoaderProps {}
 
 export interface IAppLoaderState {
   store?: Store<ElectricState>
+}
+
+export function observeStore(store: Store<ElectricState>) {
+  let currentState: ElectricState
+
+  function handleChange() {
+    const nextState = store.getState()
+    if (nextState !== currentState) {
+      if (!currentState) {
+        currentState = nextState
+        return
+      }
+
+      // If the settings have changed
+      if (currentState.settings !== nextState.settings || currentState.themeName !== nextState.themeName) {
+        writeSettings(nextState)
+      }
+
+      function connectionURLs(state: ElectricState) {
+        return state.connections.map(conn => conn.url)
+      }
+      function channelNames(state: ElectricState) {
+        return state.connections.map(conn => conn.channels.map(chan => chan.name))
+      }
+
+      // If we add/remove/edit connections
+      if (connectionURLs(currentState) !== connectionURLs(nextState) || channelNames(currentState) !== channelNames(nextState)) {
+        writeConnections(nextState)
+      }
+
+      currentState = nextState
+    }
+  }
+
+  const unsubscribe = store.subscribe(handleChange)
+  handleChange()
+  return unsubscribe
 }
 
 export class AppLoader extends React.Component<any, IAppLoaderState> {
@@ -79,15 +116,10 @@ export class AppLoader extends React.Component<any, IAppLoaderState> {
         actions.forEach(action => {
           store.dispatch(action)
         })
+        observeStore(store)
       })
 
       this.setState({ store })
-
-      store.subscribe(() => {
-        const newState = store.getState()
-        writeSettings(newState)
-        writeConnections(newState)
-      })
     })
   }
 
