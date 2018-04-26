@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { List } from 'immutable'
 import { IAddServerAction } from '../actions'
 
-import createSagaMiddleware, { channel } from 'redux-saga'
+import createSagaMiddleware from 'redux-saga'
 import messageSaga from '../sagas/messaging-saga'
 
 import { defaultReducer, defaultStore } from '../reducers/reducers'
