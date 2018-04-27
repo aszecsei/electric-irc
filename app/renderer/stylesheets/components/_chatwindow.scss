@@ -2,10 +2,15 @@
   width: 100%;
   left: 0px;
 }
-
+.filter {
+  display:flex;
+  top:0;
+  max-width: 80%;
+  min-width: 70%;
+}
 .logWindow {
   overflow-y: scroll;
-  height: 90%;
+  height: 80%;
   position: relative;
 }
 
