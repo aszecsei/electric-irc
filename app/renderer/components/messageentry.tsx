@@ -1,13 +1,11 @@
 import * as React from 'react'
 import { emoticons, Emojis } from '../emojis'
 import { Picker, EmojiData, emojiIndex } from 'emoji-mart'
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { emoji_process } from './message'
 import { connect } from 'tls'
-import {
-  Input
-} from 'reactstrap'
 
 interface IChatBoxProps {
   connection?: Connection
@@ -24,7 +22,7 @@ export class MessageEntry extends React.Component<
 > {
   constructor(props: IChatBoxProps) {
     super(props)
-    this.state = { value: '', emoji_vis: false }
+    this.state = { value: 'Disable Until in A Channel', emoji_vis: false }
   }
 
   handleChange = (event: any) => {
@@ -106,24 +104,26 @@ export class MessageEntry extends React.Component<
   // }
   render() {
     return (
-      <div className={'widthhund'}>
+    <div className={'widthhund'}>
         {this.show()}
-        <form className={'widthhund'} onSubmit={this.handleSubmit}>
-          <a href={'#'} onClick={this.toggle_emoji}>
-            ⚡
-          </a>
-          <label>Send Message:</label>
-          <Input 
-            id={'messagebox'}
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-            onClick={this.close_emoji}
-            disabled={this.props.channel===undefined}
-          />
-          <input type="submit" value="Submit" disabled={this.props.channel===undefined} />
-        </form>
-      </div>
+          <Form className={'widthhund row'} inline onSubmit={this.handleSubmit}>
+            <FormGroup>
+            <a href={'#'} onClick={this.toggle_emoji}>
+                ⚡
+            </a>
+              <Label for="message">Send Message:</Label>
+              <Input
+                type="text"
+                value={this.state.value}
+                onChange={this.handleChange}
+                id={'messagebox'}
+                onClick={this.close_emoji}
+                disabled={this.props.channel===undefined}
+              />
+                <Input type="submit" value="Submit" disabled={this.props.channel===undefined} />
+        </FormGroup>
+      </Form>
+    </div>
     )
   }
 }
