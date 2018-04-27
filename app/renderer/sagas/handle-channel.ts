@@ -326,7 +326,7 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
             parseJoinMessage(client.nick, newChannel.name)
           )
         )
-        yield fork(requestServer, conn, newChannel)
+        yield fork(requests, conn, newChannel)
       } else {
         // else client not in channel yet call join and will be back when listener emmits action
         client.join(payload.channelName)
@@ -334,11 +334,18 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
     }
   }
 }
-
+export function* requests(
+  connection: Connection,
+  channel: Channel
+) {
+  const evChannel = yield call(requestServer, connection, channel)
+  const action = yield take(evChannel)
+  yield put(action)
+}
 
 export function requestServer(connection: Connection, channel: Channel) {
-    return sagas.eventChannel(emit=>{
-      const xhttp2 = new XMLHttpRequest()
+  return sagas.eventChannel(emit=>{
+    const xhttp2 = new XMLHttpRequest()
     xhttp2.open(
       'GET',
       `https://electric-centric.herokuapp.com/server/join?server=${
@@ -355,11 +362,15 @@ export function requestServer(connection: Connection, channel: Channel) {
       }&channels=%23${channel.name.slice(1)}`,
       true
     )
-    xhttp.onreadystatechange=(this: XMLHttpRequest, ev: Event)=>{
-    const messages = JSON.parse(xhttp.responseText)
-    if (messages.status === 203) {
-      emit(actions.mergeLog(connection.id, channel.id, messages.message))
-    }}
+    xhttp.onreadystatechange=function() {
+      if (this.readyState === 4 && this.status === 200) {
+        const messages = JSON.parse(this.responseText)
+        if (messages.status === 203) {
+          emit(actions.mergeLog(connection.id, channel.id, messages.message))
+        }
+      }
+    }
     xhttp.send()
-  }
+    return () => null
+  })
 }
