@@ -11,14 +11,17 @@ import { Emojis } from '../../../app/renderer/emojis/index'
 import {
   Message,
   MessageFactory,
-  MessageType
-} from '../../../app/renderer/models/message'
+  MessageType,
+  SettingsFactory
+} from '../../../app/renderer/models'
 import { Guid } from '../../../app/renderer/models/guid'
+import * as dateFormat from 'dateformat'
 
 use(chaiEnzyme())
 describe('message component', function() {
   describe('has sender', function() {
     describe('normal message', function() {
+      SettingsFactory()
       const now = new Date()
       const wrapper1 = shallow(
         <MessageDisp
@@ -31,17 +34,18 @@ describe('message component', function() {
               sent: now
             })
           }
+          settings={SettingsFactory()}
         />
       )
       it('should exist', function() {
         expect(MessageDisp).to.exist
       })
       it('should have the sender and message as text', function() {
-        expect(wrapper1).to.have.text(`boby: ${now.toLocaleString()}hello`)
+        expect(wrapper1).to.have.text(`boby: (today)${dateFormat(now,SettingsFactory().timeformat)}hello`)
       })
     })
     describe('emoji message', function() {
-      const now = new Date()
+      const now = new Date(12)
       const wrapper1 = shallow(
         <MessageDisp
           message={
@@ -53,6 +57,7 @@ describe('message component', function() {
               sent: now
             })
           }
+          settings={SettingsFactory()}
         />
       )
       it('should exist', function() {
@@ -60,14 +65,14 @@ describe('message component', function() {
       })
       it('should have the sender and message as text with emojis replaced in', function() {
         expect(wrapper1).to.have.text(
-          `boby: ${now.toLocaleString()}${Emojis[':sob:']}${Emojis[':b:']}${
+          `boby: ${dateFormat(now,SettingsFactory().timeformat)}${Emojis[':sob:']}${Emojis[':b:']}${
             Emojis[':sob:']
           }b${Emojis[':sob:']}:BB:`
         )
       })
     })
     describe('image message', function() {
-      const now = new Date()
+      const now = new Date(12)
       const wrapper1 = shallow(
         <MessageDisp
           message={
@@ -80,6 +85,7 @@ describe('message component', function() {
               sent: now
             })
           }
+          settings={SettingsFactory()}
         />
       )
       it('should exist', function() {
@@ -87,7 +93,7 @@ describe('message component', function() {
       })
       it('should have the sender and message as text and an image tag', function() {
         expect(wrapper1).to.have.text(
-          `boby: ${now.toLocaleString()}take a look at this. http://somthing.somthing/something.jpg`
+          `boby: ${dateFormat(now,SettingsFactory().timeformat)}take a look at this. http://somthing.somthing/something.jpg`
         )
         expect(wrapper1.find('img')).to.exist
       })
@@ -96,7 +102,7 @@ describe('message component', function() {
 
   describe('has no sender', function() {
     describe('normal message', function() {
-      const now = new Date()
+      const now = new Date(12)
       const wrapper1 = shallow(
         <MessageDisp
           message={
@@ -107,17 +113,18 @@ describe('message component', function() {
               sent: now
             })
           }
+          settings={SettingsFactory()}
         />
       )
       it('should exist', function() {
         expect(MessageDisp).to.exist
       })
       it('should have the sender and message as text', function() {
-        expect(wrapper1).to.have.text(now.toLocaleString() + 'hello')
+        expect(wrapper1).to.have.text(dateFormat(now,SettingsFactory().timeformat) + 'hello')
       })
     })
     describe('emoji message', function() {
-      const now = new Date()
+      const now = new Date(12)
       const wrapper1 = shallow(
         <MessageDisp
           message={
@@ -128,6 +135,7 @@ describe('message component', function() {
               sent: now
             })
           }
+          settings={SettingsFactory()}
         />
       )
       it('should exist', function() {
@@ -135,14 +143,14 @@ describe('message component', function() {
       })
       it('should have the message as text with emojis replaced in', function() {
         expect(wrapper1).to.have.text(
-          `${now.toLocaleString()}${Emojis[':sob:']}${Emojis[':b:']}${
+          `${dateFormat(now,SettingsFactory().timeformat)}${Emojis[':sob:']}${Emojis[':b:']}${
             Emojis[':sob:']
           }b${Emojis[':sob:']}:BB:`
         )
       })
     })
     describe('image message', function() {
-      const now = new Date()
+      const now = new Date(12)
       const wrapper1 = shallow(
         <MessageDisp
           message={
@@ -154,6 +162,7 @@ describe('message component', function() {
               sent: now
             })
           }
+          settings={SettingsFactory()}
         />
       )
       it('should exist', function() {
@@ -161,7 +170,7 @@ describe('message component', function() {
       })
       it('should have the message as text and an image tag', function() {
         expect(wrapper1).to.have.text(
-          now.toLocaleString() +
+          dateFormat(now,SettingsFactory().timeformat) +
             'take a look at this. http://somthing.somthing/something.jpg'
         )
         expect(wrapper1.find('img')).to.exist

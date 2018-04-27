@@ -99,7 +99,7 @@ export function getFilePath(filename: string) {
 
 ipcMain.addListener(
   SAVE_FILE,
-  (event: IpcMessageEvent, filename: string, data: any) => {
+  (event: IpcMessageEvent, filename: string, data: any, guid: string) => {
     const filePath = getFilePath(filename)
     if (!fs.existsSync(getAppFolder())) {
       fs.mkdirSync(getAppFolder())
@@ -110,12 +110,12 @@ ipcMain.addListener(
       'utf8',
       (err: NodeJS.ErrnoException) => {
         if (err) {
-          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`, {
+          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}:${guid}`, {
             err,
             data: null
           })
         } else {
-          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}`, {
+          event.sender.send(`${SAVE_FILE_COMPLETE}:${filename}:${guid}`, {
             err: null,
             data: null
           })
@@ -125,16 +125,16 @@ ipcMain.addListener(
   }
 )
 
-ipcMain.addListener(READ_FILE, (event: IpcMessageEvent, filename: string) => {
+ipcMain.addListener(READ_FILE, (event: IpcMessageEvent, filename: string, guid: string) => {
   const filePath = getFilePath(filename)
   fs.readFile(filePath, 'utf8', (err: NodeJS.ErrnoException, data: string) => {
     if (err) {
-      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, {
+      event.sender.send(`${READ_FILE_COMPLETE}:${filename}:${guid}`, {
         err,
         data: null
       })
     } else {
-      event.sender.send(`${READ_FILE_COMPLETE}:${filename}`, {
+      event.sender.send(`${READ_FILE_COMPLETE}:${filename}:${guid}`, {
         err: null,
         data: JSON.parse(data)
       })

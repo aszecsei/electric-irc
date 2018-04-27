@@ -13,31 +13,44 @@ import {
   Label
 } from 'reactstrap'
 import * as classnames from 'classnames'
-import { ISettings, Settings } from '../models/settings'
-import { theme } from '../stylesheets/thememaps/themes'
+import { ISettings, Settings, SettingsFactory } from '../models/settings'
+import { Map } from 'immutable'
+import Button from 'reactstrap/lib/Button'
+import { CompactPicker } from 'react-color'
 
 interface ISettingsProps {
   visible: boolean
   onSettingsToggle: () => void
   onTabToggle: (arg: string) => void
-  changeSetting: (event: keyof ISettings, value: any) => void
+  changeSetting: (event: keyof ISettings|undefined, value: any) => void
+  addTheme: (name: string, theme: Map<string, string>) => void
   toggleTab: string
   className: string
   settings: Settings
   changeTheme: (theme: string) => void
   currentTheme: string
+  themes: Map<string, Map<string, string>>
+  thistheme: Map<string, string>
+  playWithTheme: (property: string, color: string) => void
 }
 
-export class SettingsModal extends React.Component<ISettingsProps> {
+export class SettingsModal extends React.Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
     super(props)
+    this.state = {
+      propertyvalue: 'background',
+      themename: 'Custom'
+    }
+  }
+  savetheme = () => {
+    this.props.addTheme(this.state.themename, this.props.thistheme)
   }
   toggletab = (tab: string) => {
     this.props.onTabToggle(tab)
   }
   toggleScrollback = (event: any) => {
     this.props.changeSetting('scrollback', !this.props.settings.scrollback)
-    console.log(this.props.settings.scrollback)
+    // console.log(this.props.settings.scrollback)
   }
   setScrollback = (event: any) => {
     this.props.changeSetting('scrollbackLines', event.target.value)
@@ -60,6 +73,9 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   setAwayMessage = (event: any) => {
     this.props.changeSetting('defaway', event.target.value)
   }
+  toggleReset = (event: any) => {
+    this.props.changeSetting(undefined, SettingsFactory())
+  }
   toggleHideJoinMessage = (event: any) => {
     this.props.changeSetting('hidejoin', !this.props.settings.hidejoin)
   }
@@ -68,6 +84,9 @@ export class SettingsModal extends React.Component<ISettingsProps> {
       'hidenicknamechange',
       !this.props.settings.hidenicknamechange
     )
+  }
+  playWithTheme= (color:any)=>{
+      this.props.playWithTheme(this.state.propertyvalue, color.hex)
   }
   toggleUrlGrabber = (event: any) => {
     this.props.changeSetting('urlgrabber', !this.props.settings.urlgrabber)
@@ -78,6 +97,13 @@ export class SettingsModal extends React.Component<ISettingsProps> {
   changeTheme = (event: any) => {
     this.props.changeTheme(event.target.value)
   }
+  handleChangeProperty = (e: any) => {
+    this.setState({ propertyvalue: e.target.value })
+  }
+  handleChangeTheme = (e: any) => {
+    this.setState({ themename: e.target.value })
+  }
+
   public render() {
     return (
       <Modal
@@ -129,6 +155,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="checkbox"
                       checked={this.props.settings.scrollback}
                       onChange={this.toggleScrollback}
+                      disabled
                     />
                     Enable Scrollback
                   </Label>
@@ -137,9 +164,10 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                   <Label>
                     <Input
                       type="number"
-                      disabled={!this.props.settings.scrollback}
+                      // disabled={!this.props.settings.scrollback}
                       value={this.props.settings.scrollbackLines}
                       onChange={this.setScrollback}
+                      disabled
                     />
                     Scrollback lines
                   </Label>
@@ -171,6 +199,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="checkbox"
                       checked={this.props.settings.autoaway}
                       onChange={this.toggleMarkAway}
+                      disabled
                     />
                     Automatically mark away
                   </Label>
@@ -181,6 +210,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="text"
                       value={this.props.settings.defquit}
                       onChange={this.setQuitMessage}
+                      disabled
                     />
                     Default Quit Message
                   </Label>
@@ -191,6 +221,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="text"
                       value={this.props.settings.defleave}
                       onChange={this.setLeaveMessage}
+                      disabled
                     />
                     Default Leave Message
                   </Label>
@@ -201,6 +232,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                       type="text"
                       value={this.props.settings.defaway}
                       onChange={this.setAwayMessage}
+                      disabled
                     />
                     Default Away Message
                   </Label>
@@ -225,6 +257,14 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                     Hide Nickname Change Messages
                   </Label>
                 </FormGroup>
+                <FormGroup>
+                    <Input
+                      type="button"
+                      id="chatSettingsReset"
+                      value={"Reset"}
+                      onClick={this.toggleReset}
+                    />
+                </FormGroup>
               </Col>
             </Row>
           </TabPane>
@@ -236,6 +276,7 @@ export class SettingsModal extends React.Component<ISettingsProps> {
                   type="checkbox"
                   checked={this.props.settings.urlgrabber}
                   onChange={this.toggleUrlGrabber}
+                  disabled
                 />
                 Enable URL Grabber
               </Label>
@@ -244,9 +285,10 @@ export class SettingsModal extends React.Component<ISettingsProps> {
               <Label>
                 <Input
                   type="number"
-                  disabled={!this.props.settings.urlgrabber}
+                  // disabled={!this.props.settings.urlgrabber}
                   value={this.props.settings.maxurl}
                   onChange={this.setMaxUrl}
+                  disabled
                 />
                 Maximum URL size
               </Label>
@@ -260,15 +302,37 @@ export class SettingsModal extends React.Component<ISettingsProps> {
               value={this.props.currentTheme}
               onChange={this.changeTheme}
             >
-              {theme
-                .keySeq()
-                .toArray()
-                .map((key: string) => (
-                  <option value={key} key={key}>
-                    {key}
-                  </option>
-                ))}
+              {this.props.themes.keySeq().map((key: string) => (
+                <option value={key} key={key}>
+                  {key}
+                </option>
+              ))}
             </Input>
+            <p>Custom Theme</p>
+            Theme Name:
+            <Input
+              type={'text'}
+              value={this.state.themename}
+              onChange={this.handleChangeTheme}
+            />
+            <Input
+              type={'select'}
+              value={this.state.propertyvalue}
+              name="themechange"
+              id="themechange"
+              onChange={this.handleChangeProperty}
+            >
+              <option value="background">Background</option>
+              <option value="primary">Primary</option>
+              <option value="secondary">Secondary</option>
+              <option value="text">Text</option>
+            </Input>
+            <CompactPicker
+                onChangeComplete ={color =>
+                this.playWithTheme(color)
+              }
+            />
+            <Button onClick={() => this.savetheme()}> Save Theme</Button>
           </TabPane>
         </TabContent>
       </Modal>

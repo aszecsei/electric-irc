@@ -11,14 +11,14 @@ import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { Guid } from '../models'
 
-const mapStateToProps = (state: ElectricState) => {
+export const mapStateToProps = (state: ElectricState) => {
   return {
     curChanID: state.currentChannelId,
     connections: state.connections
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
+export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
   return {
     onChannelClick: (conn: Connection, channel: Channel) => {
       dispatch(viewChannel(conn.id, channel.id))

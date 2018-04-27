@@ -1,10 +1,13 @@
 import * as React from 'react'
-import { Emojis } from '../emojis'
+import { Emojis, emoticons } from '../emojis'
 // import opn from 'opn'
-import { Message } from '../models'
+// see https://www.npmjs.com/package/dateformat for details
+import * as dateFormat from 'dateformat'
+import { Message,Settings } from '../models'
 const opn = require('opn')
 interface IMessageProps {
   message: Message
+  settings:Settings
 }
 function test(event: any) {
   event.preventDefault()
@@ -55,26 +58,48 @@ function image_process(str: string) {
   }
   return null
 }
-function emoji_process(str: string): string {
-  const emojire = /:[a-z_]+:/i
+export function emoji_process(str: string): string {
+  const emojire = /:[^\s:]+:/i
   let reres = emojire.exec(str)
   let tmpstr = str // tmpstr for loop control
+  let newstr = ''
   while (reres !== null) {
-    if (Emojis.hasOwnProperty(reres[0])) {
-      const rere = new RegExp(reres[0], 'gi')
-      str = str.replace(rere, Emojis[reres[0]])
+    if (Emojis[reres[0]]) {
+      newstr = newstr + tmpstr.slice(0, reres.index) + Emojis[reres[0]]
+      tmpstr = tmpstr.substring(+reres.index + reres[0].length)
+    } else {
+      newstr = newstr + tmpstr.slice(0, reres.index + reres[0].length - 1)
+      tmpstr = tmpstr.substring(+reres.index + reres[0].length - 1)
     }
-    tmpstr = tmpstr.substring(+reres.index + reres[0].length - 1)
     reres = emojire.exec(tmpstr)
   }
-  return str
+  newstr = newstr + tmpstr
+  for (const i of Object.keys(emoticons)) {
+    // replaces shortcuts too like :D
+    // could manually make a regex to include eac one but that sounds like a pain
+    newstr = newstr.replace(emoticons[+i], Emojis[emoticons[+i]])
+  }
+  return newstr
 }
-function has_sender(message: Message) {
+function showTime(message:Message,settings:Settings){
+  if(settings.timestamps){
+    const now=new Date()
+    if(message.sent.getFullYear()===now.getFullYear() 
+    && message.sent.getMonth()===now.getMonth()
+    && message.sent.getDate()===now.getDate()){
+      return <span className="time">{"(today)"+dateFormat(message.sent,settings.timeformat)}</span>
+    }else{
+      return <span className="time">{dateFormat(message.sent,settings.timeformat)}</span>
+    }
+  }
+  return null
+}
+function has_sender(message: Message,settings:Settings) {
   return (
     <p className="mmessage">
       {link_process(message.sender)}
       <span>: </span>
-      <span className="time">{message.sent.toLocaleString()}</span>
+      {showTime(message,settings)}
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
@@ -83,10 +108,10 @@ function has_sender(message: Message) {
   )
 }
 
-function no_sender(message: Message) {
+function no_sender(message: Message,settings:Settings) {
   return (
     <p className="mmessage">
-      <span className="time">{message.sent.toLocaleString()}</span>
+      {showTime(message,settings)}
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
@@ -96,8 +121,8 @@ function no_sender(message: Message) {
 }
 export const MessageDisp: React.SFC<IMessageProps> = props => {
   if (!props.message.sender || props.message.sender === '') {
-    return no_sender(props.message)
+    return no_sender(props.message,props.settings)
   } else {
-    return has_sender(props.message)
+    return has_sender(props.message,props.settings)
   }
 }

@@ -33,7 +33,7 @@ describe('theme component', function() {
       sandbox = sinon.createSandbox()
 
       wrapper = shallow(
-        <Theme properties={darkTheme}>
+        <Theme properties={themes.backup}>
           <div />
         </Theme>
       )
@@ -57,7 +57,7 @@ describe('theme component', function() {
       sandbox = sinon.createSandbox()
 
       wrapper = shallow(
-        <Theme properties={darkTheme}>
+        <Theme properties={themes.backup}>
           <div />
         </Theme>
       )
@@ -67,7 +67,7 @@ describe('theme component', function() {
     })
 
     it('should not properties', function() {
-      wrapper.setProps({ properties: darkTheme })
+      wrapper.setProps({ properties: themes.backup })
       expect(instance.handleNewProperties).to.not.be.called
     })
 
