@@ -79,8 +79,6 @@ export class Server extends React.Component<IServerProps, IServerState> {
           return "active";
       }
       return "";
-
-
   }
 
   render() {
