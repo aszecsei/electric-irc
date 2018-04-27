@@ -1,4 +1,5 @@
 import { Guid, Channel, Connection, Settings, Message } from './models'
+import { Map } from 'immutable'
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
@@ -15,7 +16,9 @@ export enum ActionTypeKeys {
   EDIT_SETTINGS = 'EDIT_SETTINGS',
   TOGGLE_TAB_SETTINGS = 'TOGGLE_TAB_SETTINGS',
   THEME_WHOLESALE = 'THEME_WHOLESALE',
+  PLAY_WITH_THEME = 'PLAY_WITH_THEME',
   MERGE_LOGS = 'MERGE_LOGS',
+  ADD_THEME = 'ADD_THEME',
   UI_TOGGLE_ADD_CHANNEL_MODAL = 'UI : TOGGLE_ADD_CHANEL_MODAL'
 }
 export interface IAddServerAction {
@@ -105,6 +108,16 @@ export interface IThemeWholesaleAction {
   readonly type: ActionTypeKeys.THEME_WHOLESALE
   readonly themename: string
 }
+export interface IAddThemeAction {
+  readonly type: ActionTypeKeys.ADD_THEME
+  readonly name: string
+  readonly theme: Map<string, string>
+}
+export interface IPlayWithThemeAction {
+  readonly type: ActionTypeKeys.PLAY_WITH_THEME
+  readonly property: string
+  readonly value: string
+}
 
 export type ActionTypes =
   | IAddServerAction
@@ -123,6 +136,8 @@ export type ActionTypes =
   | IThemeWholesaleAction
   | IMergeLogsAction
   | IToggleAddChannelModalAction
+  | IAddThemeAction
+  | IPlayWithThemeAction
 
 export function addServer(
   name: string,
@@ -286,6 +301,26 @@ export function editSettings<K extends keyof Settings>(
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,
     prop,
+    value
+  }
+}
+export function addTheme(
+  name: string,
+  theme: Map<string, string>
+): IAddThemeAction {
+  return {
+    type: ActionTypeKeys.ADD_THEME,
+    name,
+    theme
+  }
+}
+export function playWithTheme(
+  property: string,
+  value: string
+): IPlayWithThemeAction {
+  return {
+    type: ActionTypeKeys.PLAY_WITH_THEME,
+    property,
     value
   }
 }

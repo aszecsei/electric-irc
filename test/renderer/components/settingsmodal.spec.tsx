@@ -17,6 +17,8 @@ import { mount, render, shallow, ShallowWrapper } from 'enzyme'
 import * as SettingsModal from '../../../app/renderer/components/settingsmodal'
 import * as sinon from 'sinon'
 import { SettingsFactory } from '../../../app/renderer/models/settings'
+import {map} from "../../../app/renderer/stylesheets/thememaps/defaults";
+import {backup} from "../../../app/renderer/stylesheets/thememaps/themes";
 
 use(chaiEnzyme())
 
@@ -39,6 +41,8 @@ describe('settingsModal', function() {
   let onSettingsToggle: sinon.SinonSpy
   let onTabToggle: sinon.SinonSpy
   let changeSetting: sinon.SinonSpy
+  let addTheme: sinon.SinonSpy
+  let playWithTheme: sinon.SinonSpy
   let inputScrollBackCheck: ShallowWrapper
   let changeTheme: sinon.SinonSpy
   before(function() {
@@ -46,6 +50,8 @@ describe('settingsModal', function() {
     changeSetting = sinon.spy()
     onTabToggle = sinon.spy()
     changeTheme = sinon.spy()
+    addTheme = sinon.spy()
+    playWithTheme =sinon.spy()
     wrapper = shallow(
       <SettingsModal.SettingsModal
         visible={true}
@@ -57,6 +63,10 @@ describe('settingsModal', function() {
         settings={new SettingsFactory()}
         changeTheme={changeTheme}
         currentTheme={'dark'}
+        themes={map}
+        addTheme={addTheme}
+        thistheme={backup}
+        playWithTheme = {playWithTheme}
       />
     )
     instance = wrapper.instance() as SettingsModal.SettingsModal
@@ -168,4 +178,14 @@ describe('settingsModal', function() {
       expect(instance.props.changeSetting).to.have.been.called
     })
   })
+    describe('Color Chooser', ()=>{
+        it('should change color if color is changed', ()=>{
+            instance.playWithTheme("yellow")
+            expect(instance.props.playWithTheme).to.have.been.called
+        })
+        it('should save the theme', ()=>{
+            instance.savetheme()
+            expect(instance.props.addTheme).to.have.been.called
+        })
+    })
 })

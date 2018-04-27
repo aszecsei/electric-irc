@@ -23,7 +23,7 @@ export const SettingsFactory = Record<ISettings>({
   scrollback: true,
   scrollbackLines: 500,
   timestamps: true,
-  timeformat: 'test',
+  timeformat: 'mm/dd/yy hh:MM TT',
   urlgrabber: true,
   maxurl: 50,
   autoaway: true,

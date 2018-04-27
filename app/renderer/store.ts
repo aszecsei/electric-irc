@@ -5,6 +5,7 @@ import { Channel } from './models/channel'
 import { theme, backup } from './stylesheets/thememaps/themes'
 import { SettingsFactory, Settings } from './models/settings'
 import { Guid } from './models'
+import { map } from './stylesheets/thememaps/defaults'
 
 interface IElectricState {
   connections: List<Connection>
@@ -16,6 +17,7 @@ interface IElectricState {
   themeProperties: Map<string, string>
   settings: Settings
   toggleTab: string
+  themes: Map<string, Map<string, string>>
   addChannelConnId?: Guid // if add channel modal should be not visable this need to be undefined
 }
 
@@ -25,10 +27,11 @@ export const ElectricStateFactory = Record<IElectricState>({
   currentChannelId: undefined,
   themeName: 'dark',
   addServerModalActive: false,
-  themeProperties: theme.get('dark') || backup,
+  themeProperties: map.get('dark') || backup,
   settingsModalActive: false,
   settings: SettingsFactory(),
   toggleTab: '1',
+  themes: theme,
   addChannelConnId: undefined
 })
 

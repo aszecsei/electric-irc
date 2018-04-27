@@ -19,7 +19,8 @@ export const mapStateToProps = (state: ElectricState) => {
   return {
     connection: conn,
     channel: chan,
-    messages: chan ? chan.log : undefined
+    messages: chan ? chan.log : undefined,
+    settings:state.settings
   }
 }
 
