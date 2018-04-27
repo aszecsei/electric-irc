@@ -1,18 +1,18 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended",
-        "tslint-react-recommended",
-        "tslint-config-prettier"
-    ],
-    "jsRules": {},
-    "rules": {
-        "no-console": false,
-        "no-implicit-dependencies": false,
-        "no-submodule-imports": false,
-        "only-arrow-functions": false,
-        "no-unused-expression": false,
-        "indent": [true, "spaces", 2]
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react-recommended",
+    "tslint-config-prettier"
+  ],
+  "jsRules": {},
+  "rules": {
+    "no-console": false,
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false,
+    "only-arrow-functions": false,
+    "no-unused-expression": false,
+    "indent": [true, "spaces", 2]
+  },
+  "rulesDirectory": []
 }

@@ -21,6 +21,7 @@ import * as toggleAddReducer from '../../../app/renderer/reducers/toggle-add-ser
 import * as toggleSettingReducer from '../../../app/renderer/reducers/toggle-settings-modal'
 import * as changeSettingsReducer from '../../../app/renderer/reducers/change-settings'
 import * as toggleTabReducer from '../../../app/renderer/reducers/toggle-tab'
+import * as toggleAddChannelReducer from '../../../app/renderer/reducers/toggle-add-channel-modal'
 import { MessageFactory } from '../../../app/renderer/models/message'
 import { ConnectionFactory } from '../../../app/renderer/models/connections'
 import { ChannelFactory } from '../../../app/renderer/models/channel'
@@ -59,6 +60,7 @@ describe('default reducer', function() {
     sandbox.stub(viewChannelReducer, 'default').returns(alteredState)
     sandbox.stub(toggleAddReducer, 'default').returns(alteredState)
     sandbox.stub(toggleSettingReducer, 'default').returns(alteredState)
+    sandbox.stub(toggleAddChannelReducer, 'default').returns(alteredState)
     sandbox.stub(toggleTabReducer, 'default').returns(alteredState)
     sandbox.stub(changeSettingsReducer, 'default').returns(alteredState)
   })
@@ -203,6 +205,23 @@ describe('default reducer', function() {
 
     it('should return the initial state', function() {
       expect(result).to.eq(initialState)
+    })
+  })
+  describe('toggle channel', function() {
+    before(function() {
+      result = undefined
+      result = defaultReducer(
+        initialState,
+        Actions.toggleAddChannelModal(Guid.create())
+      )
+    })
+
+    it('should call the toggle add channel reducer', function() {
+      expect(toggleAddChannelReducer.default).to.be.calledOnce
+    })
+
+    it('should alter the state', function() {
+      expect(result).to.eq(alteredState)
     })
   })
 })

@@ -3,12 +3,12 @@ import { Collapse } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { Guid } from '../models/guid'
-import * as irc from 'irc'
 
 interface IServerProps {
   onChannelClick: (conn: Connection, channel: Channel) => void
   connection: Connection
   curChanID: Guid | undefined
+  onAddChannelClick: (connID: Guid) => void
 }
 
 interface IServerState {
@@ -39,6 +39,11 @@ export class Server extends React.Component<IServerProps, IServerState> {
   onClickGenerator = (client: Connection, channel: Channel) => {
     return (event: any) => {
       this.props.onChannelClick(client, channel)
+    }
+  }
+  onClickAddChannel = () => {
+    return (event: any) => {
+      this.props.onAddChannelClick(this.props.connection.id)
     }
   }
   // this next function checks to see if the channel that this 'a' link refers to is the one selected
@@ -94,6 +99,11 @@ export class Server extends React.Component<IServerProps, IServerState> {
                 )}
               </li>
             ))}
+            <li>
+              <a href="#" onClick={this.onClickAddChannel()}>
+                Add Channel
+              </a>
+            </li>
           </ul>
         </Collapse>
       </li>

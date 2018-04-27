@@ -17,7 +17,7 @@ import { Guid } from '../../../app/renderer/models/guid'
 use(chaiEnzyme())
 
 describe('irc window', function() {
-  const wrapper = mount(
+  const wrapper = shallow(
     <ChatWindow
       connection={
         new ConnectionFactory({

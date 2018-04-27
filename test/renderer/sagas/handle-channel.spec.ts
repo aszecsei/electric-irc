@@ -8,7 +8,8 @@ import * as IRC from 'irc'
 import * as actions from '../../../app/renderer/actions'
 import {
   subscribe,
-  insideWrite
+  insideWrite,
+  requestServer
 } from '../../../app/renderer/sagas/handle-channel'
 import * as sagas from 'redux-saga'
 import {
@@ -128,7 +129,6 @@ function callcallback(callback) {
   callback()
 }
 describe('suscribe', function() {
-  const xhttp = sinon.stub(XMLHttpRequest.prototype, 'send')
   sinon.stub(sagas, 'eventChannel').callsFake(callcallback)
   describe('raw listener', function() {
     describe('channel as first in args', function() {
@@ -365,37 +365,64 @@ describe('suscribe', function() {
     })
   })
   describe('join listener', function() {
-    it('it calls appendLog', function() {
-      const mockC = mockClient({
-        nick: 'bobby',
-        addListener: LimitedMockAddLisener({
-          cmd: 'join',
-          ichannel: '#world',
+    describe('I joined', function() {
+      it('it calls joinChannel', function() {
+        const mockC = mockClient({
           nick: 'bobby',
-          message: {}
+          addListener: LimitedMockAddLisener({
+            cmd: 'join',
+            ichannel: '#world',
+            nick: 'bobby',
+            message: {}
+          })
         })
+        const fakeAction = {
+          type: actions.ActionTypeKeys.JOIN_CHANNEL,
+          serverId: Guid.create(),
+          channelName: '#world2'
+        }
+        const stub = sinon.stub(actions, 'joinChannel').returns(fakeAction)
+        subscribe(
+          mockC,
+          new ConnectionFactory(),
+          new ChannelFactory({
+            name: '#'
+          })
+        )
+        expect(actions.joinChannel).to.be.called
+        stub.restore()
       })
-      const fakeAction = {
-        type: actions.ActionTypeKeys.APPEND_LOG,
-        serverId: Guid.create(),
-        channelId: Guid.create(),
-        message: new MessageFactory()
-      }
-      const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-
-      subscribe(
-        mockC,
-        new ConnectionFactory(),
-        new ChannelFactory({
-          name: '#world'
+    })
+    describe('someone else joined', function() {
+      it('it calls appendLog', function() {
+        const mockC = mockClient({
+          nick: 'bobby',
+          addListener: LimitedMockAddLisener({
+            cmd: 'join',
+            ichannel: '#world',
+            nick: 'bobby',
+            message: {}
+          })
         })
-      )
-      expect(actions.appendLog).to.be.called
-      expect(XMLHttpRequest.prototype.send).to.be.calledTwice
-      xhttp.reset()
-      stub.restore()
+        const fakeAction = {
+          type: actions.ActionTypeKeys.JOIN_CHANNEL,
+          serverId: Guid.create(),
+          channelName: '#world2'
+        }
+        const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
+        subscribe(
+          mockC,
+          new ConnectionFactory(),
+          new ChannelFactory({
+            name: '#world'
+          })
+        )
+        expect(actions.appendLog).to.be.called
+        stub.restore()
+      })
     })
   })
+
   describe('quit listener', function() {
     it('it calls appendLog', function() {
       const mockC = mockClient({
@@ -522,6 +549,70 @@ describe('suscribe', function() {
     })
   })
 })
+describe('requestServer', function() {
+  it('it should make request to server', function() {
+    const chanid = Guid.create()
+    const connid = Guid.create()
+    const chan = new ChannelFactory({
+      id: chanid,
+      name: '#world'
+    })
+    const conn = new ConnectionFactory({
+      id: connid,
+      nick: 'bob',
+      channels: [chan]
+    })
+    const fakeAction = {
+      type: actions.ActionTypeKeys.MERGE_LOGS,
+      serverId: connid,
+      channelId: chanid,
+      json: null
+    }
+    const stubx = sinon.stub(XMLHttpRequest.prototype, 'send')
+    const stubp = sinon
+      .stub(JSON, 'parse')
+      .returns({ status: 203, message: '' })
+    const stubm = sinon.stub(actions, 'mergeLog').returns(fakeAction)
+    const x = requestServer(conn, chan)
+    x.next()
+    expect(XMLHttpRequest.prototype.send).to.be.calledTwice
+    // expect(actions.mergeLog).to.be.called
+    stubm.restore()
+    stubp.restore()
+    stubx.restore()
+  })
+  it('it should merge logs', function() {
+    const chanid = Guid.create()
+    const connid = Guid.create()
+    const chan = new ChannelFactory({
+      id: chanid,
+      name: '#world'
+    })
+    const conn = new ConnectionFactory({
+      id: connid,
+      nick: 'bob',
+      channels: [chan]
+    })
+    const fakeAction = {
+      type: actions.ActionTypeKeys.MERGE_LOGS,
+      serverId: connid,
+      channelId: chanid,
+      json: null
+    }
+    const stubx = sinon.stub(XMLHttpRequest.prototype, 'send')
+    const stubp = sinon
+      .stub(JSON, 'parse')
+      .returns({ status: 203, message: '' })
+    const stubm = sinon.stub(actions, 'mergeLog').returns(fakeAction)
+    const x = requestServer(conn, chan)
+    x.next()
+    // expect(XMLHttpRequest.prototype.send).to.be.calledTwice
+    expect(actions.mergeLog).to.be.called
+    stubm.restore()
+    stubp.restore()
+    stubx.restore()
+  })
+})
 describe('write', function() {
   describe('/nick', function() {
     it('it should call send on client', function() {
@@ -548,8 +639,15 @@ describe('write', function() {
     it('it should call joinChannel', function() {
       const mockC = mockClient({
         nick: 'bobby',
-        send: (...args: any[]) => null,
-        say: (...args: any[]) => null
+        send: (...args: any[]) => {
+          return
+        },
+        say: (...args: any[]) => {
+          return
+        },
+        join: (...args: any[]) => {
+          return
+        }
       })
       const conn = new ConnectionFactory({ id: Guid.create() })
       const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
@@ -558,15 +656,10 @@ describe('write', function() {
         channelId: chan.id,
         message: '/join #bob'
       }
-      const fakeAction = {
-        type: actions.ActionTypeKeys.JOIN_CHANNEL,
-        serverId: conn.id,
-        channelId: chan.name
-      }
-      const stub = sinon.stub(actions, 'joinChannel').returns(fakeAction)
+      const stub = sinon.stub(mockC, 'join')
       const x = insideWrite(mockC, conn, chan, pay)
       x.next()
-      expect(actions.joinChannel).to.be.called
+      expect(mockC.join).to.be.called
       stub.restore()
     })
   })
@@ -616,6 +709,34 @@ describe('write', function() {
       const x = insideWrite(mockC, conn, chan, pay)
       x.next()
       expect(mockC.say).to.be.called
+      // expect(actions.appendLog).to.be.called
+      stuba.restore()
+      stubm.restore()
+    })
+    it('it should append log', function() {
+      const mockC = mockClient({
+        nick: 'bobby',
+        send: (...args: any[]) => null,
+        say: (...args: any[]) => null
+      })
+      const conn = new ConnectionFactory({ id: Guid.create() })
+      const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
+      const pay: actions.ISendMessageAction = {
+        serverId: conn.id,
+        channelId: chan.id,
+        message: 'bob df dsf fg'
+      }
+      const stubm = sinon.stub(mockC, 'say')
+      const fakeAction = {
+        type: actions.ActionTypeKeys.APPEND_LOG,
+        serverId: Guid.create(),
+        channelId: Guid.create(),
+        message: new MessageFactory()
+      }
+      const stuba = sinon.stub(actions, 'appendLog').returns(fakeAction)
+      const x = insideWrite(mockC, conn, chan, pay)
+      x.next()
+      // expect(mockC.say).to.be.called
       expect(actions.appendLog).to.be.called
       stuba.restore()
       stubm.restore()

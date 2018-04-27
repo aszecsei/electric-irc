@@ -12,7 +12,7 @@ import {
   Input
 } from 'reactstrap'
 import * as React from 'react'
-import { mount, render, shallow, ReactWrapper } from 'enzyme'
+import { mount, render, shallow, ShallowWrapper } from 'enzyme'
 
 import * as SettingsModal from '../../../app/renderer/components/settingsmodal'
 import * as sinon from 'sinon'
@@ -20,20 +20,33 @@ import { SettingsFactory } from '../../../app/renderer/models/settings'
 
 use(chaiEnzyme())
 
+const createFakeEvent = (value: any) => {
+  return {
+    target: {
+      value,
+      classList: {
+        add: val => undefined,
+        remove: val => undefined
+      }
+    },
+    preventDefault: () => undefined
+  }
+}
+
 describe('settingsModal', function() {
-  let wrapper: ReactWrapper
+  let wrapper: ShallowWrapper
   let instance: SettingsModal.SettingsModal
   let onSettingsToggle: sinon.SinonSpy
   let onTabToggle: sinon.SinonSpy
   let changeSetting: sinon.SinonSpy
-  let inputScrollBackCheck: ReactWrapper
+  let inputScrollBackCheck: ShallowWrapper
   let changeTheme: sinon.SinonSpy
   before(function() {
     onSettingsToggle = sinon.spy()
     changeSetting = sinon.spy()
     onTabToggle = sinon.spy()
     changeTheme = sinon.spy()
-    wrapper = mount(
+    wrapper = shallow(
       <SettingsModal.SettingsModal
         visible={true}
         onSettingsToggle={onSettingsToggle}
@@ -53,14 +66,14 @@ describe('settingsModal', function() {
   })
   describe('scrollback', function() {
     it('should be able to set scrollback on and off', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleScrollback} />
       )
       inputScrollBackCheck.simulate('change')
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change scrollback', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={500} onChange={instance.setScrollback} />
       )
       expect(instance.props.changeSetting).to.have.been.called
@@ -68,14 +81,14 @@ describe('settingsModal', function() {
   })
   describe('timestamps', function() {
     it('should be able to set timestamps on and off', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleTimestamps} />
       )
       inputScrollBackCheck.simulate('change')
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change timestamps', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={'test'} onChange={instance.setTimestamps} />
       )
       expect(instance.props.changeSetting).to.have.been.called
@@ -83,14 +96,14 @@ describe('settingsModal', function() {
   })
   describe('timestamps', function() {
     it('should be able to set timestamps on and off', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleTimestamps} />
       )
       inputScrollBackCheck.simulate('change')
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change timestamps', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={'test'} onChange={instance.setTimestamps} />
       )
       expect(instance.props.changeSetting).to.have.been.called
@@ -98,26 +111,26 @@ describe('settingsModal', function() {
   })
   describe('Away Messages', function() {
     it('should be able to set automatic mark away on and off', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleMarkAway} />
       )
       inputScrollBackCheck.simulate('change')
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change quit message', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={'test'} onChange={instance.setQuitMessage} />
       )
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change leave message', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={'test'} onChange={instance.setLeaveMessage} />
       )
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change away message', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={'test'} onChange={instance.setAwayMessage} />
       )
       expect(instance.props.changeSetting).to.have.been.called
@@ -125,14 +138,14 @@ describe('settingsModal', function() {
   })
   describe('Hide Messages Toggles', function() {
     it('should be able to toggle hide join ', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleHideJoinMessage} />
       )
       inputScrollBackCheck.simulate('change')
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to toggle hide nick change message ', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleHideNickChangeMessage} />
       )
       inputScrollBackCheck.simulate('change')
@@ -141,17 +154,17 @@ describe('settingsModal', function() {
   })
   describe('URL grabber', function() {
     it('should be able to toggle URL Grabber', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input checked={true} onChange={instance.toggleUrlGrabber} />
       )
       inputScrollBackCheck.simulate('change')
       expect(instance.props.changeSetting).to.have.been.called
     })
     it('should be able to change URL grabber length', function() {
-      inputScrollBackCheck = mount(
+      inputScrollBackCheck = shallow(
         <Input value={50} onChange={instance.setMaxUrl} />
       )
-      inputScrollBackCheck.simulate('change')
+      inputScrollBackCheck.simulate('change', createFakeEvent(50))
       expect(instance.props.changeSetting).to.have.been.called
     })
   })
