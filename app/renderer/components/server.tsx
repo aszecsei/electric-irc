@@ -74,6 +74,14 @@ export class Server extends React.Component<IServerProps, IServerState> {
       )
     }
   }
+  getClass(channel: Channel,curChanID: Guid | undefined){
+      if (channel.id === curChanID) {
+          return "active";
+      }
+      return "";
+
+
+  }
 
   render() {
     const server = this.props.connection
@@ -91,7 +99,7 @@ export class Server extends React.Component<IServerProps, IServerState> {
         <Collapse isOpen={this.state.collapse}>
           <ul className="list-unstyled" id={server.name}>
             {this.props.connection.channels.map((channel, i) => (
-              <li key={i}>
+              <li key={i} className={this.getClass(channel,this.props.curChanID)}>
                 {this.bold_if_selected(
                   this.props.connection,
                   channel,
