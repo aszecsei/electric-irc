@@ -15,7 +15,8 @@ import {
   loadSettings,
   writeSettings,
   loadConnections,
-  writeConnections
+  writeConnections,
+  writeLogs
 } from '../utilities/persistent-storage'
 import { ElectricState } from '../store'
 import { remote } from 'electron'
@@ -53,10 +54,33 @@ export function observeStore(store: Store<ElectricState>) {
         return state.connections.map(conn => conn.channels.map(chan => chan.name))
       }
 
-      // If we add/remove/edit connections
+      // If we add/remove/edit connections or channels
       if (connectionURLs(currentState) !== connectionURLs(nextState) || channelNames(currentState) !== channelNames(nextState)) {
         writeConnections(nextState)
       }
+
+      nextState.connections.forEach((nextConnection) => {
+        const currentConnection = currentState.connections.find(v => v.url === nextConnection.url)
+        if (currentConnection) {
+          nextConnection.channels.forEach((nextChannel) => {
+            const currentChannel = currentConnection.channels.find(v => v.name === nextChannel.name)
+            if (currentChannel) {
+              if (currentChannel.log !== nextChannel.log) {
+                // The channel has a new message; write the log
+                writeLogs(nextConnection, nextChannel)
+              }
+            } else {
+              // We have a new channel; write the log
+              writeLogs(nextConnection, nextChannel)
+            }
+          })
+        } else {
+          // We have a new connection; write the log for each channel
+          nextConnection.channels.forEach((channel) => {
+            writeLogs(nextConnection, channel)
+          })
+        }
+      })
 
       currentState = nextState
     }
