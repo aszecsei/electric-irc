@@ -334,27 +334,32 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
     }
   }
 }
-export function* requestServer(connection: Connection, channel: Channel) {
-  const xhttp2 = new XMLHttpRequest()
-  xhttp2.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/server/join?server=${
-      connection.url
-    }&channel=%23${channel.name.slice(1)}`,
-    true
-  )
-  xhttp2.send()
-  const xhttp = new XMLHttpRequest()
-  xhttp.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/message?servers=${
-      connection.url
-    }&channels=%23${channel.name.slice(1)}`,
-    false
-  )
-  xhttp.send()
-  const messages = JSON.parse(xhttp.responseText)
-  if (messages.status === 203) {
-    yield put(actions.mergeLog(connection.id, channel.id, messages.message))
+
+
+export function requestServer(connection: Connection, channel: Channel) {
+    return sagas.eventChannel(emit=>{
+      const xhttp2 = new XMLHttpRequest()
+    xhttp2.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/server/join?server=${
+        connection.url
+      }&channel=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp2.send()
+    const xhttp = new XMLHttpRequest()
+    xhttp.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/message?servers=${
+        connection.url
+      }&channels=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp.onreadystatechange=(this: XMLHttpRequest, ev: Event)=>{
+    const messages = JSON.parse(xhttp.responseText)
+    if (messages.status === 203) {
+      emit(actions.mergeLog(connection.id, channel.id, messages.message))
+    }}
+    xhttp.send()
   }
 }
