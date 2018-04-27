@@ -22,7 +22,7 @@ export class MessageEntry extends React.Component<
 > {
   constructor(props: IChatBoxProps) {
     super(props)
-    this.state = { value: '', emoji_vis: false }
+    this.state = { value: 'Disable Until in A Channel', emoji_vis: false }
   }
 
   handleChange = (event: any) => {
@@ -106,7 +106,7 @@ export class MessageEntry extends React.Component<
     return (
     <div className={'widthhund'}>
         {this.show()}
-          <Form className={'widthhund'} inline onSubmit={this.handleSubmit}>
+          <Form className={'widthhund row'} inline onSubmit={this.handleSubmit}>
             <FormGroup>
             <a href={'#'} onClick={this.toggle_emoji}>
                 ⚡
