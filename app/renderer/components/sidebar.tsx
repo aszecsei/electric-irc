@@ -22,9 +22,6 @@ export const Sidebar: React.SFC<ISidebarProps> = props => {
       </div>
 
       <ul className="list-unstyled components">
-        <li className="active">
-          <a href="#">Home</a>
-        </li>
         <li>
           <a href="#" onClick={props.onAddServerClick}>
             Add Server
