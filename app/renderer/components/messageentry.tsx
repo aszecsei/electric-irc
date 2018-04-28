@@ -22,7 +22,10 @@ export class MessageEntry extends React.Component<
 > {
   constructor(props: IChatBoxProps) {
     super(props)
-    this.state = { value: 'Disable Until in A Channel', emoji_vis: false }
+    this.state = { value: '', emoji_vis: false }
+    // this.state = { value: 'Disable Until in A Channel', emoji_vis: false } // this will stay in box
+    // not convienient once in channel. insead put string see function disabledString
+      
   }
 
   handleChange = (event: any) => {
@@ -62,6 +65,9 @@ export class MessageEntry extends React.Component<
   close_emoji = (event: any) => {
     this.setState({ value: this.state.value, emoji_vis: false })
   }
+  disabledString(){
+    return this.props.channel?this.state.value:"Disable Until in A Channel"
+  }
   show() {
     if (this.state.emoji_vis) {
       // custum can be used to add custom emojis, if you wnat to has picker use emoji set other then the native
@@ -78,52 +84,48 @@ export class MessageEntry extends React.Component<
     }
     return
   }
-  // disabledBox() {
-  //   // so user cant type when not in a place that could send message, eliminates confusion
-  //   if (this.props.channel) {
-  //     return (
-  //       <input
-  //         id={'messagebox'}
-  //         type="text"
-  //         value={this.state.value}
-  //         onChange={this.handleChange}
-  //         onClick={this.close_emoji}
-  //       />
-  //     )
-  //   } else {
-  //     return <input id={'messagebox'} type="text" value={''} disabled />
-  //   }
-  // }
-  // disabledSubmit() {
-  //   // so user cant submit when not in a place that could send message, eliminates confusion
-  //   if (this.props.channel) {
-  //     return <input type="submit" value="Submit" />
-  //   } else {
-  //     return <input type="submit" value="Submit" disabled />
-  //   }
-  // }
   render() {
     return (
-    <div className={'widthhund'}>
+      <div className={'widthhund'}>
         {this.show()}
-          <Form className={'widthhund row'} inline onSubmit={this.handleSubmit}>
-            <FormGroup>
-            <a href={'#'} onClick={this.toggle_emoji}>
-                ⚡
-            </a>
-              <Label for="message">Send Message:</Label>
-              <Input
-                type="text"
-                value={this.state.value}
-                onChange={this.handleChange}
-                id={'messagebox'}
-                onClick={this.close_emoji}
-                disabled={this.props.channel===undefined}
-              />
-                <Input type="submit" value="Submit" disabled={this.props.channel===undefined} />
-        </FormGroup>
-      </Form>
-    </div>
+        <Form className={'widthhund mForm mcenter'} onSubmit={this.handleSubmit}>
+        <FormGroup className="mformgroup mcenter">
+          <a href={'#'} onClick={this.toggle_emoji}>
+            ⚡
+          </a>
+          <Label>Send Message:</Label>
+          <Input 
+            id={'messagebox'}
+            type="text"
+            value={this.disabledString()}
+            onChange={this.handleChange}
+            onClick={this.close_emoji}
+            disabled={this.props.channel===undefined}
+          />
+          <Input className="msubmit" type="submit" value="Submit" disabled={this.props.channel===undefined} />
+          </FormGroup>
+        </Form>
+      </div>      
+    // <div className={'widthhund'}>
+    //     {this.show()}
+    //       <Form className={'widthhund'} inline onSubmit={this.handleSubmit}>
+    //         <FormGroup className={'widthhund'}>
+    //           <a href={'#'} onClick={this.toggle_emoji}>
+    //               ⚡
+    //           </a>
+    //           <Label for="message">Send Message:</Label>
+    //           <Input
+    //             type="text"
+    //             value={this.state.value}
+    //             onChange={this.handleChange}
+    //             id={'messagebox'}
+    //             onClick={this.close_emoji}
+    //             disabled={this.props.channel===undefined}
+    //           />
+    //           <Input type="submit" value="Submit" disabled={this.props.channel===undefined} />
+    //     </FormGroup>
+    //   </Form>
+    // </div>
     )
   }
 }
