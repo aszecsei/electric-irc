@@ -302,7 +302,7 @@ export function* handleChannel(
   yield fork(read, client, connection, channel)
   yield fork(write, client, connection, channel)
 }
-
+// maybe push up another arg to here to see if connected?
 export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
   for (;;) {
     const payload: actions.IJoinChannelAction = yield take(
@@ -327,7 +327,7 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
           )
         )
         yield fork(requests, conn, newChannel)
-      } else {
+      }else{
         // else client not in channel yet call join and will be back when listener emmits action
         client.join(payload.channelName)
       }
