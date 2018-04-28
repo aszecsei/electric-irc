@@ -1,8 +1,12 @@
 .chatwindow {
   width: 100%;
+  min-width: 550px;
   left: 0px;
+  overflow-x: auto;
 }
-
+.mForm{
+  margin-top: 16px;
+}
 .logWindow {
   overflow-y: scroll;
   height: 90%;
@@ -26,14 +30,24 @@
   color: var(--primary-text);
 }
 .widthhund {
-  max-width: 100%;
-  min-width: 90%;
+  width: 100%;
 }
 #messagebox {
-  width: 500px;
-  display: inline-block;
+  // width: 70%;
+  // display: inline-block;
 }
-
-.emojiB {
-  height: 20px;
+.mformgroup{
+  width:95%;
 }
+.mcenter{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.msubmit{
+  width: auto;// despite ide message this does have effect! it stops submit from being 100% width due to react's styling
+  display: inline;
+}
+// .emojiB {
+//   height: 20px;
+// }

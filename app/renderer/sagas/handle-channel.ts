@@ -302,7 +302,7 @@ export function* handleChannel(
   yield fork(read, client, connection, channel)
   yield fork(write, client, connection, channel)
 }
-
+// maybe push up another arg to here to see if connected?
 export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
   for (;;) {
     const payload: actions.IJoinChannelAction = yield take(
@@ -326,35 +326,51 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
             parseJoinMessage(client.nick, newChannel.name)
           )
         )
-        yield fork(requestServer, conn, newChannel)
-      } else {
+        yield fork(requests, conn, newChannel)
+      }else{
         // else client not in channel yet call join and will be back when listener emmits action
         client.join(payload.channelName)
       }
     }
   }
 }
-export function* requestServer(connection: Connection, channel: Channel) {
-  const xhttp2 = new XMLHttpRequest()
-  xhttp2.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/server/join?server=${
-      connection.url
-    }&channel=%23${channel.name.slice(1)}`,
-    true
-  )
-  xhttp2.send()
-  const xhttp = new XMLHttpRequest()
-  xhttp.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/message?servers=${
-      connection.url
-    }&channels=%23${channel.name.slice(1)}`,
-    false
-  )
-  xhttp.send()
-  const messages = JSON.parse(xhttp.responseText)
-  if (messages.status === 203) {
-    yield put(actions.mergeLog(connection.id, channel.id, messages.message))
-  }
+export function* requests(
+  connection: Connection,
+  channel: Channel
+) {
+  const evChannel = yield call(requestServer, connection, channel)
+  const action = yield take(evChannel)
+  yield put(action)
+}
+
+export function requestServer(connection: Connection, channel: Channel) {
+  return sagas.eventChannel(emit=>{
+    const xhttp2 = new XMLHttpRequest()
+    xhttp2.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/server/join?server=${
+        connection.url
+      }&channel=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp2.send()
+    const xhttp = new XMLHttpRequest()
+    xhttp.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/message?servers=${
+        connection.url
+      }&channels=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp.onreadystatechange=function() {
+      if (this.readyState === 4 && this.status === 200) {
+        const messages = JSON.parse(this.responseText)
+        if (messages.status === 203) {
+          emit(actions.mergeLog(connection.id, channel.id, messages.message))
+        }
+      }
+    }
+    xhttp.send()
+    return () => null
+  })
 }

@@ -101,7 +101,7 @@ export interface IToggleTabAction {
 }
 export interface IEditSettingsAction {
   readonly type: ActionTypeKeys.EDIT_SETTINGS
-  readonly prop: string
+  readonly prop: string|undefined
   readonly value: any
 }
 export interface IThemeWholesaleAction {
@@ -295,8 +295,8 @@ export function toggleSettingsTab(tab: string): IToggleTabAction {
   }
 }
 export function editSettings<K extends keyof Settings>(
-  prop: K,
-  value: Settings[K]
+  prop: K|undefined,
+  value: Settings[K]|Settings
 ): IEditSettingsAction {
   return {
     type: ActionTypeKeys.EDIT_SETTINGS,
