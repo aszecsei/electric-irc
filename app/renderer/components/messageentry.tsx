@@ -65,7 +65,7 @@ export class MessageEntry extends React.Component<
   close_emoji = (event: any) => {
     this.setState({ value: this.state.value, emoji_vis: false })
   }
-  disabledString(){
+  disabledString(){// to display disabled message in box when not viewing channel
     return this.props.channel?this.state.value:"Disable Until in A Channel"
   }
   show() {
@@ -106,26 +106,6 @@ export class MessageEntry extends React.Component<
           </FormGroup>
         </Form>
       </div>      
-    // <div className={'widthhund'}>
-    //     {this.show()}
-    //       <Form className={'widthhund'} inline onSubmit={this.handleSubmit}>
-    //         <FormGroup className={'widthhund'}>
-    //           <a href={'#'} onClick={this.toggle_emoji}>
-    //               ⚡
-    //           </a>
-    //           <Label for="message">Send Message:</Label>
-    //           <Input
-    //             type="text"
-    //             value={this.state.value}
-    //             onChange={this.handleChange}
-    //             id={'messagebox'}
-    //             onClick={this.close_emoji}
-    //             disabled={this.props.channel===undefined}
-    //           />
-    //           <Input type="submit" value="Submit" disabled={this.props.channel===undefined} />
-    //     </FormGroup>
-    //   </Form>
-    // </div>
     )
   }
 }
