@@ -4,6 +4,7 @@ import { Emojis, emoticons } from '../emojis'
 // see https://www.npmjs.com/package/dateformat for details
 import * as dateFormat from 'dateformat'
 import { Message,Settings } from '../models'
+import YouTube from 'react-youtube'
 const opn = require('opn')
 interface IMessageProps {
   message: Message
@@ -51,10 +52,27 @@ function link_process(str: string) {
   return x
 }
 function image_process(str: string) {
-  const imgurlre = /((https?:\/\/)|([a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?@))?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*\.(jpg|jpeg|png|gif|bmp|img)(\?[^\s]*)?/i
+  const imgurlre = /(https?:\/\/)?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*\.(jpg|jpeg|png|gif|bmp|img)(\?[^\s]*)?/i
   const reres = imgurlre.exec(str)
   if (reres) {
-    return <img className="imgPrev" src={reres[0]} />
+    return <img className="Prev" src={reres[0]} />
+  }
+  return youtube_process(str)
+}
+function youtube_process(str:string){
+  const yturlre1=/(https?:\/\/)?(www\.)?((youtu.be\/([^?]+))|(youtube.com\/embed\/([^?]+))|(youtube.com\/watch\?(.+&)?(v=([^&]+))))/i
+  const reres = yturlre1.exec(str)
+  console.log(reres)
+  if(reres){
+    if(reres[5]){
+      return <YouTube videoId={reres[5]} className="Prev vid"/>
+    }
+    else if(reres[7]){
+      return <YouTube videoId={reres[7]} className="Prev vid"/>
+    }
+    else if(reres[11]){
+      return <YouTube videoId={reres[11]} className="Prev vid"/>
+    }
   }
   return null
 }
@@ -77,11 +95,14 @@ export function emoji_process(str: string): string {
   for (const i of Object.keys(emoticons)) {
     // replaces shortcuts too like :D
     // could manually make a regex to include eac one but that sounds like a pain
-    newstr = newstr.replace(emoticons[+i], Emojis[emoticons[+i]])
+    newstr = newstr.replace(emoticons[+i]+" ", Emojis[emoticons[+i]]+" ")
   }
   return newstr
 }
 function showTime(message:Message,settings:Settings){
+  if(message.text==="test vid"){
+    return <iframe width="560" height="315" src="https://www.youtube.com/embed/QpyHrQYeoIE"></iframe>
+  }
   if(settings.timestamps){
     const now=new Date()
     if(message.sent.getFullYear()===now.getFullYear() 
@@ -104,6 +125,7 @@ function has_sender(message: Message,settings:Settings) {
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
       {image_process(message.text)}
+      {/* {youtube_process(message.text)}// called in image_process so only one of the previews are displayed to prevent clutter */}
     </p>
   )
 }
@@ -116,6 +138,7 @@ function no_sender(message: Message,settings:Settings) {
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
       {image_process(message.text)}
+      {/* {youtube_process(message.text)}// called in image_process so only one of the previews are displayed to prevent clutter */}
     </p>
   )
 }
