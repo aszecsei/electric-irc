@@ -16,6 +16,7 @@ import {
 } from '../../../app/renderer/models'
 import { Guid } from '../../../app/renderer/models/guid'
 import * as dateFormat from 'dateformat'
+import YouTube from 'react-youtube'
 
 use(chaiEnzyme())
 describe('message component', function() {
@@ -174,6 +175,87 @@ describe('message component', function() {
             'take a look at this. http://somthing.somthing/something.jpg'
         )
         expect(wrapper1.find('img')).to.exist
+      })
+    })
+    describe('vid message type 1', function() {
+      const now = new Date(12)
+      const wrapper1 = shallow(
+        <MessageDisp
+          message={
+            new MessageFactory({
+              id: Guid.create(),
+              type: MessageType.MESSAGE,
+              text:
+                'take a look at this. https://youtu.be/Lg9EDyAR_0U',
+              sent: now
+            })
+          }
+          settings={SettingsFactory()}
+        />
+      )
+      it('should exist', function() {
+        expect(MessageDisp).to.exist
+      })
+      it('should have the message as text and an YouTube component', function() {
+        expect(wrapper1).to.have.text(
+          dateFormat(now,SettingsFactory().timeformat) +
+            'take a look at this. https://youtu.be/Lg9EDyAR_0U<YouTube />'
+        )
+        expect(wrapper1.find(YouTube)).to.exist
+      })
+    })
+    describe('vid message type 2', function() {
+      const now = new Date(12)
+      const wrapper1 = shallow(
+        <MessageDisp
+          message={
+            new MessageFactory({
+              id: Guid.create(),
+              type: MessageType.MESSAGE,
+              text:
+                'take a look at this. https://www.youtube.com/embed/Lg9EDyAR_0U',
+              sent: now
+            })
+          }
+          settings={SettingsFactory()}
+        />
+      )
+      it('should exist', function() {
+        expect(MessageDisp).to.exist
+      })
+      it('should have the message as text and a YouTube component', function() {
+        expect(wrapper1).to.have.text(
+          dateFormat(now,SettingsFactory().timeformat) +
+            'take a look at this. https://www.youtube.com/embed/Lg9EDyAR_0U<YouTube />'
+        )
+        expect(wrapper1.find(YouTube)).to.exist
+      })
+    })
+    describe('vid message type 3', function() {
+      const now = new Date(12)
+      const wrapper1 = shallow(
+        <MessageDisp
+          message={
+            new MessageFactory({
+              id: Guid.create(),
+              type: MessageType.MESSAGE,
+              text:
+                'take a look at this. https://www.youtube.com/watch?v=Lg9EDyAR_0U',
+              sent: now
+            })
+          }
+          settings={SettingsFactory()}
+        />
+      )
+      it('should exist', function() {
+        expect(MessageDisp).to.exist
+      })
+      it('should have the message as text and a YouTube component', function() {
+        expect(wrapper1).to.have.text(
+          dateFormat(now,SettingsFactory().timeformat) +
+            'take a look at this. https://www.youtube.com/watch?v=Lg9EDyAR_0U<YouTube />'
+        )
+        expect(wrapper1.find(YouTube)).to.exist
       })
     })
   })

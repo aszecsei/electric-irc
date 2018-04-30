@@ -3,11 +3,13 @@
   min-width: 550px;
   left: 0px;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 .mForm{
   margin-top: 16px;
 }
 .logWindow {
+  overflow-x: auto;
   overflow-y: scroll;
   height: 90%;
   position: relative;
@@ -32,10 +34,10 @@
 .widthhund {
   width: 100%;
 }
-#messagebox {
-  // width: 70%;
-  // display: inline-block;
-}
+// #messagebox {
+//   // width: 70%;
+//   // display: inline-block;
+// }
 .mformgroup{
   width:95%;
 }
