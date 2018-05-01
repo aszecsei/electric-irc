@@ -28,33 +28,6 @@ jobs:
           key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Build The Application
-          command: yarn release --linux --win
-
-      # build!
-      - run: yarn release
-  build-mac:
-    macos:
-      xcode: "9.3"
-    working_directory: ~/electric-irc/mac
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-{{ .Branch }}
-            - yarn-packages-master
-            - yarn-packages-
-      - run:
-          name: Install Dependencies
-          command: yarn --link-duplicates --pure-lockfile
-      - save_cache:
-          name: Save Yarn Package Cache
-          paths:
-            - node_modules
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: Build The Application
           command: yarn release
   test:
     docker:
@@ -103,14 +76,6 @@ workflows:
     jobs:
       - test
       - build-linux-windows:
-          requires:
-            - test
-          filters:
-            branches:
-              only: /master|build/
-            tags:
-              only: /.*/ # Force CircleCI to build on tags
-      - build-mac:
           requires:
             - test
           filters:
