@@ -21,6 +21,7 @@ interface IMessage {
   text: string
   sender: string
   sent: Date
+  isMe:boolean
 }
 const emptyGUID = Guid.createEmpty()
 
@@ -29,12 +30,14 @@ export const MessageFactory = Record<IMessage>({
   type: MessageType.MESSAGE,
   text: '',
   sender: '',
-  sent: new Date()
+  sent: new Date(),
+  isMe:false
 })
 export function parseKillMessage(
   nick: string,
   reason?: string,
-  sent: Date = new Date()
+  sent: Date = new Date(),
+  isMe=false
 ) {
   const str =
     reason && reason !== ''
@@ -44,7 +47,8 @@ export function parseKillMessage(
     id: Guid.create(),
     type: MessageType.KILL,
     text: str,
-    sent
+    sent,
+    isMe
   })
 }
 
@@ -53,7 +57,8 @@ export function parseKickMessage(
   by: string,
   channel: string,
   reason?: string,
-  sent: Date = new Date()
+  sent: Date = new Date(),
+  isMe=false
 ) {
   const str =
     reason && reason !== ''
@@ -63,14 +68,16 @@ export function parseKickMessage(
     id: Guid.create(),
     type: MessageType.KICK,
     text: str,
-    sent
+    sent,
+    isMe
   })
 }
 export function parsePartMessage(
   nick: string,
   channel: string,
   reason?: string,
-  sent: Date = new Date()
+  sent: Date = new Date(),
+  isMe=false
 ) {
   const str =
     reason && reason !== ''
@@ -80,13 +87,15 @@ export function parsePartMessage(
     id: Guid.create(),
     type: MessageType.PART,
     text: str,
-    sent
+    sent,
+    isMe
   })
 }
 export function parseQuitMessage(
   nick: string,
   reason?: string,
-  sent: Date = new Date()
+  sent: Date = new Date(),
+  isMe=false
 ) {
   const str =
     reason && reason !== ''
@@ -96,26 +105,30 @@ export function parseQuitMessage(
     id: Guid.create(),
     type: MessageType.QUIT,
     text: str,
-    sent
+    sent,
+    isMe
   })
 }
 export function parseJoinMessage(
   nick: string,
   channel: string,
-  sent: Date = new Date()
+  sent: Date = new Date(),
+  isMe=false
 ) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.JOIN,
     text: `${nick} has JOINED ${channel}`,
-    sent
+    sent,
+    isMe
   })
 }
 
 export function parseNoticeMessage(
   from: string,
   to: string,
-  message: IRC.IMessage
+  message: IRC.IMessage,
+  isMe=false
 ) {
   const sender = `(${from}) NOTICE to ${to}`
   const str = message.args[1]
@@ -123,10 +136,11 @@ export function parseNoticeMessage(
     id: Guid.create(),
     type: MessageType.NOTICE,
     text: str,
-    sender
+    sender,
+    isMe
   })
 }
-export function parseNumericMessage(server: string, message: IRC.IMessage) {
+export function parseNumericMessage(server: string, message: IRC.IMessage,isMe=false) {
   let str = `${message.command}(${message.rawCommand})`
   if (message.args.length >= 1) {
     // has args beyond us
@@ -142,34 +156,39 @@ export function parseNumericMessage(server: string, message: IRC.IMessage) {
     id: Guid.create(),
     type: MessageType.SERVER,
     text: str,
-    sender: server
+    sender: server,
+    isMe
   })
 }
 export function parseMessage(
   nick: string,
   to: string,
   text: string,
-  message?: IRC.IMessage,
-  sent: Date = new Date()
+  sent: Date = new Date(),
+  isMe=false
 ) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.MESSAGE,
     text,
     sender: nick,
-    sent
+    sent,
+    isMe
   })
 }
 export function parseNickChange(
   oldnick: string,
   newnick: string,
   channels: string[],
-  message?: IRC.IMessage
+  sent: Date = new Date(),
+  isMe=false
 ) {
   return new MessageFactory({
     id: Guid.create(),
     type: MessageType.NICKCHANGE,
-    text: `${oldnick} is now known as ${newnick}.`
+    text: `${oldnick} is now known as ${newnick}.`,
+    sent,
+    isMe
   })
 }
 

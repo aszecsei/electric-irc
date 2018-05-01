@@ -114,7 +114,7 @@ function showTime(message:Message,settings:Settings){
 }
 function has_sender(message: Message,settings:Settings) {
   return (
-    <span className="mmessage">
+    <span className={"mmessage"+(message.isMe?" float-right":"")}>
       {link_process(message.sender)}
       <span>: </span>
       {showTime(message,settings)}
@@ -129,7 +129,7 @@ function has_sender(message: Message,settings:Settings) {
 
 function no_sender(message: Message,settings:Settings) {
   return (
-    <span className="mmessage">
+    <span className={"mmessage"+(message.isMe?" float-right":"")}>
       {showTime(message,settings)}
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>

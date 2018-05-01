@@ -23,7 +23,6 @@ function whichType(jmessage: any): Message {
         jmessage.sender,
         jmessage.channel_name,
         jmessage.message,
-        undefined,
         new Date(jmessage.sent)
       )
     case 'PART':

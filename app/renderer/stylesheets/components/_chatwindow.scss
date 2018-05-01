@@ -50,6 +50,11 @@
   width: auto;// despite ide message this does have effect! it stops submit from being 100% width due to react's styling
   display: inline;
 }
+#more{
+  color: var(--primary-text);
+  width: 100%;
+  text-align: center;
+}
 // .emojiB {
 //   height: 20px;
 // }

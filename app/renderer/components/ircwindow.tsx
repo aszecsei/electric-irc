@@ -17,16 +17,30 @@ interface IChatWindowProps {
   settings:Settings
   onSendMessage: (message: string, conn: Connection, channel: Channel) => void
 }
-export class ChatWindow extends React.Component<IChatWindowProps> {
+interface IChatWindowState{
+  numShow:number
+}
+const defaultState = {
+  numShow: 50
+}
+export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowState> {
   private logWindow?: HTMLDivElement
-
+  private noDidUp:boolean
   constructor(props: IChatWindowProps) {
     super(props)
+    this.state={...defaultState}
+    this.noDidUp=false
   }
   componentDidUpdate() {
-    if (this.logWindow) {
+    if (!this.noDidUp&&this.logWindow) {
       this.logWindow.scrollTop = this.logWindow.scrollHeight
     }
+    this.noDidUp=false
+  }
+  addfifty=()=>{
+    this.noDidUp=true
+    const size=this.props.messages?this.props.messages.size:0
+    this.setState({numShow:this.state.numShow+50>size?size:this.state.numShow+50})
   }
   render() {
     return (
@@ -35,8 +49,9 @@ export class ChatWindow extends React.Component<IChatWindowProps> {
           className="logWindow"
           ref={ref => (this.logWindow = ref ? ref : undefined)}
         >
+          {this.props.messages&&this.state.numShow<this.props.messages.size?<div  id="more"><a href="#" onClick={this.addfifty}>50 more</a></div>:null}
           {this.props.messages
-            ? this.props.messages.filter(
+            ? this.props.messages.slice(this.props.messages.size-this.state.numShow).filter(
               // filter out join and/or nick change messages if coorisponding options enabled
                 (m)=>(
                   !(
