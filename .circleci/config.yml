@@ -72,8 +72,7 @@ jobs:
             - yarn-packages-
       - run:
           name: Install Greenkeeper
-          command:
-              - yarn global add greenkeeper-lockfile@1
+          command: yarn global add greenkeeper-lockfile@1
       - run:
           name: Install Dependencies
           command: yarn install
