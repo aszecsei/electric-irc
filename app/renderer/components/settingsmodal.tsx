@@ -210,7 +210,6 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="text"
                       value={this.props.settings.defquit}
                       onChange={this.setQuitMessage}
-                      disabled
                     />
                     Default Quit Message
                   </Label>
@@ -221,7 +220,6 @@ export class SettingsModal extends React.Component<ISettingsProps, any> {
                       type="text"
                       value={this.props.settings.defleave}
                       onChange={this.setLeaveMessage}
-                      disabled
                     />
                     Default Leave Message
                   </Label>

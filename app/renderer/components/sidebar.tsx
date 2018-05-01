@@ -12,6 +12,8 @@ interface ISidebarProps {
   onAddChannelClick: () => void
   onAddServerClick: () => void
   onSettingsClick: () => void
+  onPartChannelClick: ()=>void
+  onQuitServerClick: ()=>void
 }
 
 export const Sidebar: React.SFC<ISidebarProps> = props => {
@@ -34,6 +36,8 @@ export const Sidebar: React.SFC<ISidebarProps> = props => {
             onChannelClick={props.onChannelClick}
             curChanID={props.curChanID}
             onAddChannelClick={props.onAddChannelClick}
+            onPartChannelClick={props.onPartChannelClick}
+            onQuitServerClick={props.onQuitServerClick}
           />
         ))}
         <li>

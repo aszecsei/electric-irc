@@ -1,5 +1,6 @@
 import { Guid, Channel, Connection, Settings, Message } from './models'
 import { Map } from 'immutable'
+import { channel } from 'redux-saga';
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
@@ -7,6 +8,8 @@ export enum ActionTypeKeys {
   REMOVE_SERVER = 'REMOVE_SERVER',
   EDIT_SERVER = 'EDIT_SERVER',
   JOIN_CHANNEL = 'JOIN_CHANNEL',
+  PART_CHANNEL = 'PART_CHANNEL',
+  REMOVE_CHANNEL = 'REMOVE_CHANNEL',
   ADD_CHANNEL = 'ADD_CHANNEL',
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
@@ -50,6 +53,16 @@ export interface IJoinChannelAction {
   readonly type: ActionTypeKeys.JOIN_CHANNEL
   readonly serverId: Guid
   readonly channelName: string
+}
+export interface IPartChannelAction {
+  readonly type: ActionTypeKeys.PART_CHANNEL
+  readonly serverId: Guid
+  readonly channel:Channel
+}
+export interface IRemoveChannelAction {
+  readonly type: ActionTypeKeys.REMOVE_CHANNEL
+  readonly serverId: Guid
+  readonly channelId: Guid
 }
 
 export interface IAddChannelAction {
@@ -138,6 +151,7 @@ export type ActionTypes =
   | IToggleAddChannelModalAction
   | IAddThemeAction
   | IPlayWithThemeAction
+  | IRemoveChannelAction
 
 export function addServer(
   name: string,
@@ -198,14 +212,34 @@ export function joinChannel(
   }
 }
 
-export function addChannel(
+export function removeChannel(
   serverId: Guid,
-  channel: Channel
+  channelId: Guid
+): IRemoveChannelAction {
+  return {
+    type: ActionTypeKeys.REMOVE_CHANNEL,
+    serverId,
+    channelId 
+  }
+}
+export function partChannel(
+  serverId: Guid,
+  channelx: Channel
+): IPartChannelAction {
+  return {
+    type: ActionTypeKeys.PART_CHANNEL,
+    serverId,
+    channel:channelx // some tslint fucking bullshit
+  }
+}
+
+export function addChannel(
+  serverId: Guid,channelx: Channel
 ): IAddChannelAction {
   return {
     type: ActionTypeKeys.ADD_CHANNEL,
     serverId,
-    channel
+    channel:channelx // some tslint fucking bullshit
   }
 }
 export function mergeLog(

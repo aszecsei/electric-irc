@@ -5,9 +5,7 @@ export default function removeServer(
   state: ElectricState,
   action: IRemoveServerAction
 ): ElectricState {
-  const newState = state
-
-  // TODO: Implement this
-
+  const newConns=state.connections.filter((v)=>v.id!==action.id)
+  const newState = state.set('connections',  newConns)
   return newState
 }
