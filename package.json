@@ -16,7 +16,7 @@
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "start": "yarn run dev",
     "test": "cross-env TS_NODE_PROJECT='test/' nyc mocha",
-    "release": "yarn compile && electron-builder -mwl --ia32 --x64",
+    "release": "yarn compile && electron-builder -wl --ia32 --x64",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "pretty": "prettier --write --no-semi --single-quote \"./**/*.{ts,tsx,scss}\"",
     "lint": "tslint -c tslint.json -t verbose './{app,test}/**/*.{ts,tsx}'"
@@ -88,11 +88,13 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "@types/react-youtube":"7.4.1",
     "@types/dateformat":"1.0.1",
     "@types/emoji-mart":"2.2.1",
     "@types/opn": "^5.1.0",
     "@types/react-color": "^2.13.4",
     "@types/reactstrap": "^5.0.17",
+    "react-youtube":"7.6.0",
     "dateformat":"3.0.3",
     "emoji-mart":"2.5.1",
     "bootstrap": "^4.0.0",
