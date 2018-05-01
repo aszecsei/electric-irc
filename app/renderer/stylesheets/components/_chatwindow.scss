@@ -5,8 +5,17 @@
 .filter {
   display:flex;
   top:0;
-  max-width: 80%;
-  min-width: 70%;
+  margin: 0.5%;
+  position: relative;
+  color: var (--primary-text);
+  height: 8%;
+  border-radius: 25px;
+  border: 2px solid var(--primary-light);
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .logWindow {
   overflow-y: scroll;
