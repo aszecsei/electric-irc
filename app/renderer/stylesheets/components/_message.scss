@@ -17,10 +17,14 @@
   word-break: break-word;
 }
 
-.imgPrev {
+.Prev {
   margin: 5px;
-  max-width: 90%;
+  max-width: 100%;
   max-height: auto;
+}
+.vid{
+  width: auto;// keep vid small to prevent clutter
+  height: auto;
 }
 .mmessage a:link {
   color: var(--secondary-light);
