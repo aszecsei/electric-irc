@@ -5,7 +5,10 @@ import {
   viewChannel,
   toggleAddServerModal,
   toggleAddChannelModal,
-  toggleSettingsModal
+  toggleSettingsModal,
+  partChannel,
+  removeChannel,
+  removeServer
 } from '../actions'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
@@ -28,6 +31,12 @@ export const mapDispatchToProps = (dispatch: Dispatch<ElectricState>) => {
     },
     onAddChannelClick: (connid?: Guid) => {
       dispatch(toggleAddChannelModal(connid))
+    },
+    onPartChannelClick: (connid: Guid,chan:Channel) => {
+      dispatch(partChannel(connid,chan))
+    },
+    onQuitServerClick: (connid: Guid) => {
+      dispatch(removeServer(connid))
     },
     onSettingsClick: () => {
       dispatch(toggleSettingsModal(true))
