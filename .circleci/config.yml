@@ -4,28 +4,58 @@
 #
 version: 2
 jobs:
-  build:
+  build-linux-windows:
     docker:
-      - image: circleci/node:8.9.4
+      - image: electronuserland/builder:wine
+    working_directory: ~/electric-irc
     steps:
       - checkout
-      - run: sudo dpkg --add-architecture i386
-      - run: sudo add-apt-repository -y ppa:ubuntu-wine/ppa
-      - run: sudo apt-get update
-      - run: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
-      - run: sudo apt-get install -y wine
       # Download and cache dependencies
       - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-            - v2-dependencies-{{ checksum "yarn.lock" }}
-            - v2-dependencies-
-      - run: yarn install
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
+      - run:
+          name: Install Dependencies
+          command: yarn --link-duplicates --pure-lockfile
       - save_cache:
+          name: Save Yarn Package Cache
           paths:
             - node_modules
-          key: v2-dependencies-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Build The Application
+          command: yarn release --linux --win
+
       # build!
       - run: yarn release
+  build-mac:
+    macos:
+      xcode: "9.3"
+    working_directory: ~/electric-irc/mac
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
+      - run:
+          name: Install Dependencies
+          command: yarn --link-duplicates --pure-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          paths:
+            - node_modules
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Build The Application
+          command: yarn release
   test:
     docker:
       - image: circleci/node:8.9.4
@@ -34,31 +64,58 @@ jobs:
       - checkout
       # Download and cache dependencies
       - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-            - v2-dependencies-{{ checksum "yarn.lock" }}
-            - v2-dependencies-
-      - run: yarn global add greenkeeper-lockfile@1
-      - run: yarn install
-      - run: ~/.yarn/bin/greenkeeper-lockfile-update
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages-
+      - run:
+          name: Install Greenkeeper
+          command:
+              - yarn global add greenkeeper-lockfile@1
+      - run:
+          name: Install Dependencies
+          command: yarn install
+      - run:
+          name: Update Lockfile
+          command: ~/.yarn/bin/greenkeeper-lockfile-update
       - save_cache:
+          name: Save Yarn Package Cache
           paths:
             - node_modules
-          key: v2-dependencies-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
       # run tests
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn report-coverage
-      - run: ~/.yarn/bin/greenkeeper-lockfile-upload
+      - run:
+          name: Lint
+          command: yarn lint
+      - run:
+          name: Test
+          command: yarn test
+      - run:
+          name: Report Coverage
+          command: yarn report-coverage
+      - run:
+          name: Upload Greenkeeper Lockfile
+          command: ~/.yarn/bin/greenkeeper-lockfile-upload
 workflows:
   version: 2
   build_and_test:
     jobs:
       - test
-      - build:
+      - build-linux-windows:
           requires:
             - test
           filters:
             branches:
-              only: master
+              only: /master|build/
+            tags:
+              only: /.*/ # Force CircleCI to build on tags
+      - build-mac:
+          requires:
+            - test
+          filters:
+            branches:
+              only: /master|build/
             tags:
               only: /.*/ # Force CircleCI to build on tags
