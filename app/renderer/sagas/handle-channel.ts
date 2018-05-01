@@ -16,9 +16,10 @@ import {
   parseQuitMessage,
   parsePartMessage,
   parseKickMessage,
-  parseKillMessage
+  parseKillMessage,
+  Settings
 } from '../models'
-import { getConnection } from './selectors'
+import { getConnection,getSettings } from './selectors'
 
 // as you add listeners for specific things add the string that would appear as the command string in message
 // by adding to this list the raw listener won't log the message type.
@@ -93,6 +94,9 @@ export function subscribe(
         message: IRC.IMessage
       ) => {
         if (ichannel.toString() === channel.name) {
+          if(client.nick===nick){
+            emit(actions.partChannel(connection.id,channel))
+          }
           emit(
             actions.appendLog(
               connection.id,
@@ -243,9 +247,10 @@ export function* read(
   }
 }
 
-const joinRegex = /^\/join\s*(#.+)$/
-
-const nickRegex = /^\/nick\s*([a-zA-Z0-9_\-]+)$/
+const joinRegex = /^\/join\s*(#.+)$/i
+const partRegex=/^\/part\s*(\s(#[^\s]+)(\s+(.+))?)?$/i
+const quitRegex=/^\/quit\s*(\s(.+))?$/i
+const nickRegex = /^\/nick\s*([a-zA-Z0-9_\-]+)$/i
 const cmdRegex = /^\/[a-z]+/i
 export function* insideWrite(
   client: IRC.Client,
@@ -258,9 +263,33 @@ export function* insideWrite(
     const joinResults = joinRegex.exec(payload.message)
     const nickResults = nickRegex.exec(payload.message)
     const cmdResults = cmdRegex.exec(payload.message)
+    const partResults = partRegex.exec(payload.message)
+    const quitResults = quitRegex.exec(payload.message)
     if (nickResults) {
       const newNickName = nickResults[1]
       client.send('nick', newNickName)
+    } else if (quitResults) {
+      yield put(actions.removeServer(payload.serverId))// the quit listener doesn't trigger when we 'diconnect'
+      // console.log(quitResults)
+      const set:Settings=yield select(getSettings)
+      let qmess=set.defquit
+      if(quitResults[2]){
+        qmess=quitResults[2]
+      }
+      // console.log(client)
+      client.disconnect(qmess,()=>null)
+    } else if (partResults) {
+      // console.log(partResults)
+      let pchann=channel.name
+      if(partResults[2]){
+        pchann=partResults[2]
+      }
+      const set:Settings=yield select(getSettings)
+      let pmess=set.defleave
+      if(partResults[4]){
+        pmess=partResults[4]
+      }
+      // client.part(pchann,pmess,()=>null)
     } else if (joinResults) {
       const newChanName = joinResults[1]
       client.join(newChanName)
@@ -302,7 +331,19 @@ export function* handleChannel(
   yield fork(read, client, connection, channel)
   yield fork(write, client, connection, channel)
 }
-
+export function* handlePartChannels(client: IRC.Client, serverId: Guid) {
+  for (;;) {
+    const payload: actions.IPartChannelAction = yield take(
+      actions.ActionTypeKeys.PART_CHANNEL
+    )
+    if (payload.serverId === serverId) {
+      const set:Settings=yield select(getSettings)
+      client.part(payload.channel.name,set.defleave,()=>null)
+      yield put(actions.removeChannel(serverId,payload.channel.id))
+    }
+  }
+}
+// maybe push up another arg to here to see if connected?
 export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
   for (;;) {
     const payload: actions.IJoinChannelAction = yield take(
@@ -326,35 +367,51 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
             parseJoinMessage(client.nick, newChannel.name)
           )
         )
-        yield fork(requestServer, conn, newChannel)
-      } else {
+        yield fork(requests, conn, newChannel)
+      }else{
         // else client not in channel yet call join and will be back when listener emmits action
         client.join(payload.channelName)
       }
     }
   }
 }
-export function* requestServer(connection: Connection, channel: Channel) {
-  const xhttp2 = new XMLHttpRequest()
-  xhttp2.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/server/join?server=${
-      connection.url
-    }&channel=%23${channel.name.slice(1)}`,
-    true
-  )
-  xhttp2.send()
-  const xhttp = new XMLHttpRequest()
-  xhttp.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/message?servers=${
-      connection.url
-    }&channels=%23${channel.name.slice(1)}`,
-    false
-  )
-  xhttp.send()
-  const messages = JSON.parse(xhttp.responseText)
-  if (messages.status === 203) {
-    yield put(actions.mergeLog(connection.id, channel.id, messages.message))
-  }
+export function* requests(
+  connection: Connection,
+  channel: Channel
+) {
+  const evChannel = yield call(requestServer, connection, channel)
+  const action = yield take(evChannel)
+  yield put(action)
+}
+
+export function requestServer(connection: Connection, channel: Channel) {
+  return sagas.eventChannel(emit=>{
+    const xhttp2 = new XMLHttpRequest()
+    xhttp2.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/server/join?server=${
+        connection.url
+      }&channel=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp2.send()
+    const xhttp = new XMLHttpRequest()
+    xhttp.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/message?servers=${
+        connection.url
+      }&channels=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp.onreadystatechange=function() {
+      if (this.readyState === 4 && this.status === 200) {
+        const messages = JSON.parse(this.responseText)
+        if (messages.status === 203) {
+          emit(actions.mergeLog(connection.id, channel.id, messages.message))
+        }
+      }
+    }
+    xhttp.send()
+    return () => null
+  })
 }

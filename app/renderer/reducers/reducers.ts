@@ -18,9 +18,10 @@ import {
   IPlayWithThemeAction,
   IToggleAddChannelModalAction,
   IMakeServerConnectedAction,
-  IMakeChannelConnectedAction
+  IMakeChannelConnectedAction,
+  IRemoveChannelAction,
 } from '../actions'
-
+import removeChannel from './remove-channel'
 import addConnection from './add-connection'
 import makeServerConnected from './make-server-connected'
 import makeChannelConnected from './make-channel-connected'
@@ -60,6 +61,8 @@ export function defaultReducer(
       return editServer(state, action as IEditServerAction)
     case ActionTypeKeys.ADD_CHANNEL:
       return addChannel(state, action as IAddChannelAction)
+    case ActionTypeKeys.REMOVE_CHANNEL:
+      return removeChannel(state, action as IRemoveChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
     case ActionTypeKeys.VIEW_CHANNEL:

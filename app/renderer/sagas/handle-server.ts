@@ -1,4 +1,4 @@
-import { call, cancel, fork, put, take } from 'redux-saga/effects'
+import { call, cancel, fork, put, take, select } from 'redux-saga/effects'
 import * as IRC from 'irc'
 import { List } from 'immutable'
 
@@ -8,10 +8,12 @@ import {
   ChannelFactory,
   Connection,
   ConnectionFactory,
-  Guid
+  Guid,
+  Settings
 } from '../models'
-import { handleChannel, handleJoinChannels } from '.'
+import { handleChannel, handleJoinChannels,handlePartChannels } from '.'
 import { Task } from 'redux-saga'
+import { getSettings } from './selectors'
 
 export function createIRCClient(
   url: string,
@@ -72,18 +74,23 @@ export function* handleServer(payload: actions.IAddServerAction) {
 
   // Handle added channels
   const joinTask = yield fork(handleJoinChannels, ircClient, typedConnection.id)
+  const partTask = yield fork(handlePartChannels, ircClient, typedConnection.id)
 
-  // TODO: This will have to change to make sure we're talking about the right server...
-  const action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
-
-  console.log('Canceling channel listeners...')
-  for (let i = 0; i < channelTasks.count(); i++) {
-    const task = channelTasks.get(i)
-    if (task) {
-      yield cancel(task)
+  for(;;){// loop until actually removing connection
+    const action: actions.IRemoveServerAction = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
+    if(action.id===typedConnection.id){// actually remove connection
+      console.log('Canceling channel listeners...')
+      for (let i = 0; i < channelTasks.count(); i++) {
+        const task = channelTasks.get(i)
+        if (task) {
+          yield cancel(task)
+        }
+      }
+      yield cancel(joinTask)
+      yield cancel(partTask)
+      const set:Settings=yield select(getSettings)
+      ircClient.disconnect(set.defquit, () => null) 
+      break
     }
   }
-  yield cancel(joinTask)
-
-  ircClient.disconnect('Bye!!!', () => null)
 }

@@ -9,6 +9,8 @@ interface IServerProps {
   connection: Connection
   curChanID: Guid | undefined
   onAddChannelClick: (connID: Guid) => void
+  onPartChannelClick: (connID: Guid,chan:Channel) => void
+  onQuitServerClick: (connID: Guid) => void
 }
 
 interface IServerState {
@@ -46,35 +48,34 @@ export class Server extends React.Component<IServerProps, IServerState> {
       this.props.onAddChannelClick(this.props.connection.id)
     }
   }
+  onClickPartChannel = (channel:Channel) => {
+    return (event: any) => {
+      this.props.onPartChannelClick(this.props.connection.id,channel)
+    }
+  }
+  onClickQuitServer = () => {
+    return (event: any) => {
+      this.props.onQuitServerClick(this.props.connection.id)
+    }
+  }
   // this next function checks to see if the channel that this 'a' link refers to is the one selected
   // and adds a special format to the selected one so user can see that is the one selected
   // can be deleted after somthing better
   bold_if_selected(
-    connection: Connection,
     channel: Channel,
     curChanID: Guid | undefined
   ) {
-    if (channel.id === curChanID) {
-      return (
-        <a
-          href="#"
-          onClick={this.onClickGenerator(this.props.connection, channel)}
-        >
-          <b>{channel.name}</b>
-        </a>
-      )
-    } else {
-      return (
-        <a
-          href="#"
-          onClick={this.onClickGenerator(this.props.connection, channel)}
-        >
-          {channel.name}
-        </a>
-      )
-    }
+      return (channel.id === curChanID?<b>{channel.name}</b>:channel.name)
   }
-
+  getClass(channel: Channel,curChanID: Guid | undefined){
+      if (channel.id === curChanID) {
+          return "active";
+      }
+      return "";
+  }
+  remove_channel(channel: Channel){
+    return (<a href="#" className="exa" onClick={channel.name !== "#"?this.onClickPartChannel(channel):this.onClickQuitServer()}>{channel.name !== "#"?"✖":"❌"}</a>)
+  }
   render() {
     const server = this.props.connection
     return (
@@ -91,17 +92,22 @@ export class Server extends React.Component<IServerProps, IServerState> {
         <Collapse isOpen={this.state.collapse}>
           <ul className="list-unstyled" id={server.name}>
             {this.props.connection.channels.map((channel, i) => (
-              <li key={i}>
-                {this.bold_if_selected(
-                  this.props.connection,
-                  channel,
-                  this.props.curChanID
-                )}
+              <li key={i} className={this.getClass(channel,this.props.curChanID)}>
+                <a
+                  href="#"
+                  onClick={this.onClickGenerator(this.props.connection, channel)}
+                >
+                  {this.bold_if_selected(
+                    channel,
+                    this.props.curChanID
+                  )}
+                </a>
+                {this.remove_channel(channel)}
               </li>
             ))}
             <li>
               <a href="#" onClick={this.onClickAddChannel()}>
-                Add Channel
+                ✚Add Channel
               </a>
             </li>
           </ul>
