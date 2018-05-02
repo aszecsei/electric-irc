@@ -2,14 +2,8 @@
   display: flex;
   align-items: stretch;
 }
-#sidebar {
-  min-width: 250px;
-  max-width: 250px;
-}
 
-#sidebar.active {
-  margin-left: -250px;
-}
+#sidebar
 a[data-toggle='collapse'] {
   position: relative;
 }
@@ -32,44 +26,69 @@ a:focus {
   transition: all 0.3s;
 }
 
-#sidebar {
-  /* don't forget to add all the previously mentioned styles here too */
-  background: var(--primary);
+
+.exreg{
+  width: 80%;
+}
+.row{
+  width: 100%;
+  margin-left: 0px;
+}
+
+#sidebar  {
+  min-width: 250px;
+  max-width: 250px;
+  overflow-y: auto;
+  background: var(--primary-light);
   color: var(--primary-text);
   transition: all 0.3s;
+  &.active {
+    margin-left: -250px;
+  }
+  .sidebar-header {
+    padding: 20px;
+    background: var(--primary-light);
+  }
+
+  ul {
+    p {
+      color: var(--primary-text);
+      padding: 10px;
+    }
+    li {
+      a {
+        padding: 10px;
+        font-size: 1.1em;
+        display: block;
+      }
+      .exa{
+        width: 20%;
+        padding-left: 14px !important;
+
+      }
+      a.exa:hover{
+        background-color: red;
+      }
+      a:hover {
+        color: var(--primary);
+        background: var(--primary-text);
+      }
+    }
+    li.active > a,
+    a[aria-expanded='true'] {
+      color: var(--primary-text);
+      background:var(--primary-dark);
+    }
+  }
+  li a {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
 }
 
-#sidebar .sidebar-header {
-  padding: 20px;
-  background: var(--primary);
-}
-
-#sidebar ul p {
-  color: var(--primary-text);
-  padding: 10px;
-}
-
-#sidebar ul li a {
-  padding: 10px;
-  font-size: 1.1em;
-  display: block;
-}
-#sidebar ul li a:hover {
-  color: var(--primary-dark);
-  background: var(--primary-text);
-}
-
-#sidebar ul li.active > a,
-a[aria-expanded='true'] {
-  color: var(--primary-text);
-  background: var(--primary-light);
-}
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
-  background: var(--primary-dark);
-}
-#sidebar li a {
-  display: flex !important;
-  justify-content: space-between;
+  background: var(--primary);
 }

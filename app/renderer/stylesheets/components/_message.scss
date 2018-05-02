@@ -3,9 +3,10 @@
   border-style: outset;
   border-color: var(--secondary-dark);
   background-color: var(--primary-dark);
-  padding: 5px;
+  padding: 10px;
   display: inline-block;
   margin: 0px;
+  border-radius: 25px;
 }
 .mmessagetext {
   color: var(--primary-text);
@@ -14,12 +15,17 @@
   margin-bottom: 5px;
   margin-left: 5px;
   word-break: break-word;
+  display: flow-root;
 }
 
-.imgPrev {
+.Prev {
   margin: 5px;
-  max-width: 90%;
+  max-width: 100%;
   max-height: auto;
+}
+.vid{
+  width: auto;// keep vid small to prevent clutter
+  height: auto;
 }
 .mmessage a:link {
   color: var(--secondary-light);
@@ -32,5 +38,5 @@
 
 .time {
   font-size: 50%;
-  color: --disabled-text;
+  color: var(--disabled-text)s;
 }

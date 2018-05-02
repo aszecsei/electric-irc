@@ -1,4 +1,4 @@
-import { call, cancel, fork, put, take } from 'redux-saga/effects'
+import { call, cancel, fork, put, take, select } from 'redux-saga/effects'
 import * as IRC from 'irc'
 import { List } from 'immutable'
 
@@ -8,10 +8,12 @@ import {
   ChannelFactory,
   Connection,
   ConnectionFactory,
-  Guid
+  Guid,
+  Settings
 } from '../models'
-import { handleChannel, handleJoinChannels } from '.'
-import { Task } from 'redux-saga'
+import { handleChannel, handleJoinChannels,handlePartChannels } from '.'
+import { Task, eventChannel } from 'redux-saga'
+import { getSettings } from './selectors'
 
 export function createIRCClient(
   url: string,
@@ -20,7 +22,8 @@ export function createIRCClient(
 ) {
   return new IRC.Client(url, nickname, {
     userName: 'electricirc',
-    channels
+    channels,
+    autoConnect: false,
   })
 }
 
@@ -48,12 +51,34 @@ export function connect(action: actions.IAddServerAction) {
   }
 }
 
+function* connectToClient(serverId: Guid, client: IRC.Client) {
+  const evChannel = eventChannel(emit => {
+    console.log("CONNECTING...")
+    client.connect(() => {
+      console.log("CONNECTED!")
+      emit(actions.makeServerConnected(
+        serverId
+      ))
+    })
+    client.addListener('error', (message: any) => {
+      console.error(message)
+    })
+    return () => null
+  })
+  for (;;) {
+    const action = yield take(evChannel)
+    yield put(action)
+  }
+}
+
 export function* handleServer(payload: actions.IAddServerAction) {
   const { client, connection } = yield call(connect, payload)
   yield put(actions.addConnection(connection))
 
   const typedConnection = connection as Connection
   const ircClient = client as IRC.Client
+
+  yield fork(connectToClient, typedConnection.id, ircClient)
 
   console.log('Adding channels...')
   let channelTasks = List<Task>([])
@@ -70,20 +95,27 @@ export function* handleServer(payload: actions.IAddServerAction) {
     }
   }
 
+  
+
   // Handle added channels
   const joinTask = yield fork(handleJoinChannels, ircClient, typedConnection.id)
+  const partTask = yield fork(handlePartChannels, ircClient, typedConnection.id)
 
-  // TODO: This will have to change to make sure we're talking about the right server...
-  const action = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
-
-  console.log('Canceling channel listeners...')
-  for (let i = 0; i < channelTasks.count(); i++) {
-    const task = channelTasks.get(i)
-    if (task) {
-      yield cancel(task)
+  for(;;){// loop until actually removing connection
+    const action: actions.IRemoveServerAction = yield take(actions.ActionTypeKeys.REMOVE_SERVER)
+    if(action.id===typedConnection.id){// actually remove connection
+      console.log('Canceling channel listeners...')
+      for (let i = 0; i < channelTasks.count(); i++) {
+        const task = channelTasks.get(i)
+        if (task) {
+          yield cancel(task)
+        }
+      }
+      yield cancel(joinTask)
+      yield cancel(partTask)
+      const set:Settings=yield select(getSettings)
+      ircClient.disconnect(set.defquit, () => null) 
+      break
     }
   }
-  yield cancel(joinTask)
-
-  ircClient.disconnect('Bye!!!', () => null)
 }

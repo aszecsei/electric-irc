@@ -16,9 +16,11 @@ import {
   parseQuitMessage,
   parsePartMessage,
   parseKickMessage,
-  parseKillMessage
+  parseKillMessage,
+  Settings
 } from '../models'
-import { getConnection } from './selectors'
+import { getConnection,getSettings, getChannelByName } from './selectors'
+import * as persistentStorage from '../utilities/persistent-storage'
 
 // as you add listeners for specific things add the string that would appear as the command string in message
 // by adding to this list the raw listener won't log the message type.
@@ -34,13 +36,8 @@ const raw_no_log = [
   'PONG'
 ]
 
-export function subscribe(
-  client: IRC.Client,
-  connection: Connection,
-  channel: Channel
-) {
-  return sagas.eventChannel(emit => {
-    // raw
+export function* subscribeToRaw(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener('raw', (message: IRC.IMessage) => {
       // print('raw\n')
       const ms = JSON.parse(JSON.stringify(message)) // turns to hash
@@ -56,12 +53,23 @@ export function subscribe(
           actions.appendLog(
             connection.id,
             channel.id,
-            parseNumericMessage(sender, message)
+            parseNumericMessage(sender, message,sender===client.nick)
           )
         )
       }
     })
-    // kick
+    return () => {
+      client.removeListener('raw', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
+
+export function* subscribeToKick(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'kick',
       (
@@ -76,14 +84,24 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseKickMessage(nick, by, channel.name, reason)
+              parseKickMessage(nick, by, channel.name, reason,new Date(),(nick===client.nick||by===client.nick))
             )
           )
         }
       }
     )
+    return () => {
+      client.removeListener('kick', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
 
-    // part
+export function* subscribeToPart(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'part',
       (
@@ -93,18 +111,31 @@ export function subscribe(
         message: IRC.IMessage
       ) => {
         if (ichannel.toString() === channel.name) {
+          if(client.nick===nick){
+            emit(actions.partChannel(connection.id,channel))
+          }
           emit(
             actions.appendLog(
               connection.id,
               channel.id,
-              parsePartMessage(nick, channel.name, reason)
+              parsePartMessage(nick, channel.name, reason,new Date(),client.nick===nick)
             )
           )
         }
       }
     )
+    return () => {
+      client.removeListener('part', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
 
-    // kill
+export function* subscribeToKill(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'kill',
       (
@@ -118,14 +149,24 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseKillMessage(nick, reason)
+              parseKillMessage(nick, reason,new Date(),client.nick===nick)
             )
           )
         }
       }
     )
+    return () => {
+      client.removeListener('kill', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
 
-    // quit
+export function* subscribeToQuit(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'quit',
       (
@@ -139,32 +180,66 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseQuitMessage(nick, reason)
+              parseQuitMessage(nick, reason,new Date(),client.nick===nick)
             )
           )
         }
       }
     )
+    return () => {
+      client.removeListener('quit', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
 
-    // join
+export function* subscribeToJoin(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'join',
       (ichannel: IRC.IChannel, nick: string, message: IRC.IMessage) => {
         if (nick === client.nick && channel.name === '#') {
-          emit(actions.joinChannel(connection.id, ichannel.toString()))
+          console.log(`Joined ${ichannel.toString()}`)
+          emit({ type: 'JOIN_OR_MAKE_CONNECTED', data: ichannel.toString() })
         } else if (ichannel.toString() === channel.name) {
           emit(
+            { type: 'APPEND_LOG', data: 
             actions.appendLog(
               connection.id,
               channel.id,
-              parseJoinMessage(nick, channel.name)
-            )
+              parseJoinMessage(nick, channel.name,new Date(),client.nick===nick)
+            ) }
           )
         }
       }
     )
+    return () => {
+      client.removeListener('join', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    if (action.type === 'APPEND_LOG') {
+      yield put(action.data)
+    } else {
+      // Check if the channel already exists
+      const chann = yield select(getChannelByName, connection.id, action.data)
+      if (chann) {
+        // Make the channel connected
+        yield put(actions.makeChannelConnected(connection.id, chann.id))
+      } else {
+        // Create the channel
+        yield put(actions.joinChannel(connection.id, action.data))
+      }
+    }
+  }
+}
 
-    // notice
+export function* subscribeToNotice(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'notice',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
@@ -175,15 +250,24 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseNoticeMessage(sender, to, message)
+              parseNoticeMessage(sender, to, message,client.nick===nick)
             )
           )
         }
       }
     )
-    // TODO: PRIV MESSAGE user 2 user
+    return () => {
+      client.removeListener('notice', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
 
-    // channel messages
+export function* subscribeToChannelMessage(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'message#',
       (nick: string, to: string, text: string, message: IRC.IMessage) => {
@@ -195,14 +279,24 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseMessage(nick, to, text, message)
+              parseMessage(nick, to, text)
             )
           )
         }
       }
     )
+    return () => {
+      client.removeListener('message#', () => null)
+    }
+  })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
+}
 
-    // nick
+export function* subscribeToNick(client: IRC.Client, connection: Connection, channel: Channel) {
+  const evChan = sagas.eventChannel(emit => {
     client.addListener(
       'nick',
       (
@@ -220,15 +314,20 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseNickChange(oldnick, newnick, channels, message)
+              parseNickChange(oldnick, newnick, channels,new Date(),newnick === client.nick)
             )
           )
         }
       }
     )
-
-    return () => null
+    return () => {
+      client.removeListener('nick', () => null)
+    }
   })
+  for (;;) {
+    const action = yield take(evChan)
+    yield put(action)
+  }
 }
 
 export function* read(
@@ -236,16 +335,21 @@ export function* read(
   connection: Connection,
   channel: Channel
 ) {
-  const evChannel = yield call(subscribe, client, connection, channel)
-  for (;;) {
-    const action = yield take(evChannel)
-    yield put(action)
-  }
+  yield fork(subscribeToRaw, client, connection, channel)
+  yield fork(subscribeToKick, client, connection, channel)
+  yield fork(subscribeToPart, client, connection, channel)
+  yield fork(subscribeToKill, client, connection, channel)
+  yield fork(subscribeToQuit, client, connection, channel)
+  yield fork(subscribeToJoin, client, connection, channel)
+  yield fork(subscribeToNotice, client, connection, channel)
+  yield fork(subscribeToChannelMessage, client, connection, channel)
+  yield fork(subscribeToNick, client, connection, channel)
 }
 
-const joinRegex = /^\/join\s*(#.+)$/
-
-const nickRegex = /^\/nick\s*([a-zA-Z0-9_\-]+)$/
+const joinRegex = /^\/join\s*(#.+)$/i
+const partRegex=/^\/part\s*(\s(#[^\s]+)(\s+(.+))?)?$/i
+const quitRegex=/^\/quit\s*(\s(.+))?$/i
+const nickRegex = /^\/nick\s*([a-zA-Z0-9_\-]+)$/i
 const cmdRegex = /^\/[a-z]+/i
 export function* insideWrite(
   client: IRC.Client,
@@ -258,9 +362,33 @@ export function* insideWrite(
     const joinResults = joinRegex.exec(payload.message)
     const nickResults = nickRegex.exec(payload.message)
     const cmdResults = cmdRegex.exec(payload.message)
+    const partResults = partRegex.exec(payload.message)
+    const quitResults = quitRegex.exec(payload.message)
     if (nickResults) {
       const newNickName = nickResults[1]
       client.send('nick', newNickName)
+    } else if (quitResults) {
+      yield put(actions.removeServer(payload.serverId))// the quit listener doesn't trigger when we 'diconnect'
+      // console.log(quitResults)
+      const set:Settings=yield select(getSettings)
+      let qmess=set.defquit
+      if(quitResults[2]){
+        qmess=quitResults[2]
+      }
+      // console.log(client)
+      client.disconnect(qmess,()=>null)
+    } else if (partResults) {
+      // console.log(partResults)
+      let pchann=channel.name
+      if(partResults[2]){
+        pchann=partResults[2]
+      }
+      const set:Settings=yield select(getSettings)
+      let pmess=set.defleave
+      if(partResults[4]){
+        pmess=partResults[4]
+      }
+      client.part(pchann,pmess,()=>null)
     } else if (joinResults) {
       const newChanName = joinResults[1]
       client.join(newChanName)
@@ -275,7 +403,7 @@ export function* insideWrite(
         actions.appendLog(
           connection.id,
           channel.id,
-          parseMessage(client.nick, channel.name, payload.message)
+          parseMessage(client.nick, channel.name, payload.message,new Date(),true)
         )
       )
     }
@@ -302,59 +430,91 @@ export function* handleChannel(
   yield fork(read, client, connection, channel)
   yield fork(write, client, connection, channel)
 }
-
+export function* handlePartChannels(client: IRC.Client, serverId: Guid) {
+  for (;;) {
+    const payload: actions.IPartChannelAction = yield take(
+      actions.ActionTypeKeys.PART_CHANNEL
+    )
+    if (payload.serverId === serverId) {
+      const set:Settings=yield select(getSettings)
+      client.part(payload.channel.name,set.defleave,()=>null)
+      yield put(actions.removeChannel(serverId,payload.channel.id))
+    }
+  }
+}
+// maybe push up another arg to here to see if connected?
 export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
   for (;;) {
     const payload: actions.IJoinChannelAction = yield take(
       actions.ActionTypeKeys.JOIN_CHANNEL
     )
     if (payload.serverId === serverId) {
-      // so all clients don't join in the fun of a specific one
-      if (client.chans[payload.channelName]) {
-        // if client joined (ie action called in join listener)
-        const newChannel = ChannelFactory({
+      // Make sure we have the right server
+      const connection: Connection = yield select(getConnection, serverId)
+      if (!connection.channels.find(value => value.name === payload.channelName)) {
+        // Prevent joining duplicate channels
+        const newChannel = new ChannelFactory({
           id: Guid.create(),
           name: payload.channelName
         })
+        // Add the channel model to the store
         yield put(actions.addChannel(serverId, newChannel))
-        const conn: Connection = yield select(getConnection, serverId)
-        yield fork(handleChannel, client, conn, newChannel)
-        yield put(
-          actions.appendLog(
-            serverId,
-            newChannel.id,
-            parseJoinMessage(client.nick, newChannel.name)
-          )
-        )
-        yield fork(requestServer, conn, newChannel)
-      } else {
-        // else client not in channel yet call join and will be back when listener emmits action
-        client.join(payload.channelName)
+        // Handle channel events
+        yield fork(handleChannel, client, connection, newChannel)
+        // Get the local channel logs
+
+        // Get the server message log
+        yield fork(requests, connection, newChannel)
+        
+        if (!client.chans[payload.channelName] && payload.channelName) {
+          // Actually join the channel if we haven't already
+          client.join(payload.channelName)
+        } else {
+          // We've already connected, so mark us connected
+          yield put(actions.makeChannelConnected(serverId, newChannel.id))
+        }
       }
     }
   }
 }
-export function* requestServer(connection: Connection, channel: Channel) {
-  const xhttp2 = new XMLHttpRequest()
-  xhttp2.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/server/join?server=${
-      connection.url
-    }&channel=%23${channel.name.slice(1)}`,
-    true
-  )
-  xhttp2.send()
-  const xhttp = new XMLHttpRequest()
-  xhttp.open(
-    'GET',
-    `https://electric-centric.herokuapp.com/message?servers=${
-      connection.url
-    }&channels=%23${channel.name.slice(1)}`,
-    false
-  )
-  xhttp.send()
-  const messages = JSON.parse(xhttp.responseText)
-  if (messages.status === 203) {
-    yield put(actions.mergeLog(connection.id, channel.id, messages.message))
-  }
+
+export function* requests(
+  connection: Connection,
+  channel: Channel
+) {
+  const evChannel = yield call(requestServer, connection, channel)
+  const action = yield take(evChannel)
+  yield put(action)
+}
+
+export function requestServer(connection: Connection, channel: Channel) {
+  return sagas.eventChannel(emit=>{
+    const xhttp2 = new XMLHttpRequest()
+    xhttp2.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/server/join?server=${
+        connection.url
+      }&channel=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp2.send()
+    const xhttp = new XMLHttpRequest()
+    xhttp.open(
+      'GET',
+      `https://electric-centric.herokuapp.com/message?servers=${
+        connection.url
+      }&channels=%23${channel.name.slice(1)}`,
+      true
+    )
+    xhttp.onreadystatechange=function() {
+      if (this.readyState === 4 && this.status === 200) {
+        const messages = JSON.parse(this.responseText)
+        if (messages.status === 203) {
+          emit(actions.mergeLog(connection.id, channel.id, messages.message))
+        }
+      }
+    }
+    xhttp.send()
+    return () => null
+  })
 }

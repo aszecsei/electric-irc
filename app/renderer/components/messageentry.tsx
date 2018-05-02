@@ -1,13 +1,11 @@
 import * as React from 'react'
 import { emoticons, Emojis } from '../emojis'
 import { Picker, EmojiData, emojiIndex } from 'emoji-mart'
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { emoji_process } from './message'
 import { connect } from 'tls'
-import {
-  Input
-} from 'reactstrap'
 
 interface IChatBoxProps {
   connection?: Connection
@@ -25,6 +23,9 @@ export class MessageEntry extends React.Component<
   constructor(props: IChatBoxProps) {
     super(props)
     this.state = { value: '', emoji_vis: false }
+    // this.state = { value: 'Disable Until in A Channel', emoji_vis: false } // this will stay in box
+    // not convienient once in channel. insead put string see function disabledString
+      
   }
 
   handleChange = (event: any) => {
@@ -64,6 +65,9 @@ export class MessageEntry extends React.Component<
   close_emoji = (event: any) => {
     this.setState({ value: this.state.value, emoji_vis: false })
   }
+  disabledString(){// to display disabled message in box when not viewing channel
+    return this.props.channel?this.state.value:"Disable Until in A Channel"
+  }
   show() {
     if (this.state.emoji_vis) {
       // custum can be used to add custom emojis, if you wnat to has picker use emoji set other then the native
@@ -80,50 +84,28 @@ export class MessageEntry extends React.Component<
     }
     return
   }
-  // disabledBox() {
-  //   // so user cant type when not in a place that could send message, eliminates confusion
-  //   if (this.props.channel) {
-  //     return (
-  //       <input
-  //         id={'messagebox'}
-  //         type="text"
-  //         value={this.state.value}
-  //         onChange={this.handleChange}
-  //         onClick={this.close_emoji}
-  //       />
-  //     )
-  //   } else {
-  //     return <input id={'messagebox'} type="text" value={''} disabled />
-  //   }
-  // }
-  // disabledSubmit() {
-  //   // so user cant submit when not in a place that could send message, eliminates confusion
-  //   if (this.props.channel) {
-  //     return <input type="submit" value="Submit" />
-  //   } else {
-  //     return <input type="submit" value="Submit" disabled />
-  //   }
-  // }
   render() {
     return (
       <div className={'widthhund'}>
         {this.show()}
-        <form className={'widthhund'} onSubmit={this.handleSubmit}>
+        <Form className={'widthhund mForm mcenter'} onSubmit={this.handleSubmit}>
+        <FormGroup className="mformgroup mcenter">
           <a href={'#'} onClick={this.toggle_emoji}>
             ⚡
           </a>
-          <label>Send Message:</label>
+          <Label>Send Message:</Label>
           <Input 
             id={'messagebox'}
             type="text"
-            value={this.state.value}
+            value={this.disabledString()}
             onChange={this.handleChange}
             onClick={this.close_emoji}
             disabled={this.props.channel===undefined}
           />
-          <input type="submit" value="Submit" disabled={this.props.channel===undefined} />
-        </form>
-      </div>
+          <Input className="msubmit" type="submit" value="Submit" disabled={this.props.channel===undefined} />
+          </FormGroup>
+        </Form>
+      </div>      
     )
   }
 }
