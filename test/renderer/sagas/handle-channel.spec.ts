@@ -177,7 +177,7 @@ describe('subscriptions', function() {
     })
 
     it('should dispatch the action', function() {
-      expect(value2).to.eq(put(fakeAction))
+      expect(value2).to.deep.equal(put(fakeAction))
     })
   })
 })
