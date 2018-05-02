@@ -140,12 +140,14 @@ const sandbox = sinon.createSandbox()
 const connectionId = Guid.create()
 const channelId = Guid.create()
 
+const fakeAction = { type: 'Fake Action' }
+
 describe('subscriptions', function() {
   let emitSpy
   beforeEach(function() {
     emitSpy = sinon.spy()
     sandbox.stub(sagas, 'eventChannel').callsArgWith(0, emitSpy)
-    sandbox.stub(actions, 'appendLog').returns(null)
+    sandbox.stub(actions, 'appendLog').returns(fakeAction)
   })
   describe('subscribe to raw', function() {
     let mockedClient
@@ -168,7 +170,7 @@ describe('subscriptions', function() {
     })
 
     it('should dispatch the action', function() {
-      expect(value).to.eq(put(null))
+      expect(value).to.eq(put(fakeAction))
     })
   })
 })
