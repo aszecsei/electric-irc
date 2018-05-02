@@ -4,12 +4,13 @@ import { Emojis, emoticons } from '../emojis'
 // see https://www.npmjs.com/package/dateformat for details
 import * as dateFormat from 'dateformat'
 import { Message,Settings } from '../models'
+import YouTube from 'react-youtube'
 const opn = require('opn')
 interface IMessageProps {
   message: Message
   settings:Settings
 }
-function test(event: any) {
+function open(event: any) {
   event.preventDefault()
   opn(event.target.href as string)
 }
@@ -35,7 +36,7 @@ function link_process(str: string) {
       <a
         key={ii}
         href={reres[2] ? reres[0] : 'http://' + reres[0]}
-        onClick={test}
+        onClick={open}
       >
         {reres[0]}
       </a>
@@ -51,10 +52,27 @@ function link_process(str: string) {
   return x
 }
 function image_process(str: string) {
-  const imgurlre = /((https?:\/\/)|([a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?@))?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*\.(jpg|jpeg|png|gif|bmp|img)(\?[^\s]*)?/i
+  const imgurlre = /(https?:\/\/)?[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?(\.[a-z0-9]([%0-9a-z\-_~]*[a-z0-9])?)+(\:[0-9]+)?(\/[%0-9a-z\-_~.]*)*\.(jpg|jpeg|png|gif|bmp|img)(\?[^\s]*)?/i
   const reres = imgurlre.exec(str)
   if (reres) {
-    return <img className="imgPrev" src={reres[0]} />
+    return <div className="mcenter"><img className="Prev" src={reres[0]} /></div>
+  }
+  return youtube_process(str)
+}
+function youtube_process(str:string){
+  const yturlre1=/(https?:\/\/)?(www\.)?((youtu.be\/([^?]+))|(youtube.com\/embed\/([^?]+))|(youtube.com\/watch\?(.+&)?(v=([^&]+))))/i
+  const reres = yturlre1.exec(str)
+  // console.log(reres)
+  if(reres){
+    if(reres[5]){
+      return <div className="mcenter"><YouTube videoId={reres[5]} className="Prev vid"/></div>
+    }
+    else if(reres[7]){
+      return <div className="mcenter"><YouTube videoId={reres[7]} className="Prev vid"/></div>
+    }
+    else if(reres[11]){
+      return <div className="mcenter"><YouTube videoId={reres[11]} className="Prev vid"/></div>
+    }
   }
   return null
 }
@@ -77,7 +95,7 @@ export function emoji_process(str: string): string {
   for (const i of Object.keys(emoticons)) {
     // replaces shortcuts too like :D
     // could manually make a regex to include eac one but that sounds like a pain
-    newstr = newstr.replace(emoticons[+i], Emojis[emoticons[+i]])
+    newstr = newstr.replace(emoticons[+i]+" ", Emojis[emoticons[+i]]+" ")
   }
   return newstr
 }
@@ -96,7 +114,7 @@ function showTime(message:Message,settings:Settings){
 }
 function has_sender(message: Message,settings:Settings) {
   return (
-    <p className="mmessage">
+    <span className={"mmessage"+(message.isMe?" float-right":"")}>
       {link_process(message.sender)}
       <span>: </span>
       {showTime(message,settings)}
@@ -104,19 +122,21 @@ function has_sender(message: Message,settings:Settings) {
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
       {image_process(message.text)}
-    </p>
+      {/* {youtube_process(message.text)}// called in image_process so only one of the previews are displayed to prevent clutter */}
+    </span>
   )
 }
 
 function no_sender(message: Message,settings:Settings) {
   return (
-    <p className="mmessage">
+    <span className={"mmessage"+(message.isMe?" float-right":"")}>
       {showTime(message,settings)}
       <br />
       <b className="mmessagetext">{link_process(message.text)}</b>
       <br />
       {image_process(message.text)}
-    </p>
+      {/* {youtube_process(message.text)}// called in image_process so only one of the previews are displayed to prevent clutter */}
+    </span>
   )
 }
 export const MessageDisp: React.SFC<IMessageProps> = props => {

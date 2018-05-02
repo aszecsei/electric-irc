@@ -25,3 +25,8 @@ export const getChannelByName = (
   }
   return undefined
 }
+export const getSettings = (
+  state: ElectricState
+) => {
+  return state.settings
+}

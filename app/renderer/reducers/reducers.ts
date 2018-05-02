@@ -16,10 +16,15 @@ import {
   IMergeLogsAction,
   IAddThemeAction,
   IPlayWithThemeAction,
-  IToggleAddChannelModalAction
+  IToggleAddChannelModalAction,
+  IMakeServerConnectedAction,
+  IMakeChannelConnectedAction,
+  IRemoveChannelAction,
 } from '../actions'
-
+import removeChannel from './remove-channel'
 import addConnection from './add-connection'
+import makeServerConnected from './make-server-connected'
+import makeChannelConnected from './make-channel-connected'
 import appendLog from './append-log'
 import editServer from './edit-server'
 import addChannel from './add-channel'
@@ -46,12 +51,18 @@ export function defaultReducer(
   switch (action.type) {
     case ActionTypeKeys.ADD_CONNECTION:
       return addConnection(state, action as IAddConnectionAction)
+    case ActionTypeKeys.MAKE_SERVER_CONNECTED:
+      return makeServerConnected(state, action as IMakeServerConnectedAction)
+    case ActionTypeKeys.MAKE_CHANNEL_CONNECTED:
+      return makeChannelConnected(state, action as IMakeChannelConnectedAction)
     case ActionTypeKeys.APPEND_LOG:
       return appendLog(state, action as IAppendLogAction)
     case ActionTypeKeys.EDIT_SERVER:
       return editServer(state, action as IEditServerAction)
     case ActionTypeKeys.ADD_CHANNEL:
       return addChannel(state, action as IAddChannelAction)
+    case ActionTypeKeys.REMOVE_CHANNEL:
+      return removeChannel(state, action as IRemoveChannelAction)
     case ActionTypeKeys.REMOVE_SERVER:
       return removeServer(state, action as IRemoveServerAction)
     case ActionTypeKeys.VIEW_CHANNEL:
