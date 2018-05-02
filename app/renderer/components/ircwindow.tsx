@@ -4,7 +4,7 @@ import { List } from 'immutable'
 
 import { MessageEntry } from './messageentry'
 import { MessageDisp } from './message'
-
+import {Input} from 'reactstrap'
 import { Connection } from '../models/connections'
 import { Channel } from '../models/channel'
 import { Message,MessageType } from '../models/message'
@@ -17,11 +17,14 @@ interface IChatWindowProps {
   settings:Settings
   onSendMessage: (message: string, conn: Connection, channel: Channel) => void
 }
-interface IChatWindowState{
+
+interface IChatWindowState {
+  value: string,
   numShow:number
 }
 const defaultState = {
-  numShow: 50
+  numShow: 50,
+  value: ""
 }
 export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowState> {
   private logWindow?: HTMLDivElement
@@ -30,6 +33,12 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
     super(props)
     this.state={...defaultState}
     this.noDidUp=false
+  }
+  
+  handleChange = (event: any) => {
+    this.setState({
+      value: event.target.value
+    })
   }
   componentDidUpdate() {
     if (!this.noDidUp&&this.logWindow) {
@@ -45,6 +54,15 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
   render() {
     return (
       <div className="chatwindow">
+        <div className="filter">
+        <Input
+                type="text"
+                value={this.state.value}
+                onChange={this.handleChange}
+                id={'filterbox'}
+                placeholder={'Filter messages'}
+              />
+        </div>
         <div
           className="logWindow"
           ref={ref => (this.logWindow = ref ? ref : undefined)}
@@ -58,7 +76,7 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
                     (m.type===MessageType.JOIN && this.props.settings.hidejoin)
                     ||(m.type===MessageType.NICKCHANGE && this.props.settings.hidenicknamechange)
                   )
-                  // and matches search===true
+                  &&(m.text.toLowerCase().match(this.state.value.toLowerCase()))// and matches search===true
                 )
               ).map((message, i) => (
                 <div key={i} className="outermessage">
