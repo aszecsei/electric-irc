@@ -149,6 +149,11 @@ describe('subscriptions', function() {
     sandbox.stub(sagas, 'eventChannel').callsArgWith(0, emitSpy)
     sandbox.stub(actions, 'appendLog').returns(fakeAction)
   })
+
+  afterEach(function() {
+    sandbox.restore()
+  })
+
   describe('subscribe to raw', function() {
     let mockedClient
     let generator
