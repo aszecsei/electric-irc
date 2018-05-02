@@ -73,9 +73,6 @@ export class Server extends React.Component<IServerProps, IServerState> {
       }
       return "";
   }
-  remove_channel(channel: Channel){
-    return (<a href="#" className="exa" onClick={channel.name !== "#"?this.onClickPartChannel(channel):this.onClickQuitServer()}>{channel.name !== "#"?"✖":"❌"}</a>)
-  }
   render() {
     const server = this.props.connection
     return (
@@ -93,16 +90,20 @@ export class Server extends React.Component<IServerProps, IServerState> {
           <ul className="list-unstyled" id={server.name}>
             {this.props.connection.channels.map((channel, i) => (
               <li key={i} className={this.getClass(channel,this.props.curChanID)}>
-                <a
-                  href="#"
-                  onClick={this.onClickGenerator(this.props.connection, channel)}
-                >
-                  {this.bold_if_selected(
-                    channel,
-                    this.props.curChanID
-                  )}
-                </a>
-                {this.remove_channel(channel)}
+                <div className={"row"}>
+                    <a href="#" className="exa" onClick={channel.name !== "#"?this.onClickPartChannel(channel):this.onClickQuitServer()}>{channel.name !== "#"?"✖":"❌"}</a>
+                        <a
+                            href="#"
+                            onClick={this.onClickGenerator(this.props.connection, channel)}
+                            className={"exreg"}
+                        >
+                            {this.bold_if_selected(
+                                channel,
+                                this.props.curChanID
+                            )}
+                        </a>
+                </div>
+
               </li>
             ))}
             <li>
