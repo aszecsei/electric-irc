@@ -138,10 +138,10 @@ function callcallback(callback) {
   callback()
 }
 describe('subscribe', function() {
-  sinon.stub(sagas, 'eventChannel').callsFake(callcallback)
+  sinon.stub(sagas, 'eventChannel').callsArg(0)
   describe('raw listener', function() {
     describe('channel as first in args', function() {
-      it('it call append log', function() {
+      it('calls append log', function() {
         const mockC = mockClient({
           nick: 'bobby',
           addListener: LimitedMockAddLisener({
@@ -162,7 +162,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#world'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
@@ -189,7 +189,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
@@ -216,7 +216,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#world'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
@@ -243,7 +243,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#world'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
@@ -274,7 +274,7 @@ describe('subscribe', function() {
         new ChannelFactory({
           name: '#world'
         })
-      )
+      ).next()
       expect(actions.appendLog).to.be.called
       stub.restore()
     })
@@ -304,7 +304,7 @@ describe('subscribe', function() {
         new ChannelFactory({
           name: '#world'
         })
-      )
+      ).next()
       expect(actions.appendLog).to.be.called
       stub.restore()
     })
@@ -336,7 +336,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#world'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
@@ -367,7 +367,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#world'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
