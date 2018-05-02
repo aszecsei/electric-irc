@@ -168,8 +168,8 @@ describe('subscriptions', function() {
         })
       })
       generator = subscribeToRaw(mockedClient, new ConnectionFactory({ id: connectionId }), new ChannelFactory({ id: channelId, name: '#world' }))
-      value1 = generator.next()
-      value2 = generator.next(fakeAction)
+      value1 = generator.next().value
+      value2 = generator.next(fakeAction).value
     })
     
     it('should call appendLog', function() {
