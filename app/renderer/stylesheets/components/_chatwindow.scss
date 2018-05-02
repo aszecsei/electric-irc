@@ -8,10 +8,25 @@
 .mForm{
   margin-top: 16px;
 }
+.filter {
+  display:flex;
+  top:0;
+  margin: 0.5%;
+  position: relative;
+  color: var (--primary-text);
+  height: 8%;
+  border-radius: 25px;
+  border: 2px solid var(--primary-light);
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .logWindow {
   overflow-x: auto;
   overflow-y: scroll;
-  height: 90%;
+  height: 80%;
   position: relative;
 }
 
@@ -49,6 +64,11 @@
 .msubmit{
   width: auto;// despite ide message this does have effect! it stops submit from being 100% width due to react's styling
   display: inline;
+}
+#more{
+  color: var(--primary-text);
+  width: 100%;
+  text-align: center;
 }
 // .emojiB {
 //   height: 20px;
