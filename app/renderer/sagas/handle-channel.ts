@@ -57,7 +57,7 @@ export function subscribe(
           actions.appendLog(
             connection.id,
             channel.id,
-            parseNumericMessage(sender, message)
+            parseNumericMessage(sender, message,sender===client.nick)
           )
         )
       }
@@ -77,7 +77,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseKickMessage(nick, by, channel.name, reason)
+              parseKickMessage(nick, by, channel.name, reason,new Date(),(nick===client.nick||by===client.nick))
             )
           )
         }
@@ -101,7 +101,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parsePartMessage(nick, channel.name, reason)
+              parsePartMessage(nick, channel.name, reason,new Date(),client.nick===nick)
             )
           )
         }
@@ -122,7 +122,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseKillMessage(nick, reason)
+              parseKillMessage(nick, reason,new Date(),client.nick===nick)
             )
           )
         }
@@ -143,7 +143,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseQuitMessage(nick, reason)
+              parseQuitMessage(nick, reason,new Date(),client.nick===nick)
             )
           )
         }
@@ -161,7 +161,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseJoinMessage(nick, channel.name)
+              parseJoinMessage(nick, channel.name,new Date(),client.nick===nick)
             )
           )
         }
@@ -179,7 +179,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseNoticeMessage(sender, to, message)
+              parseNoticeMessage(sender, to, message,client.nick===nick)
             )
           )
         }
@@ -199,7 +199,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseMessage(nick, to, text, message)
+              parseMessage(nick, to, text)
             )
           )
         }
@@ -224,7 +224,7 @@ export function subscribe(
             actions.appendLog(
               connection.id,
               channel.id,
-              parseNickChange(oldnick, newnick, channels, message)
+              parseNickChange(oldnick, newnick, channels,new Date(),newnick === client.nick)
             )
           )
         }
@@ -304,7 +304,7 @@ export function* insideWrite(
         actions.appendLog(
           connection.id,
           channel.id,
-          parseMessage(client.nick, channel.name, payload.message)
+          parseMessage(client.nick, channel.name, payload.message,new Date(),true)
         )
       )
     }
@@ -364,7 +364,7 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
           actions.appendLog(
             serverId,
             newChannel.id,
-            parseJoinMessage(client.nick, newChannel.name)
+            parseJoinMessage(client.nick, newChannel.name,new Date(),true)
           )
         )
         yield fork(requests, conn, newChannel)
