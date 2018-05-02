@@ -4,12 +4,21 @@ import * as sinonChai from 'sinon-chai'
 
 import { fork, take } from 'redux-saga/effects'
 import * as IRC from 'irc'
+import { List } from 'immutable'
 
 import * as actions from '../../../app/renderer/actions'
 import {
-  subscribe,
   insideWrite,
-  requestServer
+  requestServer,
+  subscribeToChannelMessage,
+  subscribeToJoin,
+  subscribeToKick,
+  subscribeToKill,
+  subscribeToNick,
+  subscribeToNotice,
+  subscribeToPart,
+  subscribeToQuit,
+  subscribeToRaw
 } from '../../../app/renderer/sagas/handle-channel'
 import * as sagas from 'redux-saga'
 import {
@@ -128,7 +137,7 @@ function mockClient(args: any): IRC.Client {
 function callcallback(callback) {
   callback()
 }
-describe('suscribe', function() {
+describe('subscribe', function() {
   sinon.stub(sagas, 'eventChannel').callsFake(callcallback)
   describe('raw listener', function() {
     describe('channel as first in args', function() {
@@ -147,7 +156,7 @@ describe('suscribe', function() {
           message: new MessageFactory()
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-        subscribe(
+        subscribeToRaw(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -174,7 +183,7 @@ describe('suscribe', function() {
           message: new MessageFactory()
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-        subscribe(
+        subscribeToRaw(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -201,7 +210,7 @@ describe('suscribe', function() {
           message: new MessageFactory()
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-        subscribe(
+        subscribeToRaw(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -228,7 +237,7 @@ describe('suscribe', function() {
           message: new MessageFactory()
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-        subscribe(
+        subscribeToRaw(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -259,7 +268,7 @@ describe('suscribe', function() {
         message: new MessageFactory()
       }
       const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-      subscribe(
+      subscribeToNick(
         mockC,
         new ConnectionFactory(),
         new ChannelFactory({
@@ -289,7 +298,7 @@ describe('suscribe', function() {
         message: new MessageFactory()
       }
       const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-      subscribe(
+      subscribeToChannelMessage(
         mockC,
         new ConnectionFactory(),
         new ChannelFactory({
@@ -321,7 +330,7 @@ describe('suscribe', function() {
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
 
-        subscribe(
+        subscribeToNotice(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -352,7 +361,7 @@ describe('suscribe', function() {
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
 
-        subscribe(
+        subscribeToNotice(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -382,7 +391,7 @@ describe('suscribe', function() {
           channelName: '#world2'
         }
         const stub = sinon.stub(actions, 'joinChannel').returns(fakeAction)
-        subscribe(
+        subscribeToJoin(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -410,7 +419,7 @@ describe('suscribe', function() {
           channelName: '#world2'
         }
         const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
-        subscribe(
+        subscribeToJoin(
           mockC,
           new ConnectionFactory(),
           new ChannelFactory({
@@ -443,7 +452,7 @@ describe('suscribe', function() {
       }
       const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
 
-      subscribe(
+      subscribeToQuit(
         mockC,
         new ConnectionFactory(),
         new ChannelFactory({
@@ -474,7 +483,7 @@ describe('suscribe', function() {
       }
       const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
 
-      subscribe(
+      subscribeToKill(
         mockC,
         new ConnectionFactory(),
         new ChannelFactory({
@@ -505,7 +514,7 @@ describe('suscribe', function() {
       }
       const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
 
-      subscribe(
+      subscribeToPart(
         mockC,
         new ConnectionFactory(),
         new ChannelFactory({
@@ -537,7 +546,7 @@ describe('suscribe', function() {
       }
       const stub = sinon.stub(actions, 'appendLog').returns(fakeAction)
 
-      subscribe(
+      subscribeToKick(
         mockC,
         new ConnectionFactory(),
         new ChannelFactory({
@@ -559,8 +568,7 @@ describe('requestServer', function() {
     })
     const conn = new ConnectionFactory({
       id: connid,
-      nick: 'bob',
-      channels: [chan]
+      channels: List<Channel>([chan])
     })
     const fakeAction = {
       type: actions.ActionTypeKeys.MERGE_LOGS,
@@ -633,6 +641,7 @@ describe('write', function() {
       const conn = new ConnectionFactory({ id: Guid.create() })
       const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
       const pay: actions.ISendMessageAction = {
+        type: actions.ActionTypeKeys.SEND_MESSAGE,
         serverId: conn.id,
         channelId: chan.id,
         message: '/nick bob'
@@ -661,6 +670,7 @@ describe('write', function() {
       const conn = new ConnectionFactory({ id: Guid.create() })
       const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
       const pay: actions.ISendMessageAction = {
+        type: actions.ActionTypeKeys.SEND_MESSAGE,
         serverId: conn.id,
         channelId: chan.id,
         message: '/join #bob'
@@ -682,6 +692,7 @@ describe('write', function() {
       const conn = new ConnectionFactory({ id: Guid.create() })
       const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
       const pay: actions.ISendMessageAction = {
+        type: actions.ActionTypeKeys.SEND_MESSAGE,
         serverId: conn.id,
         channelId: chan.id,
         message: '/somthing bob df dsf fg'
@@ -703,6 +714,7 @@ describe('write', function() {
       const conn = new ConnectionFactory({ id: Guid.create() })
       const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
       const pay: actions.ISendMessageAction = {
+        type: actions.ActionTypeKeys.SEND_MESSAGE,
         serverId: conn.id,
         channelId: chan.id,
         message: 'bob df dsf fg'
@@ -731,6 +743,7 @@ describe('write', function() {
       const conn = new ConnectionFactory({ id: Guid.create() })
       const chan = new ChannelFactory({ id: Guid.create(), name: '#world' })
       const pay: actions.ISendMessageAction = {
+        type: actions.ActionTypeKeys.SEND_MESSAGE,
         serverId: conn.id,
         channelId: chan.id,
         message: 'bob df dsf fg'
