@@ -289,7 +289,7 @@ export function* insideWrite(
       if(partResults[4]){
         pmess=partResults[4]
       }
-      // client.part(pchann,pmess,()=>null)
+      client.part(pchann,pmess,()=>null)
     } else if (joinResults) {
       const newChanName = joinResults[1]
       client.join(newChanName)
