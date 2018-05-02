@@ -34,7 +34,6 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
     this.state={...defaultState}
     this.noDidUp=false
   }
-  
   handleChange = (event: any) => {
     this.setState({
       value: event.target.value
