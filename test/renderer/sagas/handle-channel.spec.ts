@@ -144,9 +144,15 @@ const fakeAction = { type: 'Fake Action' }
 
 describe('subscriptions', function() {
   let emitSpy
+  let mockedClient
+  let generator
+  let value1
+  let value2
   beforeEach(function() {
     emitSpy = sinon.spy()
     sandbox.stub(sagas, 'eventChannel').callsArgWith(0, emitSpy)
+    sandbox.stub(actions, 'joinChannel').returns(fakeAction)
+    sandbox.stub(actions, 'makeChannelConnected').returns(fakeAction)
     sandbox.stub(actions, 'appendLog').returns(fakeAction)
   })
 
@@ -155,10 +161,6 @@ describe('subscriptions', function() {
   })
 
   describe('subscribe to raw', function() {
-    let mockedClient
-    let generator
-    let value1
-    let value2
     beforeEach(function() {
       mockedClient = mockClient({
         nick: 'bobby',
@@ -178,6 +180,138 @@ describe('subscriptions', function() {
 
     it('should dispatch the action', function() {
       expect(value2).to.deep.equal(put(fakeAction))
+    })
+  })
+
+  describe('subscribe to nick changes', function() {
+    beforeEach(function() {
+      mockedClient = mockClient({
+        nick: 'bobby',
+        addListener: LimitedMockAddListener({
+          cmd: 'nick',
+          channels: ['#world', '#another'],
+          oldnick: 'nick1',
+          newnick: 'nick2',
+          message: {}
+        })
+      })
+      generator = subscribeToNick(mockedClient, new ConnectionFactory({ id: connectionId }), new ChannelFactory({ id: channelId, name: '#world' }))
+      value1 = generator.next().value
+      value2 = generator.next(fakeAction).value
+    })
+  
+    it('should call appendLog', function() {
+      expect(actions.appendLog).to.have.been.calledOnce
+    })
+  
+    it('should dispatch the action', function() {
+      expect(value2).to.deep.equal(put(fakeAction))
+    })
+  })
+
+  describe('subscribe to channel messages', function() {
+    beforeEach(function() {
+      mockedClient = mockClient({
+        nick: 'bobby',
+        addListener: LimitedMockAddListener({
+          cmd: 'message#',
+          to: '#world',
+          nick: 'nick1',
+          text: 'hi',
+          message: {}
+        })
+      })
+      generator = subscribeToChannelMessage(mockedClient, new ConnectionFactory({ id: connectionId }), new ChannelFactory({ id: channelId, name: '#world' }))
+      value1 = generator.next().value
+      value2 = generator.next(fakeAction).value
+    })
+  
+    it('should call appendLog', function() {
+      expect(actions.appendLog).to.have.been.calledOnce
+    })
+  
+    it('should dispatch the action', function() {
+      expect(value2).to.deep.equal(put(fakeAction))
+    })
+  })
+
+  describe('subscribe to notices', function() {
+    beforeEach(function() {
+      mockedClient = mockClient({
+        nick: 'bobby',
+        addListener: LimitedMockAddListener({
+          cmd: 'notice',
+          to: '#world',
+          nick: null,
+          text: 'hi',
+          message: { args: ['', ''], server: 'bob' }
+        })
+      })
+      generator = subscribeToNotice(mockedClient, new ConnectionFactory({ id: connectionId }), new ChannelFactory({ id: channelId, name: '#world' }))
+      value1 = generator.next().value
+      value2 = generator.next(fakeAction).value
+    })
+  
+    it('should call appendLog', function() {
+      expect(actions.appendLog).to.have.been.calledOnce
+    })
+  
+    it('should dispatch the action', function() {
+      expect(value2).to.deep.equal(put(fakeAction))
+    })
+  })
+
+  describe('subscribe to joins', function() {
+    describe('when given a new channel', function() {
+      beforeEach(function() {
+        mockedClient = mockClient({
+          nick: 'nick1',
+          addListener: LimitedMockAddListener({
+            cmd: 'join',
+            ichannel: '#other',
+            nick: 'nick1',
+            message: {}
+          })
+        })
+        const channel = new ChannelFactory({ id: channelId, name: '#' })
+        generator = subscribeToJoin(mockedClient, new ConnectionFactory({ id: connectionId }), channel)
+        generator.next()
+        value1 = generator.next(fakeAction).value
+        value2 = generator.next(undefined).value
+      })
+    
+      it('should call joinChannel', function() {
+        expect(actions.joinChannel).to.have.been.calledOnce
+      })
+    
+      it('should dispatch the action', function() {
+        expect(value2).to.deep.equal(put(fakeAction))
+      })
+    })
+    describe('when given an existing channel', function() {
+      beforeEach(function() {
+        mockedClient = mockClient({
+          nick: 'nick1',
+          addListener: LimitedMockAddListener({
+            cmd: 'join',
+            ichannel: '#world',
+            nick: 'nick1',
+            message: {}
+          })
+        })
+        generator = subscribeToJoin(mockedClient, new ConnectionFactory({ id: connectionId }), new ChannelFactory({ id: channelId, name: '#' }))
+        generator.next()
+        value1 = generator.next(fakeAction).value
+        value2 = generator.next(new ChannelFactory({ name: '#world' })).value
+      })
+    
+      it('should call makeChannelConnected', function() {
+        expect(actions.makeChannelConnected).to.have.been.calledOnce
+      })
+    
+      it('should dispatch the action', function() {
+        expect(value2).to.deep.equal(put(fakeAction))
+      })
     })
   })
 })
