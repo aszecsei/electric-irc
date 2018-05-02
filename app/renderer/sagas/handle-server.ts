@@ -27,22 +27,6 @@ export function createIRCClient(
   })
 }
 
-export function subscribeToConnection(serverId: Guid, client: IRC.Client) {
-  return eventChannel(emit => {
-    console.log("CONNECTING...")
-    client.connect(() => {
-      console.log("CONNECTED!")
-      emit(actions.makeServerConnected(
-        serverId
-      ))
-    })
-    client.addListener('error', (message: any) => {
-      console.error(message)
-    })
-    return () => null
-  })
-}
-
 export function connect(action: actions.IAddServerAction) {
   let channels = ['#']
   const connection = new ConnectionFactory({
@@ -68,7 +52,19 @@ export function connect(action: actions.IAddServerAction) {
 }
 
 function* connectToClient(serverId: Guid, client: IRC.Client) {
-  const evChannel = yield call(subscribeToConnection, serverId, client)
+  const evChannel = eventChannel(emit => {
+    console.log("CONNECTING...")
+    client.connect(() => {
+      console.log("CONNECTED!")
+      emit(actions.makeServerConnected(
+        serverId
+      ))
+    })
+    client.addListener('error', (message: any) => {
+      console.error(message)
+    })
+    return () => null
+  })
   for (;;) {
     const action = yield take(evChannel)
     yield put(action)
