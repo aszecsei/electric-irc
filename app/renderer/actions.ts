@@ -4,6 +4,7 @@ import { channel } from 'redux-saga';
 
 export enum ActionTypeKeys {
   ADD_SERVER = 'ADD_SERVER',
+  MAKE_SERVER_CONNECTED = 'MAKE_SERVER_CONNECTED',
   ADD_CONNECTION = 'ADD_CONNECTION',
   REMOVE_SERVER = 'REMOVE_SERVER',
   EDIT_SERVER = 'EDIT_SERVER',
@@ -11,6 +12,7 @@ export enum ActionTypeKeys {
   PART_CHANNEL = 'PART_CHANNEL',
   REMOVE_CHANNEL = 'REMOVE_CHANNEL',
   ADD_CHANNEL = 'ADD_CHANNEL',
+  MAKE_CHANNEL_CONNECTED = 'MAKE_CHANNEL_CONNECTED',
   APPEND_LOG = 'APPEND_LOG',
   SEND_MESSAGE = 'SEND_MESSAGE',
   VIEW_CHANNEL = 'VIEW_CHANNEL',
@@ -22,7 +24,7 @@ export enum ActionTypeKeys {
   PLAY_WITH_THEME = 'PLAY_WITH_THEME',
   MERGE_LOGS = 'MERGE_LOGS',
   ADD_THEME = 'ADD_THEME',
-  UI_TOGGLE_ADD_CHANNEL_MODAL = 'UI : TOGGLE_ADD_CHANEL_MODAL'
+  UI_TOGGLE_ADD_CHANNEL_MODAL = 'UI : TOGGLE_ADD_CHANEL_MODAL',
 }
 export interface IAddServerAction {
   readonly type: ActionTypeKeys.ADD_SERVER
@@ -30,6 +32,17 @@ export interface IAddServerAction {
   readonly url: string
   readonly nickname: string
   readonly channels: string[]
+}
+
+export interface IMakeServerConnectedAction {
+  readonly type: ActionTypeKeys.MAKE_SERVER_CONNECTED
+  readonly serverId: Guid
+}
+
+export interface IMakeChannelConnectedAction {
+  readonly type: ActionTypeKeys.MAKE_CHANNEL_CONNECTED
+  readonly serverId: Guid
+  readonly channelId: Guid
 }
 
 export interface IAddConnectionAction {
@@ -167,17 +180,26 @@ export function addServer(
     channels
   }
 }
-// export function changeNick(id: Guid, nickname: string): IChangeNickAction {
-//   return {
-//     type: ActionTypeKeys.CHANGE_NICK,
-//     id,
-//     nickname
-//   }
-// }
+
 export function addConnection(connection: Connection): IAddConnectionAction {
   return {
     type: ActionTypeKeys.ADD_CONNECTION,
     connection
+  }
+}
+
+export function makeServerConnected(serverId: Guid): IMakeServerConnectedAction {
+  return {
+    type: ActionTypeKeys.MAKE_SERVER_CONNECTED,
+    serverId
+  }
+}
+
+export function makeChannelConnected(serverId: Guid, channelId: Guid): IMakeChannelConnectedAction {
+  return {
+    type: ActionTypeKeys.MAKE_CHANNEL_CONNECTED,
+    serverId,
+    channelId
   }
 }
 

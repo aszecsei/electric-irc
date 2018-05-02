@@ -8,6 +8,7 @@ interface IConnection {
   url: string
   nickname: string
   channels: List<Channel>
+  connected: boolean
 }
 
 const emptyGUID = Guid.createEmpty()
@@ -17,7 +18,8 @@ export const ConnectionFactory = Record<IConnection>({
   name: '',
   url: '',
   nickname: '',
-  channels: List<Channel>([])
+  channels: List<Channel>([]),
+  connected: false
 })
 
 export type Connection = Record<IConnection> & Readonly<IConnection>

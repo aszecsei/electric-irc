@@ -12,7 +12,7 @@ import {
   Settings
 } from '../models'
 import { handleChannel, handleJoinChannels,handlePartChannels } from '.'
-import { Task } from 'redux-saga'
+import { Task, eventChannel } from 'redux-saga'
 import { getSettings } from './selectors'
 
 export function createIRCClient(
@@ -22,7 +22,8 @@ export function createIRCClient(
 ) {
   return new IRC.Client(url, nickname, {
     userName: 'electricirc',
-    channels
+    channels,
+    autoConnect: false,
   })
 }
 
@@ -50,12 +51,34 @@ export function connect(action: actions.IAddServerAction) {
   }
 }
 
+function* connectToClient(serverId: Guid, client: IRC.Client) {
+  const evChannel = eventChannel(emit => {
+    console.log("CONNECTING...")
+    client.connect(() => {
+      console.log("CONNECTED!")
+      emit(actions.makeServerConnected(
+        serverId
+      ))
+    })
+    client.addListener('error', (message: any) => {
+      console.error(message)
+    })
+    return () => null
+  })
+  for (;;) {
+    const action = yield take(evChannel)
+    yield put(action)
+  }
+}
+
 export function* handleServer(payload: actions.IAddServerAction) {
   const { client, connection } = yield call(connect, payload)
   yield put(actions.addConnection(connection))
 
   const typedConnection = connection as Connection
   const ircClient = client as IRC.Client
+
+  yield fork(connectToClient, typedConnection.id, ircClient)
 
   console.log('Adding channels...')
   let channelTasks = List<Task>([])
@@ -71,6 +94,8 @@ export function* handleServer(payload: actions.IAddServerAction) {
       channelTasks = channelTasks.push(task)
     }
   }
+
+  
 
   // Handle added channels
   const joinTask = yield fork(handleJoinChannels, ircClient, typedConnection.id)
