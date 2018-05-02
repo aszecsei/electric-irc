@@ -397,7 +397,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#'
           })
-        )
+        ).next()
         expect(actions.joinChannel).to.be.called
         stub.restore()
       })
@@ -425,7 +425,7 @@ describe('subscribe', function() {
           new ChannelFactory({
             name: '#world'
           })
-        )
+        ).next()
         expect(actions.appendLog).to.be.called
         stub.restore()
       })
@@ -458,7 +458,7 @@ describe('subscribe', function() {
         new ChannelFactory({
           name: '#world'
         })
-      )
+      ).next()
       expect(actions.appendLog).to.be.called
       stub.restore()
     })
@@ -489,7 +489,7 @@ describe('subscribe', function() {
         new ChannelFactory({
           name: '#world'
         })
-      )
+      ).next()
       expect(actions.appendLog).to.be.called
       stub.restore()
     })
@@ -520,7 +520,7 @@ describe('subscribe', function() {
         new ChannelFactory({
           name: '#world'
         })
-      )
+      ).next()
       expect(actions.appendLog).to.be.called
       stub.restore()
     })
@@ -552,7 +552,7 @@ describe('subscribe', function() {
         new ChannelFactory({
           name: '#world'
         })
-      )
+      ).next()
       expect(actions.appendLog).to.be.called
       stub.restore()
     })
