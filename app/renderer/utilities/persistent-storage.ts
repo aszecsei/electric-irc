@@ -116,7 +116,7 @@ export function writeLogs(connection: Connection, channel: Channel) {
 }
 
 export function loadLogs(connection: Connection, channel: Channel) {
-  return new Promise((resolve, reject) => {
+  return new Promise<List<IAppendLogAction>>((resolve, reject) => {
     fileStorage.readFile(`logs/${connection.url}/${channel.name ? channel.name : '#'}.ei`).then((data: any) => {
       let actions = List<IAppendLogAction>([])
       const messages = data as IStoredMessage[]
@@ -133,6 +133,7 @@ export function loadLogs(connection: Connection, channel: Channel) {
           })
         ))
       })
+      resolve(actions)
     })
   })
 }
