@@ -157,7 +157,8 @@ describe('subscriptions', function() {
   describe('subscribe to raw', function() {
     let mockedClient
     let generator
-    let value
+    let value1
+    let value2
     beforeEach(function() {
       mockedClient = mockClient({
         nick: 'bobby',
@@ -167,7 +168,8 @@ describe('subscriptions', function() {
         })
       })
       generator = subscribeToRaw(mockedClient, new ConnectionFactory({ id: connectionId }), new ChannelFactory({ id: channelId, name: '#world' }))
-      value = generator.next()
+      value1 = generator.next()
+      value2 = generator.next(fakeAction)
     })
     
     it('should call appendLog', function() {
@@ -175,7 +177,7 @@ describe('subscriptions', function() {
     })
 
     it('should dispatch the action', function() {
-      expect(value).to.eq(put(fakeAction))
+      expect(value2).to.eq(put(fakeAction))
     })
   })
 })
