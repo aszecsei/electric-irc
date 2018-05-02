@@ -36,7 +36,8 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
   }
   handleChange = (event: any) => {
     this.setState({
-      value: event.target.value
+      value: event.target.value,
+      numShow:this.state.numShow
     })
   }
   componentDidUpdate() {
@@ -48,7 +49,18 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
   addfifty=()=>{
     this.noDidUp=true
     const size=this.props.messages?this.props.messages.size:0
-    this.setState({numShow:this.state.numShow+50>size?size:this.state.numShow+50})
+    this.setState({
+      value: this.state.value,
+      numShow:this.state.numShow+50>size?size:this.state.numShow+50
+    })
+  }
+  subfifty=()=>{
+    this.noDidUp=true
+    const size=this.props.messages?this.props.messages.size:0
+    this.setState({
+      value: this.state.value,
+      numShow:this.state.numShow-50<50?50:this.state.numShow-50
+    })
   }
   render() {
     return (
@@ -67,6 +79,7 @@ export class ChatWindow extends React.Component<IChatWindowProps,IChatWindowStat
           ref={ref => (this.logWindow = ref ? ref : undefined)}
         >
           {this.props.messages&&this.state.numShow<this.props.messages.size?<div  id="more"><a href="#" onClick={this.addfifty}>50 more</a></div>:null}
+          {this.props.messages&&this.state.numShow>50?<div id="more"><a href="#" onClick={this.subfifty}>50 less</a></div>:null}
           {this.props.messages
             ? this.props.messages.slice(this.props.messages.size-this.state.numShow).filter(
               // filter out join and/or nick change messages if coorisponding options enabled
