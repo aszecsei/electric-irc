@@ -97,10 +97,40 @@ export function getFilePath(filename: string) {
   return path.join(getAppFolder(), filename)
 }
 
+export function makeDirectory(targetDir: string) {
+  const sep = path.sep
+  const initDir = ''
+  const baseDir = getAppFolder()
+
+  targetDir.split(sep).reduce((parentDir, childDir) => {
+    const curDir = path.resolve(baseDir, parentDir, childDir)
+    try {
+      fs.mkdirSync(curDir)
+      console.log(`Created directory ${curDir}`)
+    } catch(err) {
+      if (err.code !== 'EEXIST') {
+        throw err
+      }
+    }
+    return curDir
+  }, initDir)
+}
+
 ipcMain.addListener(
   SAVE_FILE,
   (event: IpcMessageEvent, filename: string, data: any, guid: string) => {
-    const filePath = getFilePath(filename)
+    const splitFilename = filename.split('/')
+    const dir = splitFilename.slice(0, -1).reduce((prev, cur) => {
+      return prev + path.sep + cur
+    }, '')
+    console.log(`Creating directories ${dir}...`)
+    makeDirectory(dir)
+
+    const file = splitFilename[splitFilename.length - 1]
+
+    console.log(`Writing file ${file} to directory ${dir}...`)
+
+    const filePath = getFilePath(dir + path.sep + file)
     if (!fs.existsSync(getAppFolder())) {
       fs.mkdirSync(getAppFolder())
     }

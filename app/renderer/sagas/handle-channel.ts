@@ -1,6 +1,7 @@
 import { call, fork, put, select, take } from 'redux-saga/effects'
 import * as sagas from 'redux-saga'
 import * as IRC from 'irc'
+import { List } from 'immutable'
 
 import * as actions from '../actions'
 import {
@@ -462,7 +463,7 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
         // Handle channel events
         yield fork(handleChannel, client, connection, newChannel)
         // Get the local channel logs
-
+        yield fork(loadLogs, connection, newChannel)
         // Get the server message log
         yield fork(requests, connection, newChannel)
         
@@ -475,6 +476,23 @@ export function* handleJoinChannels(client: IRC.Client, serverId: Guid) {
         }
       }
     }
+  }
+}
+
+export function* loadLogs(connection: Connection, channel: Channel) {
+  const evChannel = sagas.eventChannel(emit => {
+    persistentStorage.loadLogs(connection, channel).then(
+      (actionList: List<actions.IAppendLogAction>) => {
+        actionList.forEach((value) => {
+          emit(value)
+        })
+      }
+    ).catch()
+    return () => null
+  })
+  for (;;) {
+    const action: actions.IAppendLogAction = yield take(evChannel)
+    yield put(action)
   }
 }
 

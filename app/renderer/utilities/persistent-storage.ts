@@ -1,8 +1,8 @@
 import { List } from 'immutable'
 
 import { ElectricState, getSettings } from '../store'
-import { SettingsFactory } from '../models'
-import { IAddServerAction, addServer } from '../actions'
+import { SettingsFactory, Connection, Channel, MessageType, MessageFactory, Guid } from '../models'
+import { IAddServerAction, addServer, IAppendLogAction, appendLog } from '../actions'
 
 import * as fileStorage from './file-storage'
 
@@ -97,3 +97,43 @@ export function writeConnections(state: ElectricState) {
 // TODO: Load custom themes
 
 // TODO: Load logs
+interface IStoredMessage {
+  type: MessageType,
+  text: string,
+  sender: string,
+  sent: string
+}
+
+export function writeLogs(connection: Connection, channel: Channel) {
+  return fileStorage.saveFile(`logs/${connection.url}/${channel.name ? channel.name : '#'}.ei`, channel.log.map((message) => {
+    return {
+      type: message.type,
+      text: message.text,
+      sender: message.sender,
+      sent: message.sent.toISOString()
+    }
+  }).toArray())
+}
+
+export function loadLogs(connection: Connection, channel: Channel) {
+  return new Promise<List<IAppendLogAction>>((resolve, reject) => {
+    fileStorage.readFile(`logs/${connection.url}/${channel.name ? channel.name : '#'}.ei`).then((data: any) => {
+      let actions = List<IAppendLogAction>([])
+      const messages = data as IStoredMessage[]
+      messages.forEach((message) => {
+        actions = actions.push(appendLog(
+          connection.id,
+          channel.id,
+          new MessageFactory({
+            id: Guid.create(),
+            type: message.type,
+            text: message.text,
+            sender: message.sender,
+            sent: new Date(message.sent)
+          })
+        ))
+      })
+      resolve(actions)
+    })
+  })
+}
